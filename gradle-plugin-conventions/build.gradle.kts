@@ -1,5 +1,5 @@
 plugins {
-    `kotlin-dsl`
+    id("io.github.technoir42.conventions.gradle-plugin")
 }
 
 gradlePlugin {
