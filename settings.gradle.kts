@@ -2,7 +2,11 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
+        maven(providers.gradleProperty("mavenRepositoryUrl"))
         mavenLocal()
+    }
+    plugins {
+        id("io.github.technoir42.conventions.gradle-plugin") version "0.0.1"
     }
 }
 
@@ -11,6 +15,7 @@ dependencyResolutionManagement {
         mavenCentral()
         gradlePluginPortal()
         google()
+        maven(providers.gradleProperty("mavenRepositoryUrl"))
         mavenLocal()
     }
 }
