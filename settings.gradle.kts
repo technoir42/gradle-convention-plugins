@@ -2,7 +2,12 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
-        maven(providers.gradleProperty("mavenRepositoryUrl"))
+        maven(providers.gradleProperty("mavenRepositoryUrl")) {
+            credentials {
+                username = providers.environmentVariable("MAVEN_USERNAME").get()
+                password = providers.environmentVariable("MAVEN_PASSWORD").get()
+            }
+        }
         mavenLocal()
     }
     plugins {
@@ -15,7 +20,6 @@ dependencyResolutionManagement {
         mavenCentral()
         gradlePluginPortal()
         google()
-        maven(providers.gradleProperty("mavenRepositoryUrl"))
         mavenLocal()
     }
 }
