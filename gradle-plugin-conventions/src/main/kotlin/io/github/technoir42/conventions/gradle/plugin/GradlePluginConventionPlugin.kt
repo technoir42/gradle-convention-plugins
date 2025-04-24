@@ -14,5 +14,6 @@ class GradlePluginConventionPlugin : Plugin<Project> {
         configureCommon()
         configureKotlin(KotlinVersion.KOTLIN_1_8)
         configurePublishing()
+        configurePlugin()
     }
 }
