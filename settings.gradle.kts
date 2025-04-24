@@ -8,20 +8,19 @@ pluginManagement {
         mavenLocal()
     }
     plugins {
-        id("io.github.technoir42.conventions.gradle-plugin") version "0.0.1"
+        val conventionPluginsVersion = "0.0.2"
+        id("io.github.technoir42.conventions.gradle-plugin") version conventionPluginsVersion
+        id("io.github.technoir42.conventions.settings") version conventionPluginsVersion
     }
 }
 
-dependencyResolutionManagement {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-        google()
-        mavenLocal()
-    }
+plugins {
+    id("io.github.technoir42.conventions.settings")
 }
 
-rootProject.name = "convention-plugins"
+globalSettings {
+    projectId = "convention-plugins"
+}
 
 include(":common-conventions")
 include(":gradle-plugin-conventions")
