@@ -25,3 +25,4 @@ rootProject.name = "convention-plugins"
 
 include(":common-conventions")
 include(":gradle-plugin-conventions")
+include(":settings-conventions")
