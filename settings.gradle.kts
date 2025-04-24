@@ -3,10 +3,7 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
         maven(providers.gradleProperty("mavenRepositoryUrl")) {
-            credentials {
-                username = providers.environmentVariable("MAVEN_USERNAME").get()
-                password = providers.environmentVariable("MAVEN_PASSWORD").get()
-            }
+            credentials(PasswordCredentials::class)
         }
         mavenLocal()
     }
