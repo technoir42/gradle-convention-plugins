@@ -1,8 +1,9 @@
 package io.github.technoir42.conventions.common
 
+import io.github.technoir42.conventions.common.api.ProjectSettings
 import org.gradle.api.Project
 
-fun Project.configureCommon() {
-    group = providers.gradleProperty("project.groupId").get()
-    version = providers.gradleProperty("project.version").get()
+fun Project.configureCommon(projectSettings: ProjectSettings) {
+    group = projectSettings.groupId.get()
+    version = projectSettings.version.get()
 }
