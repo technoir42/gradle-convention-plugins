@@ -1,12 +1,13 @@
 package io.github.technoir42.conventions.common
 
 import org.gradle.api.Project
+import org.gradle.api.provider.Provider
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
-fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT) {
+fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT, enableSerialization: Provider<Boolean>) {
     configure<KotlinJvmProjectExtension> {
         compilerOptions {
             apiVersion.set(kotlinVersion)
@@ -14,6 +15,12 @@ fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT
         }
         jvmToolchain {
             languageVersion.set(JavaLanguageVersion.of(21))
+        }
+    }
+
+    afterEvaluate {
+        if (enableSerialization.getOrElse(false)) {
+            pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
         }
     }
 }
