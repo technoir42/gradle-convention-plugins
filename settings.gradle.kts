@@ -2,13 +2,13 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
+        mavenLocal()
         maven(providers.gradleProperty("mavenRepositoryUrl")) {
             credentials(PasswordCredentials::class)
         }
-        mavenLocal()
     }
     plugins {
-        val conventionPluginsVersion = "0.0.2"
+        val conventionPluginsVersion = "0.0.3"
         id("io.github.technoir42.conventions.gradle-plugin") version conventionPluginsVersion
         id("io.github.technoir42.conventions.settings") version conventionPluginsVersion
     }
