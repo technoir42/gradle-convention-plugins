@@ -24,4 +24,5 @@ globalSettings {
 
 include(":common-conventions")
 include(":gradle-plugin-conventions")
+include(":jvm-library-conventions")
 include(":settings-conventions")
