@@ -2,6 +2,11 @@ plugins {
     id("io.github.technoir42.conventions.gradle-plugin")
 }
 
+dependencies {
+    implementation(project(":common-conventions"))
+    implementation(libs.kotlin.gradle.plugin.api)
+}
+
 gradlePlugin {
     plugins {
         register("gradlePluginConventions") {
@@ -9,9 +14,4 @@ gradlePlugin {
             implementationClass = "io.github.technoir42.conventions.gradle.plugin.GradlePluginConventionPlugin"
         }
     }
-}
-
-dependencies {
-    implementation(project(":common-conventions"))
-    implementation(libs.kotlin.gradle.plugin.api)
 }

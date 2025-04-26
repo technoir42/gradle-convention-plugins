@@ -9,6 +9,7 @@ import org.gradle.kotlin.dsl.credentials
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.maven
 import org.gradle.kotlin.dsl.register
+import org.gradle.kotlin.dsl.withType
 
 fun Project.configurePublishing(isLibrary: Boolean = false) {
     pluginManager.apply("maven-publish")
@@ -28,6 +29,15 @@ fun Project.configurePublishing(isLibrary: Boolean = false) {
                 register<MavenPublication>("libraryMaven") {
                     from(components["java"])
                 }
+            }
+
+            withType<MavenPublication>().named { it == "pluginMaven" }.configureEach {
+                suppressPomMetadataWarningsFor("apiElements")
+                suppressPomMetadataWarningsFor("runtimeElements")
+                suppressPomMetadataWarningsFor("apiApiElements")
+                suppressPomMetadataWarningsFor("apiRuntimeElements")
+                suppressPomMetadataWarningsFor("apiJavadocElements")
+                suppressPomMetadataWarningsFor("apiSourcesElements")
             }
         }
     }

@@ -2,6 +2,10 @@ plugins {
     id("io.github.technoir42.conventions.gradle-plugin")
 }
 
+dependencies {
+    implementation(project(":common-conventions"))
+}
+
 gradlePlugin {
     plugins {
         register("settingsConventions") {
@@ -9,8 +13,4 @@ gradlePlugin {
             implementationClass = "io.github.technoir42.conventions.settings.SettingsConventionPlugin"
         }
     }
-}
-
-dependencies {
-    implementation(project(":common-conventions"))
 }
