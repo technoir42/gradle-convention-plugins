@@ -1,6 +1,7 @@
 package io.github.technoir42.conventions.settings
 
 import io.github.technoir42.conventions.common.Environment
+import org.gradle.api.Project
 import org.gradle.api.credentials.PasswordCredentials
 import org.gradle.api.initialization.Settings
 import org.gradle.api.initialization.resolve.RepositoriesMode
@@ -24,6 +25,15 @@ internal fun Settings.configureDependencyResolution(environment: Environment) {
             if (!environment.isCi) {
                 mavenLocal()
             }
+        }
+    }
+}
+
+internal fun Project.configureDependencyResolution() {
+    configurations.configureEach {
+        resolutionStrategy {
+            failOnChangingVersions()
+            failOnDynamicVersions()
         }
     }
 }
