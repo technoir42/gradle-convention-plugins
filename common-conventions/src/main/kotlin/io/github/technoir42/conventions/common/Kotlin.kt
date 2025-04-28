@@ -3,7 +3,6 @@ package io.github.technoir42.conventions.common
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.provider.Provider
-import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
@@ -15,9 +14,6 @@ fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT
         compilerOptions {
             apiVersion.set(kotlinVersion)
             languageVersion.set(kotlinVersion)
-        }
-        jvmToolchain {
-            languageVersion.set(JavaLanguageVersion.of(21))
         }
     }
 

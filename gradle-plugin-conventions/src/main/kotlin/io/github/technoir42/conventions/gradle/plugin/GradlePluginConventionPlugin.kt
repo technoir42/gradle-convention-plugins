@@ -2,6 +2,7 @@ package io.github.technoir42.conventions.gradle.plugin
 
 import io.github.technoir42.conventions.common.api.ProjectSettings
 import io.github.technoir42.conventions.common.configureCommon
+import io.github.technoir42.conventions.common.configureJava
 import io.github.technoir42.conventions.common.configureKotlin
 import io.github.technoir42.conventions.common.configurePublishing
 import io.github.technoir42.conventions.gradle.plugin.api.GradlePluginExtension
@@ -18,6 +19,7 @@ class GradlePluginConventionPlugin : Plugin<Project> {
 
         val projectSettings = ProjectSettings(this)
         configureCommon(projectSettings)
+        configureJava()
         configureKotlin(KotlinVersion.KOTLIN_1_8, enableSerialization = config.buildFeatures.serialization)
         configurePublishing()
         configurePlugin()
