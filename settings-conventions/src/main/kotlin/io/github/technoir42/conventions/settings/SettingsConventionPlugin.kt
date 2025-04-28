@@ -14,6 +14,10 @@ class SettingsConventionPlugin : Plugin<Settings> {
             rootProject.name = config.projectId.get()
         }
 
+        gradle.rootProject {
+            pluginManager.apply("org.gradle.lifecycle-base")
+        }
+
         val environment = Environment(providers)
         configureDependencyResolution(environment)
     }
