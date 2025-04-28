@@ -1,6 +1,7 @@
 package io.github.technoir42.conventions.common
 
 import org.gradle.api.Project
+import org.gradle.api.attributes.Usage
 import org.gradle.api.credentials.PasswordCredentials
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
@@ -31,13 +32,24 @@ fun Project.configurePublishing(isLibrary: Boolean = false) {
                 }
             }
 
-            withType<MavenPublication>().named { it == "pluginMaven" }.configureEach {
-                suppressPomMetadataWarningsFor("apiElements")
-                suppressPomMetadataWarningsFor("runtimeElements")
-                suppressPomMetadataWarningsFor("apiApiElements")
-                suppressPomMetadataWarningsFor("apiRuntimeElements")
-                suppressPomMetadataWarningsFor("apiJavadocElements")
-                suppressPomMetadataWarningsFor("apiSourcesElements")
+            withType<MavenPublication>().configureEach {
+                versionMapping {
+                    usage(Usage.JAVA_API) {
+                        fromResolutionResult()
+                    }
+                    usage(Usage.JAVA_RUNTIME) {
+                        fromResolutionResult()
+                    }
+                }
+
+                if (name == "pluginMaven") {
+                    suppressPomMetadataWarningsFor("apiElements")
+                    suppressPomMetadataWarningsFor("runtimeElements")
+                    suppressPomMetadataWarningsFor("apiApiElements")
+                    suppressPomMetadataWarningsFor("apiRuntimeElements")
+                    suppressPomMetadataWarningsFor("apiJavadocElements")
+                    suppressPomMetadataWarningsFor("apiSourcesElements")
+                }
             }
         }
     }
