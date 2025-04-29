@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(project(":common-conventions"))
+    implementation(libs.dependency.analysis.gradle.plugin)
 }
 
 gradlePlugin {
