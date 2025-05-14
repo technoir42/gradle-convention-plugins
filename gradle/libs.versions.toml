@@ -1,6 +1,6 @@
 [versions]
 dependency-analysis-gradle-plugin = "2.17.0"
-kotlin = "2.0.21"
+kotlin = "2.1.21"
 
 [libraries]
 dependency-analysis-gradle-plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependency-analysis-gradle-plugin" }
