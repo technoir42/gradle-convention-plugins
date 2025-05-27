@@ -9,6 +9,7 @@ plugins {
 }
 
 jvmLibrary {
+    // Optional build features
     buildFeatures {
         // Enable Kotlin serialization
         serialization = true

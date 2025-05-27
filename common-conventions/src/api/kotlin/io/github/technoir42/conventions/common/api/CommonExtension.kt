@@ -4,6 +4,9 @@ import org.gradle.api.tasks.Nested
 
 @CommonDsl
 interface CommonExtension {
+    /**
+     * Optional build features.
+     */
     @get:Nested
     val buildFeatures: CommonBuildFeatures
 }

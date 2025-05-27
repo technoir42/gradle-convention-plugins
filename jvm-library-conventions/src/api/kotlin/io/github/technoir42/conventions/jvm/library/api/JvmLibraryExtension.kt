@@ -6,6 +6,9 @@ import org.gradle.api.tasks.Nested
 
 @JvmLibraryDsl
 interface JvmLibraryExtension : CommonExtension {
+    /**
+     * Optional build features.
+     */
     @get:Nested
     override val buildFeatures: JvmLibraryBuildFeatures
 

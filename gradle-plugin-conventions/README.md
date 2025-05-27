@@ -9,6 +9,7 @@ plugins {
 }
 
 gradlePluginConfig {
+    // Optional build features
     buildFeatures {
         // Enable Kotlin serialization
         serialization = true

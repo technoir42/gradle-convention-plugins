@@ -6,6 +6,9 @@ import org.gradle.api.tasks.Nested
 
 @GradlePluginDsl
 interface GradlePluginExtension : CommonExtension {
+    /**
+     * Optional build features.
+     */
     @get:Nested
     override val buildFeatures: GradlePluginBuildFeatures
 
