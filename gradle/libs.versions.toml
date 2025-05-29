@@ -1,5 +1,5 @@
 [versions]
-dependency-analysis-gradle-plugin = "2.17.0"
+dependency-analysis-gradle-plugin = "2.18.0"
 kotlin = "2.0.21"
 
 [libraries]
