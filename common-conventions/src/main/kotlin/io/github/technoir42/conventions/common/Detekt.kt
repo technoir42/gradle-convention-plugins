@@ -1,11 +1,13 @@
 package io.github.technoir42.conventions.common
 
+import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.the
+import org.gradle.kotlin.dsl.withType
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 fun Project.configureDetekt() {
@@ -26,8 +28,7 @@ fun Project.configureDetekt() {
     }
 
     tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME).configure {
-        dependsOn(tasks.named("detektMain"))
-        dependsOn(tasks.named("detektTest"))
+        dependsOn(tasks.withType<Detekt>())
     }
 
     dependencies {
