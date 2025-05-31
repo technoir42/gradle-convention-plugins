@@ -8,6 +8,7 @@ import org.gradle.kotlin.dsl.configure
 fun Project.configureJava() {
     configure<JavaPluginExtension> {
         toolchain {
+            @Suppress("MagicNumber")
             languageVersion.set(JavaLanguageVersion.of(21))
         }
 
