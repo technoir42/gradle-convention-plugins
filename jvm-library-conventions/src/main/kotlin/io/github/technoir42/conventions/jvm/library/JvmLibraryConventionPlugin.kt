@@ -2,6 +2,7 @@ package io.github.technoir42.conventions.jvm.library
 
 import io.github.technoir42.conventions.common.api.ProjectSettings
 import io.github.technoir42.conventions.common.configureCommon
+import io.github.technoir42.conventions.common.configureDetekt
 import io.github.technoir42.conventions.common.configureJava
 import io.github.technoir42.conventions.common.configureKotlin
 import io.github.technoir42.conventions.common.configurePublishing
@@ -20,6 +21,7 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
         configureCommon(projectSettings)
         configureJava()
         configureKotlin(enableSerialization = config.buildFeatures.serialization)
+        configureDetekt()
         configurePublishing(isLibrary = true)
     }
 }
