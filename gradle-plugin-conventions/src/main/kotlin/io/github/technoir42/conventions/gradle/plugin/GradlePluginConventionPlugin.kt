@@ -6,6 +6,7 @@ import io.github.technoir42.conventions.common.configureDetekt
 import io.github.technoir42.conventions.common.configureJava
 import io.github.technoir42.conventions.common.configureKotlin
 import io.github.technoir42.conventions.common.configurePublishing
+import io.github.technoir42.conventions.common.configureTestFixtures
 import io.github.technoir42.conventions.gradle.plugin.api.GradlePluginExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -25,5 +26,6 @@ class GradlePluginConventionPlugin : Plugin<Project> {
         configureDetekt()
         configurePublishing()
         configurePlugin()
+        configureTestFixtures()
     }
 }
