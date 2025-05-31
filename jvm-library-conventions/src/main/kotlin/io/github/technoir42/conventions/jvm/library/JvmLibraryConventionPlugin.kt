@@ -7,6 +7,7 @@ import io.github.technoir42.conventions.common.configureJava
 import io.github.technoir42.conventions.common.configureKotlin
 import io.github.technoir42.conventions.common.configurePublishing
 import io.github.technoir42.conventions.common.configureTestFixtures
+import io.github.technoir42.conventions.common.configureTesting
 import io.github.technoir42.conventions.jvm.library.api.JvmLibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -24,6 +25,7 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
         configureKotlin(enableSerialization = config.buildFeatures.serialization)
         configureDetekt()
         configurePublishing(isLibrary = true)
+        configureTesting()
         configureTestFixtures()
     }
 }
