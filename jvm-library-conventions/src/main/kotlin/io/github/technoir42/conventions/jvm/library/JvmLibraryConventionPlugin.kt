@@ -17,6 +17,7 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         val config = extensions.create<JvmLibraryExtension>(JvmLibraryExtension.NAME)
 
+        pluginManager.apply("java-library")
         pluginManager.apply("org.jetbrains.kotlin.jvm")
 
         val projectSettings = ProjectSettings(this)
