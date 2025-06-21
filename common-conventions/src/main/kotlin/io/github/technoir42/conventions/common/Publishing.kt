@@ -20,9 +20,11 @@ fun Project.configurePublishing(isLibrary: Boolean = false) {
     configure<PublishingExtension> {
         val publishRepositoryUrl = providers.gradleProperty("publishRepositoryUrl")
         repositories {
-            maven(publishRepositoryUrl) {
-                if (url.scheme != "file") {
-                    credentials(PasswordCredentials::class)
+            if (publishRepositoryUrl.isPresent) {
+                maven(publishRepositoryUrl) {
+                    if (url.scheme != "file") {
+                        credentials(PasswordCredentials::class)
+                    }
                 }
             }
         }
