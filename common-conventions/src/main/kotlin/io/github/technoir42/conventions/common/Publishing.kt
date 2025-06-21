@@ -15,6 +15,8 @@ import org.gradle.kotlin.dsl.withType
 fun Project.configurePublishing(isLibrary: Boolean = false) {
     pluginManager.apply("maven-publish")
 
+    val projectDescription = provider { description }
+
     configure<PublishingExtension> {
         val publishRepositoryUrl = providers.gradleProperty("publishRepositoryUrl")
         repositories {
@@ -33,6 +35,10 @@ fun Project.configurePublishing(isLibrary: Boolean = false) {
             }
 
             withType<MavenPublication>().configureEach {
+                pom {
+                    description.convention(projectDescription)
+                }
+
                 versionMapping {
                     usage(Usage.JAVA_API) {
                         fromResolutionResult()
