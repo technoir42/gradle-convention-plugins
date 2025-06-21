@@ -9,6 +9,7 @@ dependencies {
         }
     }
     implementation(project(":common-conventions"))
+    implementation(project(":gradle-extensions"))
     implementation(libs.kotlin.gradle.plugin.api)
 }
 

@@ -1,6 +1,6 @@
 package io.github.technoir42.conventions.settings
 
-import io.github.technoir42.conventions.common.Environment
+import io.github.technoir42.gradle.Environment
 import org.gradle.api.Project
 import org.gradle.api.credentials.PasswordCredentials
 import org.gradle.api.initialization.Settings

@@ -1,9 +1,8 @@
 package io.github.technoir42.conventions.common
 
+import io.github.technoir42.gradle.dependencies.implementation
 import org.gradle.api.Project
-import org.gradle.api.artifacts.Dependency
 import org.gradle.api.provider.Provider
-import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
@@ -27,6 +26,3 @@ fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT
         implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     }
 }
-
-private fun DependencyHandlerScope.implementation(dependencyNotation: Any): Dependency? =
-    "implementation"(dependencyNotation)

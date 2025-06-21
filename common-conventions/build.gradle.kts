@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":gradle-extensions"))
     implementation(libs.kotlin.gradle.plugin.api)
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.kotlin.serialization.gradle.plugin)

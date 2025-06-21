@@ -24,6 +24,7 @@ globalSettings {
     projectId = "convention-plugins"
 }
 
+include(":gradle-extensions")
 include(":common-conventions")
 include(":gradle-plugin-conventions")
 include(":jvm-application-conventions")

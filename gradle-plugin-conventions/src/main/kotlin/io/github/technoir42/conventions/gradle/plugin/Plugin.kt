@@ -1,8 +1,11 @@
 package io.github.technoir42.conventions.gradle.plugin
 
+import io.github.technoir42.gradle.dependencies.api
 import org.gradle.api.Project
+import org.gradle.api.artifacts.Dependency
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.plugins.jvm.JvmTestSuite
+import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.project
@@ -41,8 +44,8 @@ internal fun Project.configurePlugin() {
     }
 
     dependencies {
-        "apiImplementation"(gradleApi())
-        "api"(project(path)) {
+        apiImplementation(gradleApi())
+        api(project(path)) {
             capabilities {
                 requireCapability("$group:$name-api:$version")
             }
@@ -53,5 +56,8 @@ internal fun Project.configurePlugin() {
         enableStricterValidation.set(true)
     }
 }
+
+private fun DependencyHandlerScope.apiImplementation(dependencyNotation: Any): Dependency? =
+    "apiImplementation"(dependencyNotation)
 
 private const val API_VARIANT_NAME = "api"

@@ -1,7 +1,7 @@
 package io.github.technoir42.conventions.settings
 
-import io.github.technoir42.conventions.common.Environment
 import io.github.technoir42.conventions.settings.api.SettingsExtension
+import io.github.technoir42.gradle.Environment
 import org.gradle.api.Plugin
 import org.gradle.api.initialization.Settings
 import org.gradle.kotlin.dsl.create

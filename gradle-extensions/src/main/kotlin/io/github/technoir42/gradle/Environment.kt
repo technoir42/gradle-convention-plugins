@@ -1,4 +1,4 @@
-package io.github.technoir42.conventions.common
+package io.github.technoir42.gradle
 
 import org.gradle.api.provider.ProviderFactory
 
