@@ -9,7 +9,8 @@ import org.gradle.api.tasks.Nested
 @JvmApplicationDsl
 interface JvmApplicationExtension : CommonExtension {
     /**
-     * The fully qualified name of the application's main class.
+     * The name of the application's main class.
+     * Can be a fully qualified name or relative to the package name, e.g. `com.example.MainKt` or `.MainKt`.
      */
     val mainClass: Property<String>
 
