@@ -5,6 +5,7 @@ import io.github.technoir42.conventions.common.configureCommon
 import io.github.technoir42.conventions.common.configureDetekt
 import io.github.technoir42.conventions.common.configureJava
 import io.github.technoir42.conventions.common.configureKotlin
+import io.github.technoir42.conventions.common.configureKotlinSerialization
 import io.github.technoir42.conventions.common.configurePublishing
 import io.github.technoir42.conventions.common.configureTestFixtures
 import io.github.technoir42.conventions.common.configureTesting
@@ -23,7 +24,8 @@ class GradlePluginConventionPlugin : Plugin<Project> {
         val projectSettings = ProjectSettings(this)
         configureCommon(projectSettings)
         configureJava()
-        configureKotlin(KotlinVersion.KOTLIN_1_8, enableSerialization = config.buildFeatures.serialization)
+        configureKotlin(KotlinVersion.KOTLIN_1_8)
+        configureKotlinSerialization(config.buildFeatures.serialization)
         configureDetekt()
         configurePublishing()
         configurePlugin()

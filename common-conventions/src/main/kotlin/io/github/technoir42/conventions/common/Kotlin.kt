@@ -6,9 +6,11 @@ import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
-fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT, enableSerialization: Provider<Boolean>) {
+fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT) {
     configure<KotlinJvmProjectExtension> {
         compilerOptions {
             apiVersion.set(kotlinVersion)
@@ -16,13 +18,41 @@ fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT
         }
     }
 
-    afterEvaluate {
-        if (enableSerialization.getOrElse(false)) {
-            pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
-        }
-    }
-
     dependencies {
         implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
+    }
+}
+
+fun Project.configureKotlinMultiplatform(packageName: Provider<String>, executable: Boolean = false) {
+    configure<KotlinMultiplatformExtension> {
+        linuxX64()
+        macosArm64()
+        mingwX64()
+    }
+
+    afterEvaluate {
+        configure<KotlinMultiplatformExtension> {
+            linuxX64 {
+                configureBinaries(executable, packageName)
+            }
+            macosArm64 {
+                configureBinaries(executable, packageName)
+            }
+            mingwX64 {
+                configureBinaries(executable, packageName)
+            }
+        }
+    }
+}
+
+private fun KotlinNativeTarget.configureBinaries(executable: Boolean, packageName: Provider<String>) {
+    if (executable) {
+        binaries {
+            executable {
+                if (packageName.isPresent) {
+                    entryPoint = "${packageName.get()}.main"
+                }
+            }
+        }
     }
 }

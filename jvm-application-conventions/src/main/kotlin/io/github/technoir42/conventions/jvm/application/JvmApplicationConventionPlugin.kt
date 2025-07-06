@@ -5,6 +5,7 @@ import io.github.technoir42.conventions.common.configureCommon
 import io.github.technoir42.conventions.common.configureDetekt
 import io.github.technoir42.conventions.common.configureJava
 import io.github.technoir42.conventions.common.configureKotlin
+import io.github.technoir42.conventions.common.configureKotlinSerialization
 import io.github.technoir42.conventions.common.configureTesting
 import io.github.technoir42.conventions.jvm.application.api.JvmApplicationExtension
 import org.gradle.api.Plugin
@@ -22,7 +23,8 @@ class JvmApplicationConventionPlugin : Plugin<Project> {
         configureCommon(projectSettings)
         configureJava()
         configureApplication(config)
-        configureKotlin(enableSerialization = config.buildFeatures.serialization)
+        configureKotlin()
+        configureKotlinSerialization(config.buildFeatures.serialization)
         configureDetekt()
         configureTesting()
     }

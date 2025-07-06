@@ -5,7 +5,7 @@ plugins {
 dependencies {
     apiApi(project(":common-conventions")) {
         capabilities {
-            requireCapability("${project.group}:common-conventions-api:${project.version}")
+            requireCapability("${project.group}:common-conventions-api")
         }
     }
     implementation(project(":common-conventions"))

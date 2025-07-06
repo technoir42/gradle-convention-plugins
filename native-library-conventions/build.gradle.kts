@@ -9,14 +9,14 @@ dependencies {
         }
     }
     implementation(project(":common-conventions"))
-    implementation(libs.kotlin.gradle.plugin.api)
+    implementation(libs.kotlin.gradle.plugin)
 }
 
 gradlePlugin {
     plugins {
-        register("jvmLibraryConventions") {
-            id = "io.github.technoir42.conventions.jvm-library"
-            implementationClass = "io.github.technoir42.conventions.jvm.library.JvmLibraryConventionPlugin"
+        register("nativeLibraryConventions") {
+            id = "io.github.technoir42.conventions.native-library"
+            implementationClass = "io.github.technoir42.conventions.native.library.NativeLibraryConventionPlugin"
         }
     }
 }
