@@ -8,7 +8,7 @@ pluginManagement {
         }
     }
     plugins {
-        val conventionPluginsVersion = providers.gradleProperty("conventionPluginsVersion").orElse("0.0.8")
+        val conventionPluginsVersion = providers.gradleProperty("conventionPluginsVersion").orElse("0.0.9")
         id("io.github.technoir42.conventions.gradle-plugin") version conventionPluginsVersion
         id("io.github.technoir42.conventions.jvm-application") version conventionPluginsVersion
         id("io.github.technoir42.conventions.jvm-library") version conventionPluginsVersion
@@ -17,6 +17,8 @@ pluginManagement {
 }
 
 plugins {
+    id("io.github.technoir42.conventions.gradle-plugin") apply false
+    id("io.github.technoir42.conventions.jvm-library") apply false
     id("io.github.technoir42.conventions.settings")
 }
 

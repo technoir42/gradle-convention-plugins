@@ -1,9 +1,11 @@
 [versions]
+buildconfig = "5.6.7"
 dependency-analysis-gradle-plugin = "2.19.0"
 detekt = "1.23.8"
 kotlin = "2.1.21"
 
 [libraries]
+buildconfig-gradle-plugin = { module = "com.github.gmazzo.buildconfig:plugin", version.ref = "buildconfig" }
 dependency-analysis-gradle-plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependency-analysis-gradle-plugin" }
 detekt-gradle-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }

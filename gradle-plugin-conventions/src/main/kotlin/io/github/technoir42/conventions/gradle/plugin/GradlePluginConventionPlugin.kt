@@ -1,6 +1,7 @@
 package io.github.technoir42.conventions.gradle.plugin
 
 import io.github.technoir42.conventions.common.api.ProjectSettings
+import io.github.technoir42.conventions.common.configureBuildConfig
 import io.github.technoir42.conventions.common.configureCommon
 import io.github.technoir42.conventions.common.configureDetekt
 import io.github.technoir42.conventions.common.configureJava
@@ -19,13 +20,17 @@ class GradlePluginConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         val config = extensions.create<GradlePluginExtension>(GradlePluginExtension.NAME)
 
+        afterEvaluate {
+            configureBuildConfig(config.buildFeatures.buildConfig, config.packageName)
+            configureKotlinSerialization(config.buildFeatures.serialization)
+        }
+
         pluginManager.apply("org.gradle.kotlin.kotlin-dsl")
 
         val projectSettings = ProjectSettings(this)
         configureCommon(projectSettings)
         configureJava()
         configureKotlin(KotlinVersion.KOTLIN_1_8)
-        configureKotlinSerialization(config.buildFeatures.serialization)
         configureDetekt()
         configurePublishing()
         configurePlugin()

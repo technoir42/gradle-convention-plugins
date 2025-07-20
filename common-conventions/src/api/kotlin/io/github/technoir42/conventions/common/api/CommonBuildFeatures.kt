@@ -4,6 +4,11 @@ import org.gradle.api.provider.Property
 
 interface CommonBuildFeatures {
     /**
+     * Generate BuildConfig. Disabled by default.
+     */
+    val buildConfig: Property<Boolean>
+
+    /**
      * Enable Kotlin serialization. Disabled by default.
      */
     val serialization: Property<Boolean>

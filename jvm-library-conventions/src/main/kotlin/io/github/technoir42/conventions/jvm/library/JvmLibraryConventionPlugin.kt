@@ -1,6 +1,7 @@
 package io.github.technoir42.conventions.jvm.library
 
 import io.github.technoir42.conventions.common.api.ProjectSettings
+import io.github.technoir42.conventions.common.configureBuildConfig
 import io.github.technoir42.conventions.common.configureCommon
 import io.github.technoir42.conventions.common.configureDetekt
 import io.github.technoir42.conventions.common.configureJava
@@ -18,6 +19,11 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         val config = extensions.create<JvmLibraryExtension>(JvmLibraryExtension.NAME)
 
+        afterEvaluate {
+            configureBuildConfig(config.buildFeatures.buildConfig, config.packageName)
+            configureKotlinSerialization(config.buildFeatures.serialization)
+        }
+
         pluginManager.apply("java-library")
         pluginManager.apply("org.jetbrains.kotlin.jvm")
 
@@ -25,7 +31,6 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
         configureCommon(projectSettings)
         configureJava()
         configureKotlin()
-        configureKotlinSerialization(config.buildFeatures.serialization)
         configureDetekt()
         configurePublishing(isLibrary = true)
         configureTesting()
