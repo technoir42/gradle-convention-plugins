@@ -1,9 +1,11 @@
 package io.github.technoir42.conventions.common
 
 import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
+import org.gradle.api.tasks.SourceTask
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
@@ -28,6 +30,14 @@ fun Project.configureDetekt() {
         }
     }
 
+    tasks.withType<Detekt>().configureEach {
+        configureExcludes()
+    }
+
+    tasks.withType<DetektCreateBaselineTask>().configureEach {
+        configureExcludes()
+    }
+
     tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME).configure {
         dependsOn(tasks.withType<Detekt>())
     }
@@ -35,6 +45,11 @@ fun Project.configureDetekt() {
     dependencies {
         detektPlugins("$DETEKT_GROUP_ID:detekt-formatting")
     }
+}
+
+private fun SourceTask.configureExcludes() {
+    val buildDir = project.layout.buildDirectory.get().asFile
+    exclude { it.file.startsWith(buildDir) }
 }
 
 private fun DependencyHandlerScope.detektPlugins(dependencyNotation: Any): Dependency? =
