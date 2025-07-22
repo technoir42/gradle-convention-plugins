@@ -1,6 +1,6 @@
 package io.github.technoir42.conventions.gradle.plugin
 
-import io.github.technoir42.conventions.common.api.ProjectSettings
+import io.github.technoir42.conventions.common.ProjectSettingsImpl
 import io.github.technoir42.conventions.common.configureBuildConfig
 import io.github.technoir42.conventions.common.configureCommon
 import io.github.technoir42.conventions.common.configureDetekt
@@ -27,7 +27,7 @@ class GradlePluginConventionPlugin : Plugin<Project> {
 
         pluginManager.apply("org.gradle.kotlin.kotlin-dsl")
 
-        val projectSettings = ProjectSettings(this)
+        val projectSettings = ProjectSettingsImpl(this)
         configureCommon(projectSettings)
         configureJava()
         configureKotlin(KotlinVersion.KOTLIN_1_8)

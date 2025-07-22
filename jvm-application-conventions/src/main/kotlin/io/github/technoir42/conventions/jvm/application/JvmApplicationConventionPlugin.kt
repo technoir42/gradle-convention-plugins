@@ -1,6 +1,6 @@
 package io.github.technoir42.conventions.jvm.application
 
-import io.github.technoir42.conventions.common.api.ProjectSettings
+import io.github.technoir42.conventions.common.ProjectSettingsImpl
 import io.github.technoir42.conventions.common.configureBuildConfig
 import io.github.technoir42.conventions.common.configureCommon
 import io.github.technoir42.conventions.common.configureDetekt
@@ -25,7 +25,7 @@ class JvmApplicationConventionPlugin : Plugin<Project> {
         pluginManager.apply("application")
         pluginManager.apply("org.jetbrains.kotlin.jvm")
 
-        val projectSettings = ProjectSettings(this)
+        val projectSettings = ProjectSettingsImpl(this)
         configureCommon(projectSettings)
         configureJava()
         configureApplication(config)
