@@ -15,6 +15,7 @@ gradlePluginConfig {
 afterEvaluate {
     configure<BuildConfigExtension> {
         forClass("DependencyVersions") {
+            buildConfigField<String>("JUNIT", libs.versions.junit)
             buildConfigField<String>("KOTLINX_COROUTINES", libs.versions.kotlinx.coroutines)
             buildConfigField<String>("KOTLINX_SERIALIZATION", libs.versions.kotlinx.serialization)
         }
