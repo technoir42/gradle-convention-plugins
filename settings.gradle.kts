@@ -8,7 +8,7 @@ pluginManagement {
         }
     }
     plugins {
-        val conventionPluginsVersion = providers.gradleProperty("conventionPluginsVersion").orElse("0.0.10")
+        val conventionPluginsVersion: String by settings
         id("io.github.technoir42.conventions.gradle-plugin") version conventionPluginsVersion
         id("io.github.technoir42.conventions.jvm-application") version conventionPluginsVersion
         id("io.github.technoir42.conventions.jvm-library") version conventionPluginsVersion
