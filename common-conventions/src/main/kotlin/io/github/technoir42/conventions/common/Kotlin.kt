@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import java.io.File
 
 fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT) {
     configure<KotlinJvmProjectExtension> {
@@ -26,6 +27,9 @@ fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT
 }
 
 fun Project.configureKotlinMultiplatform(packageName: Provider<String>, executable: Boolean = false) {
+    val includePath = providers.environmentVariable("INCLUDE").map { it.split(File.pathSeparator) }
+    val libraryPath = providers.environmentVariable("LIB").map { it.split(File.pathSeparator) }
+
     configure<KotlinMultiplatformExtension> {
         linuxX64()
         macosArm64()
@@ -33,25 +37,38 @@ fun Project.configureKotlinMultiplatform(packageName: Provider<String>, executab
 
         afterEvaluate {
             linuxX64 {
-                configureBinaries(executable, packageName)
+                configureTarget(executable, packageName, includePath, libraryPath)
             }
             macosArm64 {
-                configureBinaries(executable, packageName)
+                configureTarget(executable, packageName, includePath, libraryPath)
             }
             mingwX64 {
-                configureBinaries(executable, packageName)
+                configureTarget(executable, packageName, includePath, libraryPath)
             }
         }
     }
 }
 
-private fun KotlinNativeTarget.configureBinaries(executable: Boolean, packageName: Provider<String>) {
-    if (executable) {
-        binaries {
+private fun KotlinNativeTarget.configureTarget(
+    executable: Boolean,
+    packageName: Provider<String>,
+    includePath: Provider<List<String>>,
+    libraryPath: Provider<List<String>>
+) {
+    compilations.configureEach {
+        cinterops.configureEach {
+            compilerOpts(includePath.orNull?.map { "-I$it" }.orEmpty())
+        }
+    }
+
+    binaries {
+        if (executable) {
             executable {
                 if (packageName.isPresent) {
                     entryPoint = "${packageName.get()}.main"
                 }
+
+                linkerOpts(libraryPath.orNull?.map { "-L$it" }.orEmpty())
             }
         }
     }
