@@ -10,6 +10,8 @@ dependencies {
     }
     implementation(project(":common-conventions"))
     implementation(libs.kotlin.gradle.plugin)
+
+    functionalTestImplementation(testFixtures(project(":common-conventions")))
 }
 
 gradlePlugin {

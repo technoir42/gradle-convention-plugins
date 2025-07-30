@@ -30,10 +30,8 @@ fun Project.configureKotlinMultiplatform(packageName: Provider<String>, executab
         linuxX64()
         macosArm64()
         mingwX64()
-    }
 
-    afterEvaluate {
-        configure<KotlinMultiplatformExtension> {
+        afterEvaluate {
             linuxX64 {
                 configureBinaries(executable, packageName)
             }

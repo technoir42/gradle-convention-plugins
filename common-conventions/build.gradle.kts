@@ -29,4 +29,7 @@ dependencies {
     implementation(libs.kotlin.serialization.gradle.plugin)
     implementation(libs.detekt.gradle.plugin)
     implementation(libs.buildconfig.gradle.plugin)
+
+    testFixturesImplementation(gradleTestKit())
+    testFixturesImplementation(libs.junit.jupiter.api)
 }

@@ -18,6 +18,11 @@ formatting:
   Wrapping:
     maxLineLength: 160
 
+naming:
+  FunctionNaming:
+    ignoreAnnotated:
+      - org.junit.jupiter.api.Test
+
 style:
   MaxLineLength:
     active: false
