@@ -12,6 +12,7 @@ import org.gradle.kotlin.dsl.create
 class NativeApplicationConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         val config = extensions.create<NativeApplicationExtension>(NativeApplicationExtension.NAME)
+        config.initDefaults(project.name)
 
         afterEvaluate {
             configureBuildConfig(config.buildFeatures.buildConfig, config.packageName)

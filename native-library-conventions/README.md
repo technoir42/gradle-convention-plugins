@@ -9,5 +9,15 @@ plugins {
 }
 
 nativeLibrary {
+    // The base package name
+    packageName = "com.example.native.library"
+
+    // Optional build features
+    buildFeatures {
+        // Generate BuildConfig
+        buildConfig = true
+        // Enable Kotlin serialization
+        serialization = true
+    }
 }
 ```

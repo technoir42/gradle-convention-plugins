@@ -5,10 +5,6 @@ plugins {
     id("io.github.technoir42.conventions.native-application")
 }
 
-nativeApplication {
-    packageName = "com.example.native.application"
-}
-
 kotlin {
     targets.withType<KotlinNativeTarget>().configureEach {
         compilations.named("main") {

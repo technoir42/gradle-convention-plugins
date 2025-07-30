@@ -16,6 +16,7 @@ import org.gradle.kotlin.dsl.create
 class JvmApplicationConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         val config = extensions.create<JvmApplicationExtension>(JvmApplicationExtension.NAME)
+        config.initDefaults(project.name)
 
         afterEvaluate {
             configureBuildConfig(config.buildFeatures.buildConfig, config.packageName)

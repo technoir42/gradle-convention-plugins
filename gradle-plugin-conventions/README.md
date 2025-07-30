@@ -9,8 +9,13 @@ plugins {
 }
 
 gradlePluginConfig {
+    // The base package name
+    packageName = "com.example.gradle.plugin"
+
     // Optional build features
     buildFeatures {
+        // Generate BuildConfig
+        buildConfig = true
         // Enable Kotlin serialization
         serialization = true
     }

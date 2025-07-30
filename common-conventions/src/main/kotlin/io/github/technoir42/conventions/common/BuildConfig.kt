@@ -7,7 +7,7 @@ import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.configure
 
 fun Project.configureBuildConfig(enable: Provider<Boolean>, packageName: Property<String>) {
-    if (!enable.getOrElse(false)) return
+    if (!enable.get()) return
 
     pluginManager.apply("com.github.gmazzo.buildconfig")
 

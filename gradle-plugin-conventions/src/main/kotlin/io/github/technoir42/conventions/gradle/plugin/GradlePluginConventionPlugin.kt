@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 class GradlePluginConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         val config = extensions.create<GradlePluginExtension>(GradlePluginExtension.NAME)
+        config.initDefaults(project.name)
 
         afterEvaluate {
             configureBuildConfig(config.buildFeatures.buildConfig, config.packageName)

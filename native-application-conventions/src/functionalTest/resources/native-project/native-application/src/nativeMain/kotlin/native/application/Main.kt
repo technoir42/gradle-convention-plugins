@@ -1,9 +1,9 @@
-package com.example.native.library
+package native.application
 
 import kotlinx.cinterop.ExperimentalForeignApi
 import lib.nativeGreet
 
 @ExperimentalForeignApi
-fun greet(name: String) {
-    nativeGreet(name)
+fun main() {
+    nativeGreet("world")
 }

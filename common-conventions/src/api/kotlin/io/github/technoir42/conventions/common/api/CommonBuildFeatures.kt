@@ -12,4 +12,9 @@ interface CommonBuildFeatures {
      * Enable Kotlin serialization. Disabled by default.
      */
     val serialization: Property<Boolean>
+
+    fun initDefaults() {
+        buildConfig.convention(false)
+        serialization.convention(false)
+    }
 }
