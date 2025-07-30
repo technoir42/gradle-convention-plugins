@@ -2,14 +2,17 @@ package io.github.technoir42.conventions.common
 
 import io.github.technoir42.gradle.dependencies.implementation
 import org.gradle.api.Project
+import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import java.io.File
+import kotlin.io.path.Path
 
 fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT) {
     configure<KotlinJvmProjectExtension> {
@@ -26,49 +29,61 @@ fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT
     }
 }
 
-fun Project.configureKotlinMultiplatform(packageName: Provider<String>, executable: Boolean = false) {
+fun Project.configureKotlinMultiplatform(packageName: Provider<String>, enableCInterop: Property<Boolean>, executable: Boolean = false) {
     val includePath = providers.environmentVariable("INCLUDE").map { it.split(File.pathSeparator) }
     val libraryPath = providers.environmentVariable("LIB").map { it.split(File.pathSeparator) }
 
     configure<KotlinMultiplatformExtension> {
-        linuxX64()
-        macosArm64()
-        mingwX64()
+        compilerOptions {
+            optIn.add("kotlinx.cinterop.ExperimentalForeignApi")
+        }
 
-        afterEvaluate {
-            linuxX64 {
-                configureTarget(executable, packageName, includePath, libraryPath)
+        linuxX64 {
+            afterEvaluate {
+                configureFromDsl(executable, packageName, enableCInterop)
             }
-            macosArm64 {
-                configureTarget(executable, packageName, includePath, libraryPath)
+        }
+        macosArm64 {
+            afterEvaluate {
+                configureFromDsl(executable, packageName, enableCInterop)
             }
-            mingwX64 {
-                configureTarget(executable, packageName, includePath, libraryPath)
+        }
+        mingwX64 {
+            afterEvaluate {
+                configureFromDsl(executable, packageName, enableCInterop)
+            }
+        }
+
+        targets.withType<KotlinNativeTarget>().configureEach {
+            compilations.configureEach {
+                cinterops.configureEach {
+                    val srcPath = Path("src", "nativeInterop", "cinterop")
+                    compilerOpts("-I$srcPath")
+                    compilerOpts(includePath.orNull?.map { "-I$it" }.orEmpty())
+                }
+            }
+            binaries.configureEach {
+                linkerOpts(libraryPath.orNull?.map { "-L$it" }.orEmpty())
             }
         }
     }
 }
 
-private fun KotlinNativeTarget.configureTarget(
-    executable: Boolean,
-    packageName: Provider<String>,
-    includePath: Provider<List<String>>,
-    libraryPath: Provider<List<String>>
-) {
-    compilations.configureEach {
-        cinterops.configureEach {
-            compilerOpts(includePath.orNull?.map { "-I$it" }.orEmpty())
+private fun KotlinNativeTarget.configureFromDsl(executable: Boolean, packageName: Provider<String>, enableCInterop: Provider<Boolean>) {
+    if (enableCInterop.get()) {
+        compilations.named("main") {
+            cinterops.register(project.name) {
+                packageName(packageName.get())
+            }
         }
     }
 
-    binaries {
-        if (executable) {
+    if (executable) {
+        binaries {
             executable {
                 if (packageName.isPresent) {
                     entryPoint = "${packageName.get()}.main"
                 }
-
-                linkerOpts(libraryPath.orNull?.map { "-L$it" }.orEmpty())
             }
         }
     }

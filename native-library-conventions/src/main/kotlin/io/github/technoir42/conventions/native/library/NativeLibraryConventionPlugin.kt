@@ -21,7 +21,7 @@ class NativeLibraryConventionPlugin : Plugin<Project> {
 
         pluginManager.apply("org.jetbrains.kotlin.multiplatform")
 
-        configureKotlinMultiplatform(config.packageName)
+        configureKotlinMultiplatform(config.packageName, config.buildFeatures.cinterop)
         configureDetekt()
     }
 }

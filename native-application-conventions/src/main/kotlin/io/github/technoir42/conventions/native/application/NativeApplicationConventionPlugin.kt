@@ -21,7 +21,7 @@ class NativeApplicationConventionPlugin : Plugin<Project> {
 
         pluginManager.apply("org.jetbrains.kotlin.multiplatform")
 
-        configureKotlinMultiplatform(config.packageName, executable = true)
+        configureKotlinMultiplatform(config.packageName, config.buildFeatures.cinterop, executable = true)
         configureDetekt()
     }
 }

@@ -18,6 +18,8 @@ nativeApplication {
         buildConfig = true
         // Enable Kotlin serialization
         serialization = true
+        // Enable C interop
+        cinterop = true
     }
 }
 ```
