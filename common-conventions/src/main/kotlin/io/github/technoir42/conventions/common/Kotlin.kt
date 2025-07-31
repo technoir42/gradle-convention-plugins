@@ -11,7 +11,6 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import java.io.File
 import kotlin.io.path.Path
 
 fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT) {
@@ -30,9 +29,6 @@ fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT
 }
 
 fun Project.configureKotlinMultiplatform(packageName: Provider<String>, enableCInterop: Property<Boolean>, executable: Boolean = false) {
-    val includePath = providers.environmentVariable("INCLUDE").map { it.split(File.pathSeparator) }
-    val libraryPath = providers.environmentVariable("LIB").map { it.split(File.pathSeparator) }
-
     configure<KotlinMultiplatformExtension> {
         compilerOptions {
             optIn.add("kotlinx.cinterop.ExperimentalForeignApi")
@@ -65,11 +61,7 @@ fun Project.configureKotlinMultiplatform(packageName: Provider<String>, enableCI
                 cinterops.configureEach {
                     val srcPath = Path("src", "nativeInterop", "cinterop")
                     compilerOpts("-I$srcPath")
-                    compilerOpts(includePath.orNull?.map { "-I$it" }.orEmpty())
                 }
-            }
-            binaries.configureEach {
-                linkerOpts(libraryPath.orNull?.map { "-L$it" }.orEmpty())
             }
         }
     }
