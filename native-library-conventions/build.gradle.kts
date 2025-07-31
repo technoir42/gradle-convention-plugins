@@ -12,6 +12,7 @@ dependencies {
     implementation(libs.kotlin.gradle.plugin)
 
     functionalTestImplementation(testFixtures(project(":common-conventions")))
+    functionalTestImplementation(libs.assertj.core)
 }
 
 gradlePlugin {

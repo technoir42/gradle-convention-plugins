@@ -1,9 +1,12 @@
 package io.github.technoir42.conventions.native.library
 
+import io.github.technoir42.conventions.common.ProjectSettingsImpl
 import io.github.technoir42.conventions.common.configureBuildConfig
+import io.github.technoir42.conventions.common.configureCommon
 import io.github.technoir42.conventions.common.configureDetekt
 import io.github.technoir42.conventions.common.configureKotlinMultiplatform
 import io.github.technoir42.conventions.common.configureKotlinSerialization
+import io.github.technoir42.conventions.common.configurePublishing
 import io.github.technoir42.conventions.native.library.api.NativeLibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -21,7 +24,10 @@ class NativeLibraryConventionPlugin : Plugin<Project> {
 
         pluginManager.apply("org.jetbrains.kotlin.multiplatform")
 
+        val projectSettings = ProjectSettingsImpl(this)
+        configureCommon(projectSettings)
         configureKotlinMultiplatform(config.packageName, config.buildFeatures.cinterop)
         configureDetekt()
+        configurePublishing()
     }
 }

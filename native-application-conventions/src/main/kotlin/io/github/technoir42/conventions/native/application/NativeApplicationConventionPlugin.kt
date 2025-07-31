@@ -1,6 +1,8 @@
 package io.github.technoir42.conventions.native.application
 
+import io.github.technoir42.conventions.common.ProjectSettingsImpl
 import io.github.technoir42.conventions.common.configureBuildConfig
+import io.github.technoir42.conventions.common.configureCommon
 import io.github.technoir42.conventions.common.configureDetekt
 import io.github.technoir42.conventions.common.configureKotlinMultiplatform
 import io.github.technoir42.conventions.common.configureKotlinSerialization
@@ -21,6 +23,8 @@ class NativeApplicationConventionPlugin : Plugin<Project> {
 
         pluginManager.apply("org.jetbrains.kotlin.multiplatform")
 
+        val projectSettings = ProjectSettingsImpl(this)
+        configureCommon(projectSettings)
         configureKotlinMultiplatform(config.packageName, config.buildFeatures.cinterop, executable = true)
         configureDetekt()
     }

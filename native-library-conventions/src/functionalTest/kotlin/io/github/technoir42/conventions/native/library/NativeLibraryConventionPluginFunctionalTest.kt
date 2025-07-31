@@ -3,6 +3,7 @@ package io.github.technoir42.conventions.native.library
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
 import io.github.technoir42.conventions.common.fixtures.replaceText
 import io.github.technoir42.conventions.common.fixtures.resolve
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 
@@ -39,5 +40,22 @@ class NativeLibraryConventionPluginFunctionalTest {
             )
 
         gradleRunner.build(":native-library:build")
+    }
+
+    @Test
+    fun publishing() {
+        val repoDir = gradleRunner.projectDir.resolve("repo")
+        repoDir.mkdirs()
+
+        gradleRunner.build(":native-library:publish") {
+            gradleProperties += mapOf(
+                "project.groupId" to "com.example",
+                "project.version" to "v1",
+                "publishRepositoryUrl" to repoDir.toURI()
+            )
+        }
+
+        val artifactDir = repoDir.resolve("com", "example", "native-library", "v1")
+        assertThat(artifactDir).isDirectoryContaining("glob:**native-library-v1*")
     }
 }

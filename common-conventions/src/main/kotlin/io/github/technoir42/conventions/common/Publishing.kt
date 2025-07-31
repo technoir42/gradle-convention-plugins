@@ -32,7 +32,8 @@ fun Project.configurePublishing(isLibrary: Boolean = false) {
         publications {
             if (isLibrary) {
                 register<MavenPublication>("libraryMaven") {
-                    from(components["java"])
+                    val component = components.findByName("kotlin") ?: components["java"]
+                    from(component)
                 }
             }
 
