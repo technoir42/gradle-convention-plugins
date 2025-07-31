@@ -38,20 +38,26 @@ fun Project.configureKotlinMultiplatform(packageName: Provider<String>, enableCI
             optIn.add("kotlinx.cinterop.ExperimentalForeignApi")
         }
 
-        linuxX64 {
-            afterEvaluate {
-                configureFromDsl(executable, packageName, enableCInterop)
-            }
+        // Tier 1
+        iosArm64 {
+            afterEvaluate { configureFromDsl(executable, packageName, enableCInterop) }
+        }
+        iosSimulatorArm64 {
+            afterEvaluate { configureFromDsl(executable, packageName, enableCInterop) }
         }
         macosArm64 {
-            afterEvaluate {
-                configureFromDsl(executable, packageName, enableCInterop)
-            }
+            afterEvaluate { configureFromDsl(executable, packageName, enableCInterop) }
+        }
+        // Tier 2
+        linuxX64 {
+            afterEvaluate { configureFromDsl(executable, packageName, enableCInterop) }
+        }
+        // Tier 3
+        androidNativeArm64 {
+            afterEvaluate { configureFromDsl(executable, packageName, enableCInterop) }
         }
         mingwX64 {
-            afterEvaluate {
-                configureFromDsl(executable, packageName, enableCInterop)
-            }
+            afterEvaluate { configureFromDsl(executable, packageName, enableCInterop) }
         }
 
         targets.withType<KotlinNativeTarget>().configureEach {
