@@ -16,14 +16,19 @@ internal fun Settings.configureDependencyResolution(environment: Environment) {
         rulesMode.set(RulesMode.FAIL_ON_PROJECT_RULES)
 
         repositories {
-            mavenCentral()
-            maven(providers.gradleProperty("mavenRepositoryUrl")) {
-                if (url.scheme != "file") {
-                    credentials(PasswordCredentials::class)
-                }
-            }
             if (!environment.isCi) {
                 mavenLocal()
+            }
+            mavenCentral()
+            google()
+
+            val mavenRepositoryUrl = providers.gradleProperty("mavenRepositoryUrl")
+            if (mavenRepositoryUrl.isPresent) {
+                maven(mavenRepositoryUrl) {
+                    if (url.scheme != "file") {
+                        credentials(PasswordCredentials::class)
+                    }
+                }
             }
         }
     }
