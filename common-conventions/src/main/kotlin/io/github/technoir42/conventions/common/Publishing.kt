@@ -2,11 +2,9 @@ package io.github.technoir42.conventions.common
 
 import org.gradle.api.Project
 import org.gradle.api.attributes.Usage
-import org.gradle.api.credentials.PasswordCredentials
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.credentials
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.maven
 import org.gradle.kotlin.dsl.register
@@ -18,12 +16,15 @@ fun Project.configurePublishing(isLibrary: Boolean = false) {
     val projectDescription = provider { description }
 
     configure<PublishingExtension> {
-        val publishRepositoryUrl = providers.gradleProperty("publishRepositoryUrl")
+        val publishUrl = providers.gradleProperty("publish.url")
         repositories {
-            if (publishRepositoryUrl.isPresent) {
-                maven(publishRepositoryUrl) {
+            if (publishUrl.isPresent) {
+                maven(publishUrl) {
                     if (url.scheme != "file") {
-                        credentials(PasswordCredentials::class)
+                        credentials {
+                            username = providers.gradleProperty("publish.username").orNull
+                            password = providers.gradleProperty("publish.password").orNull
+                        }
                     }
                 }
             }

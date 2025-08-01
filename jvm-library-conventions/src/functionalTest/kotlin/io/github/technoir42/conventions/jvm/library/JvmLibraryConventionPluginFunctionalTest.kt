@@ -24,7 +24,7 @@ class JvmLibraryConventionPluginFunctionalTest {
             gradleProperties += mapOf(
                 "project.groupId" to "com.example",
                 "project.version" to "v1",
-                "publishRepositoryUrl" to repoDir.toURI()
+                "publish.url" to repoDir.toURI()
             )
         }
 
