@@ -27,7 +27,8 @@ class NativeApplicationConventionPluginFunctionalTest {
             """.trimIndent()
         )
 
-        val newMainKt = projectDir.resolve("src", "nativeMain", "kotlin", "com", "example", "native", "application", "Main.kt").apply { parentFile.mkdirs() }
+        val newMainKt = projectDir.resolve("src", "nativeMain", "kotlin", "com", "example", "native", "application", "Main.kt")
+            .apply { parentFile.mkdirs() }
         projectDir.resolve("src", "nativeMain", "kotlin", "native", "application", "Main.kt").renameTo(newMainKt)
         newMainKt.replaceText("package native.application", "package com.example.native.application")
 

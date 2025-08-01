@@ -1,22 +1,22 @@
 formatting:
   ArgumentListWrapping:
-    maxLineLength: 160
+    maxLineLength: 140
   ContextReceiverMapping:
-    maxLineLength: 160
+    maxLineLength: 140
   FunctionReturnTypeSpacing:
-    maxLineLength: 160
+    maxLineLength: 140
   FunctionSignature:
-    maxLineLength: 160
+    maxLineLength: 140
   MaximumLineLength:
-    maxLineLength: 160
+    maxLineLength: 140
   ParameterListWrapping:
-    maxLineLength: 160
+    maxLineLength: 140
   ParameterWrapping:
-    maxLineLength: 160
+    maxLineLength: 140
   PropertyWrapping:
-    maxLineLength: 160
+    maxLineLength: 140
   Wrapping:
-    maxLineLength: 160
+    maxLineLength: 140
 
 naming:
   FunctionNaming:
