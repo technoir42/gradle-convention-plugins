@@ -4,7 +4,7 @@ buildconfig = "5.6.7"
 dependency-analysis-gradle-plugin = "2.19.0"
 detekt = "1.23.8"
 junit = "5.13.4"
-kotlin = "2.2.0"
+kotlin = "2.1.21"
 kotlinx-coroutines = "1.10.2"
 kotlinx-serialization = "1.8.1"
 
