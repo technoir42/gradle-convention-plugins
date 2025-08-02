@@ -10,7 +10,9 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.plugin.mpp.Executable
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.konan.target.HostManager
 import kotlin.io.path.Path
 
 fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT) {
@@ -58,10 +60,21 @@ fun Project.configureKotlinMultiplatform(packageName: Provider<String>, enableCI
         }
 
         targets.withType<KotlinNativeTarget>().configureEach {
+            val target = this
             compilations.configureEach {
                 cinterops.configureEach {
                     val srcPath = Path("src", "nativeInterop", "cinterop")
                     compilerOpts("-I$srcPath")
+                }
+            }
+            binaries.withType<Executable>().configureEach {
+                if (HostManager.host == konanTarget && runTaskName != null) {
+                    val executableName = name
+                    tasks.register("run${executableName.capitalized()}") {
+                        group = "run"
+                        description = "Executes Kotlin/Native executable $executableName for target ${target.name}"
+                        dependsOn(runTaskName!!)
+                    }
                 }
             }
         }

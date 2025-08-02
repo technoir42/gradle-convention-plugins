@@ -3,6 +3,7 @@ package io.github.technoir42.conventions.native.application
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
 import io.github.technoir42.conventions.common.fixtures.replaceText
 import io.github.technoir42.conventions.common.fixtures.resolve
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 
@@ -33,5 +34,12 @@ class NativeApplicationConventionPluginFunctionalTest {
         newMainKt.replaceText("package native.application", "package com.example.native.application")
 
         gradleRunner.build(":native-application:build")
+    }
+
+    @Test
+    fun running() {
+        val buildResult = gradleRunner.build(":native-application:runDebugExecutable")
+
+        assertThat(buildResult.output).contains("Hello, world!")
     }
 }
