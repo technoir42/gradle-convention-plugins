@@ -1,0 +1,38 @@
+name: Publish
+on:
+  push:
+    tags: [ '*' ]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build with Gradle
+        run: >
+          ./gradlew build
+          -Pgpr.user=${{ github.repository_owner }}
+          -Pgpr.token=${{ secrets.GITHUB_TOKEN }}
+          -Pproject.version=${{ github.ref_name }}
+
+      - name: Publish
+        run: >
+          ./gradlew publish
+          --no-configuration-cache
+          -Pgpr.user=${{ github.repository_owner }}
+          -Pgpr.token=${{ secrets.GITHUB_TOKEN }}
+          -Pproject.version=${{ github.ref_name }}
+          -Ppublish.url=https://maven.pkg.github.com/technoir42/gradle-convention-plugins
+          -Ppublish.username=${{ secrets.DEPLOY_USER }}
+          -Ppublish.password=${{ secrets.DEPLOY_TOKEN }}
