@@ -32,6 +32,7 @@ fun Project.configureKotlinMultiplatform(packageName: Provider<String>, enableCI
     configure<KotlinMultiplatformExtension> {
         compilerOptions {
             optIn.add("kotlinx.cinterop.ExperimentalForeignApi")
+            freeCompilerArgs.add("-Xexpect-actual-classes")
         }
 
         // Tier 1
