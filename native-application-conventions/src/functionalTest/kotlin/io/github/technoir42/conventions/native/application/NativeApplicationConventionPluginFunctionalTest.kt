@@ -17,6 +17,50 @@ class NativeApplicationConventionPluginFunctionalTest {
     }
 
     @Test
+    fun `default targets`() {
+        val buildResult = gradleRunner.build(":native-application:tasks")
+
+        assertThat(buildResult.output).contains(
+            "androidNativeArm64",
+            "iosArm64",
+            "iosSimulatorArm64",
+            "linuxX64",
+            "macosArm64",
+            "mingwX64",
+        )
+    }
+
+    @Test
+    fun `custom targets`() {
+        gradleRunner.projectDir.resolve("native-application", "build.gradle.kts").appendText(
+            // language=kotlin
+            """
+            nativeApplication {
+                defaultTargets = false
+            }
+            kotlin {
+                linuxArm64()
+            }
+            """.trimIndent()
+        )
+
+        val buildResult = gradleRunner.build(":native-application:tasks")
+
+        assertThat(buildResult.output)
+            .contains(
+                "linuxArm64",
+            )
+            .doesNotContain(
+                "androidNativeArm64",
+                "iosArm64",
+                "iosSimulatorArm64",
+                "linuxX64",
+                "macosArm64",
+                "mingwX64",
+            )
+    }
+
+    @Test
     fun `custom package name`() {
         val projectDir = gradleRunner.projectDir.resolve("native-application")
         projectDir.resolve("build.gradle.kts").appendText(
@@ -33,7 +77,9 @@ class NativeApplicationConventionPluginFunctionalTest {
         projectDir.resolve("src", "nativeMain", "kotlin", "native", "application", "Main.kt").renameTo(newMainKt)
         newMainKt.replaceText("package native.application", "package com.example.native.application")
 
-        gradleRunner.build(":native-application:build")
+        val buildResult = gradleRunner.build(":native-application:runDebugExecutable")
+
+        assertThat(buildResult.output).contains("Hello, world!")
     }
 
     @Test

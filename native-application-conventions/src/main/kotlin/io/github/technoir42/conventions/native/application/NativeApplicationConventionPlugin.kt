@@ -21,11 +21,14 @@ class NativeApplicationConventionPlugin : Plugin<Project> {
             configureKotlinSerialization(config.buildFeatures.serialization)
         }
 
-        pluginManager.apply("org.jetbrains.kotlin.multiplatform")
-
         val projectSettings = ProjectSettingsImpl(this)
         configureCommon(projectSettings)
-        configureKotlinMultiplatform(config.packageName, config.buildFeatures.cinterop, executable = true)
+        configureKotlinMultiplatform(
+            packageName = config.packageName,
+            defaultTargets = config.defaultTargets,
+            enableCInterop = config.buildFeatures.cinterop,
+            executable = true
+        )
         configureDetekt()
     }
 }

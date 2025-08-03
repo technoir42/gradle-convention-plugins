@@ -17,6 +17,50 @@ class NativeLibraryConventionPluginFunctionalTest {
     }
 
     @Test
+    fun `default targets`() {
+        val buildResult = gradleRunner.build(":native-library:tasks")
+
+        assertThat(buildResult.output).contains(
+            "androidNativeArm64",
+            "iosArm64",
+            "iosSimulatorArm64",
+            "linuxX64",
+            "macosArm64",
+            "mingwX64",
+        )
+    }
+
+    @Test
+    fun `custom targets`() {
+        gradleRunner.projectDir.resolve("native-library", "build.gradle.kts").appendText(
+            // language=kotlin
+            """
+            nativeLibrary {
+                defaultTargets = false
+            }
+            kotlin {
+                linuxArm64()
+            }
+            """.trimIndent()
+        )
+
+        val buildResult = gradleRunner.build(":native-library:tasks")
+
+        assertThat(buildResult.output)
+            .contains(
+                "linuxArm64",
+            )
+            .doesNotContain(
+                "androidNativeArm64",
+                "iosArm64",
+                "iosSimulatorArm64",
+                "linuxX64",
+                "macosArm64",
+                "mingwX64",
+            )
+    }
+
+    @Test
     fun `custom package name`() {
         val projectDir = gradleRunner.projectDir.resolve("native-library")
         projectDir.resolve("build.gradle.kts").appendText(

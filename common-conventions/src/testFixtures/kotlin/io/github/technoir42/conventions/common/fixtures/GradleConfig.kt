@@ -7,7 +7,7 @@ class GradleConfig(
     var configurationOnDemand: Boolean = true,
     var dryRun: Boolean = false,
     var isolatedProjects: Boolean = true,
-    val arguments: MutableList<String> = mutableListOf(),
+    val arguments: MutableList<String> = mutableListOf("--stacktrace"),
     val gradleProperties: MutableMap<String, Any> = mutableMapOf(),
     val systemProperties: MutableMap<String, Any> = mutableMapOf(),
 ) {

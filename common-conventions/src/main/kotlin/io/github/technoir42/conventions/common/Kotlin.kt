@@ -10,6 +10,8 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
+import org.jetbrains.kotlin.gradle.plugin.KotlinNativeTargetConfigurator.Companion.RUN_GROUP
 import org.jetbrains.kotlin.gradle.plugin.mpp.Executable
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.konan.target.HostManager
@@ -30,71 +32,67 @@ fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT
     }
 }
 
-fun Project.configureKotlinMultiplatform(packageName: Provider<String>, enableCInterop: Property<Boolean>, executable: Boolean = false) {
+fun Project.configureKotlinMultiplatform(
+    packageName: Provider<String>,
+    defaultTargets: Provider<Boolean>,
+    enableCInterop: Property<Boolean>,
+    executable: Boolean = false
+) {
+    afterEvaluate {
+        if (defaultTargets.get()) {
+            configure<KotlinMultiplatformExtension> {
+                // Tier 1
+                iosArm64()
+                iosSimulatorArm64()
+                macosArm64()
+                // Tier 2
+                linuxX64()
+                // Tier 3
+                androidNativeArm64()
+                mingwX64()
+            }
+        }
+    }
+
+    pluginManager.apply("org.jetbrains.kotlin.multiplatform")
+
     configure<KotlinMultiplatformExtension> {
         compilerOptions {
             optIn.add("kotlinx.cinterop.ExperimentalForeignApi")
             freeCompilerArgs.add("-Xexpect-actual-classes")
         }
 
-        // Tier 1
-        iosArm64 {
-            afterEvaluate { configureFromDsl(executable, packageName, enableCInterop) }
-        }
-        iosSimulatorArm64 {
-            afterEvaluate { configureFromDsl(executable, packageName, enableCInterop) }
-        }
-        macosArm64 {
-            afterEvaluate { configureFromDsl(executable, packageName, enableCInterop) }
-        }
-        // Tier 2
-        linuxX64 {
-            afterEvaluate { configureFromDsl(executable, packageName, enableCInterop) }
-        }
-        // Tier 3
-        androidNativeArm64 {
-            afterEvaluate { configureFromDsl(executable, packageName, enableCInterop) }
-        }
-        mingwX64 {
-            afterEvaluate { configureFromDsl(executable, packageName, enableCInterop) }
-        }
-
         targets.withType<KotlinNativeTarget>().configureEach {
-            val target = this
-            compilations.configureEach {
-                cinterops.configureEach {
-                    val srcPath = Path("src", "nativeInterop", "cinterop")
-                    compilerOpts("-I$srcPath")
-                }
-            }
-            binaries.withType<Executable>().configureEach {
-                if (HostManager.host == konanTarget && runTaskName != null) {
-                    val executableName = name
-                    tasks.register("run${executableName.capitalized()}") {
-                        group = "run"
-                        description = "Executes Kotlin/Native executable $executableName for target ${target.name}"
-                        dependsOn(runTaskName!!)
-                    }
-                }
-            }
+            configureTarget(packageName, enableCInterop, executable)
         }
     }
 }
 
-private fun KotlinNativeTarget.configureFromDsl(executable: Boolean, packageName: Provider<String>, enableCInterop: Provider<Boolean>) {
+private fun KotlinNativeTarget.configureTarget(packageName: Provider<String>, enableCInterop: Property<Boolean>, executable: Boolean) {
     if (enableCInterop.get()) {
-        compilations.named("main") {
+        compilations.named(KotlinCompilation.MAIN_COMPILATION_NAME) {
             cinterops.register(project.name) {
                 packageName(packageName.get())
+                val srcPath = Path("src", "nativeInterop", "cinterop")
+                compilerOpts("-I$srcPath")
             }
         }
     }
-
-    if (executable) {
-        binaries {
+    binaries {
+        if (executable) {
             executable {
                 if (packageName.isPresent) {
                     entryPoint = "${packageName.get()}.main"
+                }
+            }
+        }
+        if (HostManager.host == konanTarget) {
+            withType<Executable>().configureEach {
+                val executableName = name
+                project.tasks.register("run${executableName.capitalized()}") {
+                    group = RUN_GROUP
+                    description = "Executes Kotlin/Native executable $executableName for target ${target.name}"
+                    dependsOn(runTaskName!!)
                 }
             }
         }
