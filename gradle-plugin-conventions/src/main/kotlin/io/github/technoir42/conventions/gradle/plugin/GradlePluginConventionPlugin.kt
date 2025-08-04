@@ -14,7 +14,6 @@ import io.github.technoir42.conventions.gradle.plugin.api.GradlePluginExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 class GradlePluginConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
@@ -31,7 +30,7 @@ class GradlePluginConventionPlugin : Plugin<Project> {
         val projectSettings = ProjectSettingsImpl(this)
         configureCommon(projectSettings)
         configureJava()
-        configureKotlin(KotlinVersion.KOTLIN_1_8)
+        configureKotlin()
         configureDetekt()
         configurePublishing()
         configurePlugin()

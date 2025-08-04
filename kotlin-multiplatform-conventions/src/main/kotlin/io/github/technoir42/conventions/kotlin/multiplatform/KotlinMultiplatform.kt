@@ -43,7 +43,10 @@ internal fun Project.configureKotlinMultiplatform(
     configure<KotlinMultiplatformExtension> {
         compilerOptions {
             optIn.add("kotlinx.cinterop.ExperimentalForeignApi")
-            freeCompilerArgs.add("-Xexpect-actual-classes")
+            freeCompilerArgs.addAll(
+                "-Xconsistent-data-class-copy-visibility",
+                "-Xexpect-actual-classes"
+            )
         }
 
         targets.withType<KotlinNativeTarget>().configureEach {

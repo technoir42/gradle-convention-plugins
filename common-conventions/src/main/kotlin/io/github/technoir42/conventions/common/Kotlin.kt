@@ -5,13 +5,13 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
-fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT) {
+fun Project.configureKotlin() {
     configure<KotlinJvmProjectExtension> {
         compilerOptions {
-            apiVersion.set(kotlinVersion)
-            languageVersion.set(kotlinVersion)
+            freeCompilerArgs.addAll(
+                "-Xconsistent-data-class-copy-visibility"
+            )
         }
     }
 
