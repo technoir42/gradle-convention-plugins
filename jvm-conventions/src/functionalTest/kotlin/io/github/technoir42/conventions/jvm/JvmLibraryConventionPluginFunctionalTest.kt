@@ -31,4 +31,20 @@ class JvmLibraryConventionPluginFunctionalTest {
         val artifactDir = repoDir.resolve("com", "example", "jvm-library", "v1")
         assertThat(artifactDir).isDirectoryContaining("glob:**jvm-library-v1*")
     }
+
+    @Test
+    fun `declaring common dependencies without versions`() {
+        gradleRunner.projectDir.resolve("jvm-library", "build.gradle.kts").appendText(
+            // language=kotlin
+            """
+            dependencies {
+                implementation("org.jetbrains.kotlin:kotlin-reflect")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core")
+            }
+            """.trimIndent()
+        )
+
+        gradleRunner.build(":jvm-library:assemble")
+    }
 }

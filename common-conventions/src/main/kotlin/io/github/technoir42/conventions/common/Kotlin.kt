@@ -16,8 +16,8 @@ fun Project.configureKotlin(kotlinVersion: KotlinVersion = KotlinVersion.DEFAULT
     }
 
     dependencies {
-        implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-        implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:${DependencyVersions.KOTLINX_COROUTINES}"))
-        implementation(platform("org.jetbrains.kotlinx:kotlinx-serialization-bom:${DependencyVersions.KOTLINX_SERIALIZATION}"))
+        implementation(platform(CommonDependencies.KOTLIN_BOM))
+        implementation(platform(CommonDependencies.KOTLINX_COROUTINES_BOM))
+        implementation(platform(CommonDependencies.KOTLINX_SERIALIZATION_BOM))
     }
 }

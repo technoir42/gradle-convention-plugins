@@ -102,4 +102,24 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
         val artifactDir = repoDir.resolve("com", "example", "kmp-library", "v1")
         assertThat(artifactDir).isDirectoryContaining("glob:**kmp-library-v1*")
     }
+
+    @Test
+    fun `declaring common dependencies without versions`() {
+        gradleRunner.projectDir.resolve("kmp-library", "build.gradle.kts").appendText(
+            // language=kotlin
+            """
+            kotlin {
+                sourceSets {
+                    commonMain.dependencies {
+                        implementation("org.jetbrains.kotlin:kotlin-reflect")
+                        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+                        implementation("org.jetbrains.kotlinx:kotlinx-serialization-core")
+                    }
+                }
+            }
+            """.trimIndent()
+        )
+
+        gradleRunner.build(":kmp-library:assemble")
+    }
 }

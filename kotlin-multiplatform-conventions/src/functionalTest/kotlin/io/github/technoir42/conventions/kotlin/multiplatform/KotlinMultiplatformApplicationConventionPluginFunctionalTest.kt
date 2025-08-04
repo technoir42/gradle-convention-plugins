@@ -88,4 +88,24 @@ class KotlinMultiplatformApplicationConventionPluginFunctionalTest {
 
         assertThat(buildResult.output).contains("Hello, world!")
     }
+
+    @Test
+    fun `declaring common dependencies without versions`() {
+        gradleRunner.projectDir.resolve("kmp-application", "build.gradle.kts").appendText(
+            // language=kotlin
+            """
+            kotlin {
+                sourceSets {
+                    commonMain.dependencies {
+                        implementation("org.jetbrains.kotlin:kotlin-reflect")
+                        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+                        implementation("org.jetbrains.kotlinx:kotlinx-serialization-core")
+                    }
+                }
+            }
+            """.trimIndent()
+        )
+
+        gradleRunner.build(":kmp-application:assemble")
+    }
 }

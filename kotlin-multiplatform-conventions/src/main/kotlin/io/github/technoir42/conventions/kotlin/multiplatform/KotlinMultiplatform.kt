@@ -1,10 +1,12 @@
 package io.github.technoir42.conventions.kotlin.multiplatform
 
+import io.github.technoir42.conventions.common.CommonDependencies
 import io.github.technoir42.conventions.common.capitalized
 import org.gradle.api.Project
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
@@ -46,6 +48,14 @@ internal fun Project.configureKotlinMultiplatform(
 
         targets.withType<KotlinNativeTarget>().configureEach {
             configureTarget(packageName, enableCInterop, executable)
+        }
+
+        sourceSets {
+            commonMain.dependencies {
+                implementation(dependencies.platform(CommonDependencies.KOTLIN_BOM))
+                implementation(dependencies.platform(CommonDependencies.KOTLINX_COROUTINES_BOM))
+                implementation(dependencies.platform(CommonDependencies.KOTLINX_SERIALIZATION_BOM))
+            }
         }
     }
 }
