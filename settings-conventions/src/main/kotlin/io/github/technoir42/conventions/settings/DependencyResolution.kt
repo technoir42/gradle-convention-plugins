@@ -18,6 +18,7 @@ internal fun Settings.configureDependencyResolution(environment: Environment) {
             }
             mavenCentral()
             google()
+            gradlePluginPortal()
         }
     }
 }
