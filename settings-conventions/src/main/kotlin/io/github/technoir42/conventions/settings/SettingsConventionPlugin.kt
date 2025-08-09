@@ -9,6 +9,7 @@ import org.gradle.kotlin.dsl.create
 class SettingsConventionPlugin : Plugin<Settings> {
     override fun apply(settings: Settings) = with(settings) {
         pluginManager.apply("com.autonomousapps.build-health")
+        pluginManager.apply("org.gradle.toolchains.foojay-resolver-convention")
 
         val config = extensions.create<SettingsExtension>(SettingsExtension.NAME)
 

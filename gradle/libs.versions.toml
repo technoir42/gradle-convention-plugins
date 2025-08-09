@@ -3,6 +3,7 @@ assertj = "3.27.3"
 buildconfig = "5.6.7"
 dependency-analysis-gradle-plugin = "2.19.0"
 detekt = "1.23.8"
+foojay-resolver-gradle-plugin = "1.0.0"
 junit = "5.13.4"
 kotlin = "2.1.21"
 kotlinx-coroutines = "1.10.2"
@@ -13,6 +14,7 @@ assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 buildconfig-gradle-plugin = { module = "com.github.gmazzo.buildconfig:plugin", version.ref = "buildconfig" }
 dependency-analysis-gradle-plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependency-analysis-gradle-plugin" }
 detekt-gradle-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+foojay-resolver-gradle-plugin = { module = "org.gradle.toolchains:foojay-resolver", version.ref = "foojay-resolver-gradle-plugin" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }

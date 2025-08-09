@@ -6,6 +6,7 @@ dependencies {
     implementation(project(":common-conventions"))
     implementation(project(":gradle-extensions"))
     implementation(libs.dependency.analysis.gradle.plugin)
+    implementation(libs.foojay.resolver.gradle.plugin)
 }
 
 gradlePlugin {
