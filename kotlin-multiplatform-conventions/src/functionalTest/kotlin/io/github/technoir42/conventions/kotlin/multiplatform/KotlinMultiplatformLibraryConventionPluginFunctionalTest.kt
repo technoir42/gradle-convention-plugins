@@ -75,11 +75,12 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
         projectDir.resolve("src", "commonMain", "kotlin", "kmp", "library", "KmpLibrary.kt")
             .replaceText(
                 """
-                    import kotlinx.cinterop.ExperimentalForeignApi
+                    package kmp.library
                 """.trimIndent(),
                 """
+                    package kmp.library
+                    
                     import com.example.kmp.library.nativeGreet
-                    import kotlinx.cinterop.ExperimentalForeignApi
                 """.trimIndent()
             )
 
