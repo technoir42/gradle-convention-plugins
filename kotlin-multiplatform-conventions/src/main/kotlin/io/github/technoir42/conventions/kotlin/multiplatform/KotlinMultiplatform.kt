@@ -42,8 +42,12 @@ internal fun Project.configureKotlinMultiplatform(
 
     configure<KotlinMultiplatformExtension> {
         compilerOptions {
-            optIn.add("kotlinx.cinterop.ExperimentalForeignApi")
+            optIn.addAll(
+                "kotlin.time.ExperimentalTime",
+                "kotlinx.cinterop.ExperimentalForeignApi"
+            )
             freeCompilerArgs.addAll(
+                "-Xcontext-parameters",
                 "-Xconsistent-data-class-copy-visibility",
                 "-Xexpect-actual-classes"
             )

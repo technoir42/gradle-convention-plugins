@@ -9,7 +9,9 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 fun Project.configureKotlin() {
     configure<KotlinJvmProjectExtension> {
         compilerOptions {
+            optIn.add("kotlin.time.ExperimentalTime")
             freeCompilerArgs.addAll(
+                "-Xcontext-parameters",
                 "-Xconsistent-data-class-copy-visibility"
             )
         }
