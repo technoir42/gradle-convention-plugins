@@ -2,6 +2,7 @@ package io.github.technoir42.conventions.kotlin.multiplatform
 
 import io.github.technoir42.conventions.common.CommonDependencies
 import io.github.technoir42.conventions.common.capitalized
+import io.github.technoir42.conventions.common.configureCompilerOptions
 import org.gradle.api.Project
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
@@ -12,7 +13,9 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinNativeTargetConfigurator.Companion.RUN_GROUP
 import org.jetbrains.kotlin.gradle.plugin.mpp.Executable
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 import org.jetbrains.kotlin.konan.target.HostManager
 import kotlin.io.path.Path
 
@@ -49,12 +52,17 @@ internal fun Project.configureKotlinMultiplatform(
             freeCompilerArgs.addAll(
                 "-Xcontext-parameters",
                 "-Xconsistent-data-class-copy-visibility",
-                "-Xexpect-actual-classes"
+                "-Xexpect-actual-classes",
+                "-Xnested-type-aliases",
             )
         }
 
-        targets.withType<KotlinNativeTarget>().configureEach {
-            configureTarget(packageName, enableCInterop, executable)
+        targets.configureEach {
+            when (this) {
+                is KotlinAndroidTarget -> configureCompilerOptions()
+                is KotlinJvmTarget -> configureCompilerOptions()
+                is KotlinNativeTarget -> configureNativeTarget(packageName, enableCInterop, executable)
+            }
         }
 
         sourceSets {
@@ -67,7 +75,11 @@ internal fun Project.configureKotlinMultiplatform(
     }
 }
 
-private fun KotlinNativeTarget.configureTarget(packageName: Provider<String>, enableCInterop: Property<Boolean>, executable: Boolean) {
+private fun KotlinNativeTarget.configureNativeTarget(
+    packageName: Provider<String>,
+    enableCInterop: Property<Boolean>,
+    executable: Boolean
+) {
     if (enableCInterop.get()) {
         compilations.named(KotlinCompilation.MAIN_COMPILATION_NAME) {
             cinterops.register(project.name) {
