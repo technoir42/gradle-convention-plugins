@@ -5,7 +5,7 @@ import org.gradle.api.initialization.Settings
 import org.gradle.kotlin.dsl.configure
 
 internal fun Settings.configureDependencyAnalysis() {
-    configure<DependencyAnalysisExtension> {
+    extensions.configure(DependencyAnalysisExtension::class) {
         abi {
             exclusions {
                 ignoreGeneratedCode()

@@ -2,6 +2,12 @@ plugins {
     id("io.github.technoir42.conventions.gradle-plugin")
 }
 
+gradlePluginConfig {
+    buildFeatures {
+        abiValidation = true
+    }
+}
+
 dependencies {
     implementation(project(":common-conventions"))
     implementation(project(":gradle-extensions"))

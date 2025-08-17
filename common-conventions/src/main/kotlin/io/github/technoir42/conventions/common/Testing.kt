@@ -10,7 +10,7 @@ fun Project.configureTesting() {
     pluginManager.apply("jvm-test-suite")
 
     @Suppress("UnstableApiUsage")
-    configure<TestingExtension> {
+    extensions.configure(TestingExtension::class) {
         suites.withType<JvmTestSuite>().configureEach {
             useJUnitJupiter(DependencyVersions.JUNIT)
         }

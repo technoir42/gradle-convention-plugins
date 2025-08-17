@@ -14,11 +14,11 @@ import org.jetbrains.kotlin.gradle.dsl.abi.AbiValidationExtension
 import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 
 fun Project.configureKotlin(enableAbiValidation: Provider<Boolean>) {
-    configure<KotlinJvmProjectExtension> {
+    extensions.configure(KotlinJvmProjectExtension::class) {
         configureCompilerOptions()
 
         @OptIn(ExperimentalAbiValidation::class)
-        configure<AbiValidationExtension> {
+        extensions.configure(AbiValidationExtension::class) {
             enabled.set(enableAbiValidation)
         }
     }

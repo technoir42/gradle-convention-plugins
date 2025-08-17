@@ -17,7 +17,7 @@ import org.gradle.plugin.devel.tasks.ValidatePlugins
 import org.gradle.testing.base.TestingExtension
 
 internal fun Project.configurePlugin() {
-    configure<JavaPluginExtension> {
+    extensions.configure(JavaPluginExtension::class) {
         val apiSourceSet = sourceSets.create(API_VARIANT_NAME)
 
         registerFeature(API_VARIANT_NAME) {
@@ -28,8 +28,8 @@ internal fun Project.configurePlugin() {
     }
 
     @Suppress("UnstableApiUsage")
-    configure<TestingExtension> {
-        val functionalTestSuite = suites.register<JvmTestSuite>("functionalTest") {
+    extensions.configure(TestingExtension::class) {
+        val functionalTestSuite = suites.register("functionalTest", JvmTestSuite::class) {
             dependencies {
                 implementation.add(project())
                 implementation.add(gradleTestKit())
@@ -38,7 +38,7 @@ internal fun Project.configurePlugin() {
         tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME).configure {
             dependsOn(functionalTestSuite)
         }
-        configure<GradlePluginDevelopmentExtension> {
+        extensions.configure(GradlePluginDevelopmentExtension::class) {
             testSourceSet(functionalTestSuite.get().sources)
         }
     }

@@ -15,7 +15,7 @@ fun Project.configurePublishing(isLibrary: Boolean = false) {
 
     val projectDescription = provider { description }
 
-    configure<PublishingExtension> {
+    extensions.configure(PublishingExtension::class) {
         val publishUrl = providers.gradleProperty("publish.url")
         repositories {
             if (publishUrl.isPresent) {
@@ -32,7 +32,7 @@ fun Project.configurePublishing(isLibrary: Boolean = false) {
 
         publications {
             if (isLibrary) {
-                register<MavenPublication>("libraryMaven") {
+                register("libraryMaven", MavenPublication::class) {
                     val component = components.findByName("kotlin") ?: components["java"]
                     from(component)
                 }

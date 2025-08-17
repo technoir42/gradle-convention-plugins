@@ -1,9 +1,9 @@
 package io.github.technoir42.conventions.kotlin.multiplatform
 
 import io.github.technoir42.conventions.common.CommonDependencies
-import io.github.technoir42.conventions.common.capitalized
 import io.github.technoir42.conventions.common.configureCompilerOptions
 import io.github.technoir42.conventions.kotlin.multiplatform.api.KotlinMultiplatformBuildFeatures
+import io.github.technoir42.gradle.capitalized
 import org.gradle.api.Project
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
@@ -31,7 +31,7 @@ internal fun Project.configureKotlinMultiplatform(
 ) {
     afterEvaluate {
         if (defaultTargets.get()) {
-            configure<KotlinMultiplatformExtension> {
+            extensions.configure(KotlinMultiplatformExtension::class) {
                 // Tier 1
                 iosArm64()
                 iosSimulatorArm64()
@@ -47,9 +47,9 @@ internal fun Project.configureKotlinMultiplatform(
 
     pluginManager.apply("org.jetbrains.kotlin.multiplatform")
 
-    configure<KotlinMultiplatformExtension> {
+    extensions.configure(KotlinMultiplatformExtension::class) {
         @OptIn(ExperimentalAbiValidation::class)
-        configure<AbiValidationMultiplatformExtension> {
+        extensions.configure(AbiValidationMultiplatformExtension::class) {
             enabled.set(buildFeatures.abiValidation)
         }
 

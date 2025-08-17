@@ -10,7 +10,7 @@ fun Project.configureTestFixtures() {
     pluginManager.apply("java-test-fixtures")
 
     pluginManager.withPlugin("maven-publish") {
-        configure<PublishingExtension> {
+        extensions.configure(PublishingExtension::class) {
             publications.withType<MavenPublication>().configureEach {
                 suppressPomMetadataWarningsFor("testFixturesApiElements")
                 suppressPomMetadataWarningsFor("testFixturesRuntimeElements")

@@ -39,7 +39,7 @@ class JvmApplicationConventionPlugin : Plugin<Project> {
     }
 
     private fun Project.configureApplication(config: JvmApplicationExtension) {
-        configure<JavaApplication> {
+        extensions.configure(JavaApplication::class) {
             mainClass.set(config.fullyQualifiedMainClass)
 
             afterEvaluate {

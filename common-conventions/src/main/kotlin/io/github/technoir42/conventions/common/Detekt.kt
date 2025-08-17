@@ -16,7 +16,7 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
 fun Project.configureDetekt() {
     pluginManager.apply("io.gitlab.arturbosch.detekt")
 
-    configure<DetektExtension> {
+    extensions.configure(DetektExtension::class) {
         config.from(layout.settingsDirectory.dir("config").file("detekt.yaml"))
         buildUponDefaultConfig = true
     }

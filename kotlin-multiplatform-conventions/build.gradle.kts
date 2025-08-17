@@ -4,6 +4,10 @@ plugins {
 
 gradlePluginConfig {
     packageName = "io.github.technoir42.conventions.kotlin.multiplatform"
+
+    buildFeatures {
+        abiValidation = true
+    }
 }
 
 dependencies {
@@ -13,6 +17,7 @@ dependencies {
         }
     }
     implementation(project(":common-conventions"))
+    implementation(project(":gradle-extensions"))
     implementation(libs.kotlin.gradle.plugin)
 
     functionalTestImplementation(testFixtures(project(":common-conventions")))

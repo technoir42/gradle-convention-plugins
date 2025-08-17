@@ -8,6 +8,7 @@ gradlePluginConfig {
     packageName = "io.github.technoir42.conventions.common"
 
     buildFeatures {
+        abiValidation = true
         buildConfig = true
     }
 }

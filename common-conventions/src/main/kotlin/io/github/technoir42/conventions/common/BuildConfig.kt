@@ -11,7 +11,7 @@ fun Project.configureBuildConfig(enable: Provider<Boolean>, packageName: Propert
 
     pluginManager.apply("com.github.gmazzo.buildconfig")
 
-    configure<BuildConfigExtension> {
+    extensions.configure(BuildConfigExtension::class) {
         this.packageName.set(packageName)
     }
 }
