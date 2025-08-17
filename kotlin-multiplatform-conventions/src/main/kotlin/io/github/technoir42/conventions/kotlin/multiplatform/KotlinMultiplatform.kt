@@ -3,13 +3,17 @@ package io.github.technoir42.conventions.kotlin.multiplatform
 import io.github.technoir42.conventions.common.CommonDependencies
 import io.github.technoir42.conventions.common.capitalized
 import io.github.technoir42.conventions.common.configureCompilerOptions
+import io.github.technoir42.conventions.kotlin.multiplatform.api.KotlinMultiplatformBuildFeatures
 import org.gradle.api.Project
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.withType
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.dsl.abi.AbiValidationMultiplatformExtension
+import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinNativeTargetConfigurator.Companion.RUN_GROUP
 import org.jetbrains.kotlin.gradle.plugin.mpp.Executable
@@ -22,7 +26,7 @@ import kotlin.io.path.Path
 internal fun Project.configureKotlinMultiplatform(
     packageName: Provider<String>,
     defaultTargets: Provider<Boolean>,
-    enableCInterop: Property<Boolean>,
+    buildFeatures: KotlinMultiplatformBuildFeatures,
     executable: Boolean = false
 ) {
     afterEvaluate {
@@ -44,6 +48,11 @@ internal fun Project.configureKotlinMultiplatform(
     pluginManager.apply("org.jetbrains.kotlin.multiplatform")
 
     configure<KotlinMultiplatformExtension> {
+        @OptIn(ExperimentalAbiValidation::class)
+        configure<AbiValidationMultiplatformExtension> {
+            enabled.set(buildFeatures.abiValidation)
+        }
+
         compilerOptions {
             optIn.addAll(
                 "kotlin.time.ExperimentalTime",
@@ -61,7 +70,7 @@ internal fun Project.configureKotlinMultiplatform(
             when (this) {
                 is KotlinAndroidTarget -> configureCompilerOptions()
                 is KotlinJvmTarget -> configureCompilerOptions()
-                is KotlinNativeTarget -> configureNativeTarget(packageName, enableCInterop, executable)
+                is KotlinNativeTarget -> configureNativeTarget(packageName, buildFeatures.cinterop, executable)
             }
         }
 
@@ -71,6 +80,12 @@ internal fun Project.configureKotlinMultiplatform(
                 implementation(dependencies.platform(CommonDependencies.KOTLINX_COROUTINES_BOM))
                 implementation(dependencies.platform(CommonDependencies.KOTLINX_SERIALIZATION_BOM))
             }
+        }
+    }
+
+    tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME).configure {
+        if (buildFeatures.abiValidation.get()) {
+            dependsOn(tasks.named("checkLegacyAbi"))
         }
     }
 }

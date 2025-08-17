@@ -33,7 +33,7 @@ class JvmApplicationConventionPlugin : Plugin<Project> {
         configureCommon(projectSettings)
         configureJava()
         configureApplication(config)
-        configureKotlin()
+        configureKotlin(config.buildFeatures.abiValidation)
         configureDetekt()
         configureTesting()
     }

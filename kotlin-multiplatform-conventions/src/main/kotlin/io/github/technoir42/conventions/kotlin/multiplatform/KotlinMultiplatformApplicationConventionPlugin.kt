@@ -25,7 +25,7 @@ class KotlinMultiplatformApplicationConventionPlugin : Plugin<Project> {
         configureKotlinMultiplatform(
             packageName = config.packageName,
             defaultTargets = config.defaultTargets,
-            enableCInterop = config.buildFeatures.cinterop,
+            buildFeatures = config.buildFeatures,
             executable = true
         )
         configureDetekt()

@@ -1,7 +1,7 @@
-Native application conventions
-==============================
+Kotlin multiplatform conventions
+================================
 
-## Usage
+## KMP Application
 
 ```kotlin
 plugins {
@@ -14,6 +14,8 @@ kotlinMultiplatformApplication {
 
     // Optional build features
     buildFeatures {
+        // Enable ABI validation
+        abiValidation = true
         // Generate BuildConfig
         buildConfig = true
         // Enable Kotlin serialization
@@ -24,11 +26,11 @@ kotlinMultiplatformApplication {
 }
 ```
 
-## Usage
+## KMP Library
 
 ```kotlin
 plugins {
-    id("io.github.technoir42.conventions.kotlin-library")
+    id("io.github.technoir42.conventions.kotlin-multiplatform-library")
 }
 
 kotlinLibrary {
@@ -37,6 +39,8 @@ kotlinLibrary {
 
     // Optional build features
     buildFeatures {
+        // Enable ABI validation
+        abiValidation = true
         // Generate BuildConfig
         buildConfig = true
         // Enable Kotlin serialization

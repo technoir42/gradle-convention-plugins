@@ -4,6 +4,7 @@ import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
 import io.github.technoir42.conventions.common.fixtures.replaceText
 import io.github.technoir42.conventions.common.fixtures.resolve
 import org.assertj.core.api.Assertions.assertThat
+import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 
@@ -94,13 +95,13 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
 
         gradleRunner.build(":kmp-library:publish") {
             gradleProperties += mapOf(
-                "project.groupId" to "com.example",
+                "project.groupId" to "com.example.kmp",
                 "project.version" to "v1",
                 "publish.url" to repoDir.toURI()
             )
         }
 
-        val artifactDir = repoDir.resolve("com", "example", "kmp-library", "v1")
+        val artifactDir = repoDir.resolve("com", "example", "kmp", "kmp-library", "v1")
         assertThat(artifactDir).isDirectoryContaining("glob:**kmp-library-v1*")
     }
 
@@ -122,5 +123,56 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
         )
 
         gradleRunner.build(":kmp-library:assemble")
+    }
+
+    @Test
+    fun `ABI validation`() {
+        val moduleDir = gradleRunner.projectDir.resolve("kmp-library")
+        moduleDir.resolve("build.gradle.kts").appendText(
+            """
+                kotlinMultiplatformLibrary {
+                    buildFeatures {
+                        abiValidation = true
+                    }
+                }
+            """.trimIndent()
+        )
+
+        gradleRunner.build(":kmp-library:updateLegacyAbi")
+
+        val abiDump = moduleDir.resolve("api", "kmp-library.klib.api")
+        assertThat(abiDump)
+            .content()
+            .contains(
+                """
+                    // Library unique name: <com.example:kmp-library>
+                    final fun kmp.library/greet(kotlin/String) // kmp.library/greet|greet(kotlin.String){}[0]
+                """.trimIndent()
+            )
+
+        moduleDir.resolve("src", "commonMain", "kotlin", "kmp", "library", "KmpLibrary.kt")
+            .writeText(
+                """
+                    package kmp.library
+                    
+                    fun greet(name: String) {
+                        nativeGreet(name)
+                    }
+                    
+                    fun hello() = Unit
+                    
+                """.trimIndent()
+            )
+
+        val buildResult = gradleRunner.buildAndFail(":kmp-library:check")
+
+        assertThat(buildResult.task(":kmp-library:checkLegacyAbi")?.outcome).isEqualTo(TaskOutcome.FAILED)
+        assertThat(buildResult.output).contains(
+            """
+                |  // Library unique name: <com.example:kmp-library>
+                |   final fun kmp.library/greet(kotlin/String) // kmp.library/greet|greet(kotlin.String){}[0]
+                |  +final fun kmp.library/hello() // kmp.library/hello|hello(){}[0]
+            """.trimMargin()
+        )
     }
 }

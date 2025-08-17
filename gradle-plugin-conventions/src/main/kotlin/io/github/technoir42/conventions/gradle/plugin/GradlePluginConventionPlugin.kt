@@ -30,7 +30,7 @@ class GradlePluginConventionPlugin : Plugin<Project> {
         val projectSettings = ProjectSettingsImpl(this)
         configureCommon(projectSettings)
         configureJava()
-        configureKotlin()
+        configureKotlin(config.buildFeatures.abiValidation)
         configureDetekt()
         configurePublishing()
         configurePlugin()

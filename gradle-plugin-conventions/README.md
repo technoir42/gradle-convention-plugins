@@ -14,6 +14,8 @@ gradlePluginConfig {
 
     // Optional build features
     buildFeatures {
+        // Enable ABI validation
+        abiValidation = true
         // Generate BuildConfig
         buildConfig = true
         // Enable Kotlin serialization

@@ -26,7 +26,7 @@ class KotlinMultiplatformLibraryConventionPlugin : Plugin<Project> {
         configureKotlinMultiplatform(
             packageName = config.packageName,
             defaultTargets = config.defaultTargets,
-            enableCInterop = config.buildFeatures.cinterop
+            buildFeatures = config.buildFeatures
         )
         configureDetekt()
         configurePublishing()
