@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.Executable
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
+import org.jetbrains.kotlin.konan.target.Family
 import org.jetbrains.kotlin.konan.target.HostManager
 import kotlin.io.path.Path
 
@@ -106,7 +107,12 @@ private fun KotlinNativeTarget.configureNativeTarget(
     }
 
     binaries {
-        if (executable) {
+        if (konanTarget.family in setOf(Family.IOS, Family.TVOS, Family.WATCHOS)) {
+            framework {
+                isStatic = true
+                baseName = project.name
+            }
+        } else if (executable) {
             executable {
                 if (packageName.isPresent) {
                     entryPoint = "${packageName.get()}.main"
