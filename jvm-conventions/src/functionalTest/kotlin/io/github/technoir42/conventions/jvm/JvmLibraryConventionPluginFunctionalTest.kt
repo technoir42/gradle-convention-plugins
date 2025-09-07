@@ -29,11 +29,16 @@ class JvmLibraryConventionPluginFunctionalTest {
         val artifactDir = repoDir.resolve("io", "github", "technoir42", "jvm-library", "dev")
         assertThat(artifactDir)
             .isDirectoryContaining("glob:**jvm-library-dev.*")
+            .isDirectoryContaining("glob:**jvm-library-dev-javadoc.*")
             .isDirectoryContaining("glob:**jvm-library-dev-sources.*")
 
         val sourcesJar = artifactDir.resolve("jvm-library-dev-sources.jar")
         assertThat(sourcesJar).exists()
         assertThat(sourcesJar.jarEntries()).contains("com/example/jvm/library/JvmLibrary.kt")
+
+        val javadocJar = artifactDir.resolve("jvm-library-dev-javadoc.jar")
+        assertThat(javadocJar).exists()
+        assertThat(javadocJar.jarEntries()).contains("com/example/jvm/library/JvmLibrary.html")
     }
 
     @Test

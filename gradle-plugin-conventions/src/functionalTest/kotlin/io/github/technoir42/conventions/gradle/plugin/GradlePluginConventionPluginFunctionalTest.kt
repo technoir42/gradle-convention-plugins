@@ -31,12 +31,17 @@ class GradlePluginConventionPluginFunctionalTest {
         assertThat(artifactDir)
             .isDirectoryContaining("glob:**example-plugin-dev.*")
             .isDirectoryContaining("glob:**example-plugin-dev-sources.*")
+            .isDirectoryContaining("glob:**example-plugin-dev-javadoc.*")
             .isDirectoryContaining("glob:**example-plugin-dev-api.*")
             .isDirectoryContaining("glob:**example-plugin-dev-api-sources.*")
 
         val sourcesJar = artifactDir.resolve("example-plugin-dev-sources.jar")
         assertThat(sourcesJar).exists()
         assertThat(sourcesJar.jarEntries()).contains("com/example/plugin/ExamplePlugin.kt")
+
+        val javadocJar = artifactDir.resolve("example-plugin-dev-javadoc.jar")
+        assertThat(javadocJar).exists()
+        assertThat(javadocJar.jarEntries()).contains("com/example/plugin/ExamplePlugin.html")
 
         val apiSourcesJar = artifactDir.resolve("example-plugin-dev-api-sources.jar")
         assertThat(apiSourcesJar).exists()

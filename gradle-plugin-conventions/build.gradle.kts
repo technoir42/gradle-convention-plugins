@@ -17,6 +17,7 @@ dependencies {
     implementation(project(":common-conventions"))
     implementation(project(":gradle-extensions"))
     implementation(libs.kotlin.gradle.plugin.api)
+    implementation(libs.dokka.gradle.plugin)
 
     functionalTestImplementation(testFixtures(project(":common-conventions")))
     functionalTestImplementation(libs.assertj.core)
