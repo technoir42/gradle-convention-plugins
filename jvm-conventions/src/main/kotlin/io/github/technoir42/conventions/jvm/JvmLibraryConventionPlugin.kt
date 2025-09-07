@@ -33,7 +33,7 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
         configureJava()
         configureKotlin(config.buildFeatures.abiValidation)
         configureDetekt()
-        configurePublishing(isLibrary = true)
+        configurePublishing(publicationName = "libraryMaven")
         configureTesting()
         configureTestFixtures()
     }

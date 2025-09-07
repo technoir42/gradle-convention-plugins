@@ -10,7 +10,7 @@ import org.gradle.kotlin.dsl.maven
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 
-fun Project.configurePublishing(isLibrary: Boolean = false) {
+fun Project.configurePublishing(publicationName: String, extraConfiguration: MavenPublication.() -> Unit = {}) {
     pluginManager.apply("maven-publish")
 
     val projectDescription = provider { description }
@@ -30,35 +30,34 @@ fun Project.configurePublishing(isLibrary: Boolean = false) {
             }
         }
 
-        publications {
-            if (isLibrary) {
-                register("libraryMaven", MavenPublication::class) {
-                    val component = components.findByName("kotlin") ?: components["java"]
-                    from(component)
+        publications.withType<MavenPublication>().configureEach {
+            pom {
+                description.convention(projectDescription)
+            }
+
+            versionMapping {
+                usage(Usage.JAVA_API) {
+                    fromResolutionResult()
+                }
+                usage(Usage.JAVA_RUNTIME) {
+                    fromResolutionResult()
                 }
             }
 
-            withType<MavenPublication>().configureEach {
-                pom {
-                    description.convention(projectDescription)
-                }
+            if (name == publicationName) {
+                extraConfiguration()
+            }
+        }
+    }
 
-                versionMapping {
-                    usage(Usage.JAVA_API) {
-                        fromResolutionResult()
+    afterEvaluate {
+        extensions.configure(PublishingExtension::class) {
+            publications {
+                if (publicationName !in names) {
+                    register(publicationName, MavenPublication::class) {
+                        val component = components.findByName("java") ?: components["kotlin"]
+                        from(component)
                     }
-                    usage(Usage.JAVA_RUNTIME) {
-                        fromResolutionResult()
-                    }
-                }
-
-                if (name == "pluginMaven") {
-                    suppressPomMetadataWarningsFor("apiElements")
-                    suppressPomMetadataWarningsFor("runtimeElements")
-                    suppressPomMetadataWarningsFor("apiApiElements")
-                    suppressPomMetadataWarningsFor("apiRuntimeElements")
-                    suppressPomMetadataWarningsFor("apiJavadocElements")
-                    suppressPomMetadataWarningsFor("apiSourcesElements")
                 }
             }
         }

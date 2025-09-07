@@ -12,6 +12,8 @@ fun Project.configureJava() {
             languageVersion.set(JavaLanguageVersion.of(21))
         }
 
-        withSourcesJar()
+        if ("java" in components.names) {
+            withSourcesJar()
+        }
     }
 }

@@ -1,6 +1,7 @@
 package io.github.technoir42.conventions.kotlin.multiplatform
 
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
+import io.github.technoir42.conventions.common.fixtures.jarEntries
 import io.github.technoir42.conventions.common.fixtures.replaceText
 import io.github.technoir42.conventions.common.fixtures.resolve
 import org.assertj.core.api.Assertions.assertThat
@@ -94,6 +95,25 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
         repoDir.mkdirs()
 
         gradleRunner.build(":kmp-library:publish") {
+            gradleProperties += mapOf("publish.url" to repoDir.toURI())
+        }
+
+        val artifactDir = repoDir.resolve("io", "github", "technoir42", "kmp-library", "dev")
+        assertThat(artifactDir)
+            .isDirectoryContaining("glob:**kmp-library-dev.*")
+            .isDirectoryContaining("glob:**kmp-library-dev-sources.*")
+
+        val sourcesJar = artifactDir.resolve("kmp-library-dev-sources.jar")
+        assertThat(sourcesJar).exists()
+        assertThat(sourcesJar.jarEntries()).contains("commonMain/kmp/library/KmpLibrary.kt")
+    }
+
+    @Test
+    fun `publishing with custom Maven coordinates`() {
+        val repoDir = gradleRunner.projectDir.resolve("repo")
+        repoDir.mkdirs()
+
+        gradleRunner.build(":kmp-library:publish") {
             gradleProperties += mapOf(
                 "project.groupId" to "com.example.kmp",
                 "project.version" to "v1",
@@ -145,7 +165,7 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
             .content()
             .contains(
                 """
-                    // Library unique name: <com.example:kmp-library>
+                    // Library unique name: <io.github.technoir42:kmp-library>
                     final fun kmp.library/greet(kotlin/String) // kmp.library/greet|greet(kotlin.String){}[0]
                 """.trimIndent()
             )
@@ -169,7 +189,7 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
         assertThat(buildResult.task(":kmp-library:checkLegacyAbi")?.outcome).isEqualTo(TaskOutcome.FAILED)
         assertThat(buildResult.output).contains(
             """
-                |  // Library unique name: <com.example:kmp-library>
+                |  // Library unique name: <io.github.technoir42:kmp-library>
                 |   final fun kmp.library/greet(kotlin/String) // kmp.library/greet|greet(kotlin.String){}[0]
                 |  +final fun kmp.library/hello() // kmp.library/hello|hello(){}[0]
             """.trimMargin()

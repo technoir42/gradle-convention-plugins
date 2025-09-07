@@ -8,4 +8,4 @@ dependencyResolutionManagement {
     }
 }
 
-include(":gradle-plugin")
+include(":example-plugin")

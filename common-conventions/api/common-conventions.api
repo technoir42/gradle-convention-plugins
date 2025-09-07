@@ -33,8 +33,8 @@ public final class io/github/technoir42/conventions/common/ProjectSettingsImpl :
 }
 
 public final class io/github/technoir42/conventions/common/PublishingKt {
-	public static final fun configurePublishing (Lorg/gradle/api/Project;Z)V
-	public static synthetic fun configurePublishing$default (Lorg/gradle/api/Project;ZILjava/lang/Object;)V
+	public static final fun configurePublishing (Lorg/gradle/api/Project;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun configurePublishing$default (Lorg/gradle/api/Project;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 }
 
 public final class io/github/technoir42/conventions/common/SerializationKt {

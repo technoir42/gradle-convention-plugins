@@ -29,6 +29,6 @@ class KotlinMultiplatformLibraryConventionPlugin : Plugin<Project> {
             buildFeatures = config.buildFeatures
         )
         configureDetekt()
-        configurePublishing()
+        configurePublishing(publicationName = "kotlinMultiplatform")
     }
 }

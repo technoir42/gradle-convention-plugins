@@ -1,6 +1,7 @@
 package io.github.technoir42.conventions.jvm
 
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
+import io.github.technoir42.conventions.common.fixtures.jarEntries
 import io.github.technoir42.conventions.common.fixtures.resolve
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
@@ -18,6 +19,25 @@ class JvmLibraryConventionPluginFunctionalTest {
 
     @Test
     fun publishing() {
+        val repoDir = gradleRunner.projectDir.resolve("repo")
+        repoDir.mkdirs()
+
+        gradleRunner.build(":jvm-library:publish") {
+            gradleProperties += mapOf("publish.url" to repoDir.toURI())
+        }
+
+        val artifactDir = repoDir.resolve("io", "github", "technoir42", "jvm-library", "dev")
+        assertThat(artifactDir)
+            .isDirectoryContaining("glob:**jvm-library-dev.*")
+            .isDirectoryContaining("glob:**jvm-library-dev-sources.*")
+
+        val sourcesJar = artifactDir.resolve("jvm-library-dev-sources.jar")
+        assertThat(sourcesJar).exists()
+        assertThat(sourcesJar.jarEntries()).contains("com/example/jvm/library/JvmLibrary.kt")
+    }
+
+    @Test
+    fun `publishing with custom Maven coordinates`() {
         val repoDir = gradleRunner.projectDir.resolve("repo")
         repoDir.mkdirs()
 

@@ -32,7 +32,14 @@ class GradlePluginConventionPlugin : Plugin<Project> {
         configureJava()
         configureKotlin(config.buildFeatures.abiValidation)
         configureDetekt()
-        configurePublishing()
+        configurePublishing(publicationName = "pluginMaven") {
+            suppressPomMetadataWarningsFor("apiElements")
+            suppressPomMetadataWarningsFor("runtimeElements")
+            suppressPomMetadataWarningsFor("apiApiElements")
+            suppressPomMetadataWarningsFor("apiRuntimeElements")
+            suppressPomMetadataWarningsFor("apiJavadocElements")
+            suppressPomMetadataWarningsFor("apiSourcesElements")
+        }
         configurePlugin()
         configureTesting()
         configureTestFixtures()
