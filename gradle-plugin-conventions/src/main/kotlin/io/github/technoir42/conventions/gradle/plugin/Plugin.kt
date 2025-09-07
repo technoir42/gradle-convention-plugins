@@ -61,7 +61,7 @@ internal fun Project.configurePlugin() {
         apiImplementation(gradleApi())
         api(project(path)) {
             capabilities {
-                requireCapability("$group:$name-$API_VARIANT_NAME:$version")
+                requireCapability("$group:$name-$API_VARIANT_NAME")
             }
         }
     }
