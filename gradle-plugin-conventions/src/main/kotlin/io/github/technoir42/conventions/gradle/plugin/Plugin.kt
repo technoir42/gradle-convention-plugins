@@ -3,11 +3,13 @@ package io.github.technoir42.conventions.gradle.plugin
 import io.github.technoir42.gradle.dependencies.api
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
+import org.gradle.api.attributes.java.TargetJvmEnvironment
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.plugins.jvm.JvmTestSuite
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.project
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
@@ -15,6 +17,7 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.plugin.devel.GradlePluginDevelopmentExtension
 import org.gradle.plugin.devel.tasks.ValidatePlugins
 import org.gradle.testing.base.TestingExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 
 internal fun Project.configurePlugin() {
     extensions.configure(JavaPluginExtension::class) {
@@ -26,6 +29,16 @@ internal fun Project.configurePlugin() {
             usingSourceSet(apiSourceSet)
             capability("$group", "$name-$API_VARIANT_NAME", "$version")
         }
+
+        // Align attributes with the main variant
+        @Suppress("NoNameShadowing")
+        configurations.named { it == apiSourceSet.apiElementsConfigurationName || it == apiSourceSet.runtimeElementsConfigurationName }
+            .configureEach {
+                attributes {
+                    attribute(TargetJvmEnvironment.TARGET_JVM_ENVIRONMENT_ATTRIBUTE, objects.named(TargetJvmEnvironment.STANDARD_JVM))
+                    attribute(KotlinPlatformType.attribute, KotlinPlatformType.jvm)
+                }
+            }
     }
 
     @Suppress("UnstableApiUsage")
