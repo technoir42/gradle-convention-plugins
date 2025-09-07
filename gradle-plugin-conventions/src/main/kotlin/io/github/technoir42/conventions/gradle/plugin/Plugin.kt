@@ -20,10 +20,11 @@ internal fun Project.configurePlugin() {
     extensions.configure(JavaPluginExtension::class) {
         val apiSourceSet = sourceSets.create(API_VARIANT_NAME)
 
+        // TODO: Make 'api' artifact work with ABI validation
         registerFeature(API_VARIANT_NAME) {
             withSourcesJar()
             usingSourceSet(apiSourceSet)
-            capability("$group", "$name-api", "$version")
+            capability("$group", "$name-$API_VARIANT_NAME", "$version")
         }
     }
 
@@ -47,7 +48,7 @@ internal fun Project.configurePlugin() {
         apiImplementation(gradleApi())
         api(project(path)) {
             capabilities {
-                requireCapability("$group:$name-api:$version")
+                requireCapability("$group:$name-$API_VARIANT_NAME:$version")
             }
         }
     }
@@ -58,6 +59,6 @@ internal fun Project.configurePlugin() {
 }
 
 private fun DependencyHandlerScope.apiImplementation(dependencyNotation: Any): Dependency? =
-    "apiImplementation"(dependencyNotation)
+    "${API_VARIANT_NAME}Implementation"(dependencyNotation)
 
 private const val API_VARIANT_NAME = "api"
