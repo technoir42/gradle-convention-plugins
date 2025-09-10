@@ -11,6 +11,7 @@ import io.github.technoir42.conventions.common.configurePublishing
 import io.github.technoir42.conventions.common.configureTestFixtures
 import io.github.technoir42.conventions.common.configureTesting
 import io.github.technoir42.conventions.gradle.plugin.api.GradlePluginExtension
+import io.github.technoir42.gradle.Environment
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
@@ -27,12 +28,13 @@ class GradlePluginConventionPlugin : Plugin<Project> {
 
         pluginManager.apply("org.gradle.kotlin.kotlin-dsl")
 
+        val environment = Environment(providers)
         val projectSettings = ProjectSettingsImpl(this)
         configureCommon(projectSettings)
         configureJava()
         configureKotlin(config.buildFeatures.abiValidation)
         configureDetekt()
-        configurePublishing(publicationName = "pluginMaven") {
+        configurePublishing(publicationName = "pluginMaven", environment) {
             suppressPomMetadataWarningsFor("apiElements")
             suppressPomMetadataWarningsFor("runtimeElements")
             suppressPomMetadataWarningsFor("apiApiElements")

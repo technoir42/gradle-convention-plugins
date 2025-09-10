@@ -11,6 +11,7 @@ import io.github.technoir42.conventions.common.configurePublishing
 import io.github.technoir42.conventions.common.configureTestFixtures
 import io.github.technoir42.conventions.common.configureTesting
 import io.github.technoir42.conventions.jvm.api.JvmLibraryExtension
+import io.github.technoir42.gradle.Environment
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
@@ -28,12 +29,13 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
         pluginManager.apply("java-library")
         pluginManager.apply("org.jetbrains.kotlin.jvm")
 
+        val environment = Environment(providers)
         val projectSettings = ProjectSettingsImpl(this)
         configureCommon(projectSettings)
         configureJava()
         configureKotlin(config.buildFeatures.abiValidation)
         configureDetekt()
-        configurePublishing(publicationName = "libraryMaven")
+        configurePublishing(publicationName = "libraryMaven", environment)
         configureTesting()
         configureTestFixtures()
     }
