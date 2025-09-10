@@ -1,6 +1,7 @@
 package io.github.technoir42.conventions.kotlin.multiplatform
 
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
+import io.github.technoir42.conventions.common.fixtures.createDependencyGraph
 import io.github.technoir42.conventions.common.fixtures.replaceText
 import io.github.technoir42.conventions.common.fixtures.resolve
 import org.assertj.core.api.Assertions.assertThat
@@ -14,6 +15,24 @@ class KotlinMultiplatformApplicationConventionPluginFunctionalTest {
     @Test
     fun `builds successfully`() {
         gradleRunner.build(":kmp-application:build")
+    }
+
+    @Test
+    fun `dependency injection`() {
+        gradleRunner.projectDir.resolve("kmp-application", "build.gradle.kts").appendText(
+            //language=kotlin
+            """
+                kotlinMultiplatformApplication {
+                    buildFeatures {
+                        metro = true
+                    }
+                }
+            """.trimIndent()
+        )
+        gradleRunner.projectDir.resolve("kmp-application")
+            .createDependencyGraph()
+
+        gradleRunner.build(":kmp-application:assemble")
     }
 
     @Test

@@ -19,6 +19,22 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
     }
 
     @Test
+    fun `dependency injection`() {
+        gradleRunner.projectDir.resolve("kmp-library", "build.gradle.kts").appendText(
+            //language=kotlin
+            """
+                kotlinMultiplatformLibrary {
+                    buildFeatures {
+                        metro = true
+                    }
+                }
+            """.trimIndent()
+        )
+
+        gradleRunner.build(":kmp-library:assemble")
+    }
+
+    @Test
     fun `default targets`() {
         val buildResult = gradleRunner.build(":kmp-library:tasks")
 

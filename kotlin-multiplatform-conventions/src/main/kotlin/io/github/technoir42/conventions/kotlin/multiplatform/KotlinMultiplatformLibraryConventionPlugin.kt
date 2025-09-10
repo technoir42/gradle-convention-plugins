@@ -20,6 +20,7 @@ class KotlinMultiplatformLibraryConventionPlugin : Plugin<Project> {
         afterEvaluate {
             configureBuildConfig(config.buildFeatures.buildConfig, config.packageName)
             configureKotlinSerialization(config.buildFeatures.serialization)
+            configureMetro(config.buildFeatures.metro)
         }
 
         val environment = Environment(providers)

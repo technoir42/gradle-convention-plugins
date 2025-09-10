@@ -9,8 +9,14 @@ interface KotlinMultiplatformBuildFeatures : CommonBuildFeatures {
      */
     val cinterop: Property<Boolean>
 
+    /**
+     * Enable Metro dependency injection.
+     */
+    val metro: Property<Boolean>
+
     override fun initDefaults() {
         super.initDefaults()
         cinterop.convention(false)
+        metro.convention(false)
     }
 }
