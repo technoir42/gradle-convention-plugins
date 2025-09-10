@@ -6,9 +6,9 @@ detekt = "1.23.8"
 develocity-gradle-plugin = "4.1"
 foojay-resolver-gradle-plugin = "1.0.0"
 junit = "5.13.4"
-kotlin = "2.2.10"
+kotlin = "2.2.20"
 kotlinx-coroutines = "1.10.2"
-kotlinx-serialization = "1.8.1"
+kotlinx-serialization = "1.9.0"
 
 [libraries]
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
