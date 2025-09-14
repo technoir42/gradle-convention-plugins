@@ -1,5 +1,3 @@
-import com.github.gmazzo.buildconfig.BuildConfigExtension
-
 plugins {
     id("io.github.technoir42.conventions.gradle-plugin")
 }
@@ -9,17 +7,11 @@ gradlePluginConfig {
 
     buildFeatures {
         abiValidation = true
-        buildConfig = true
-    }
-}
-
-afterEvaluate {
-    configure<BuildConfigExtension> {
-        forClass("DependencyVersions") {
-            buildConfigField<String>("JUNIT", libs.versions.junit)
-            buildConfigField<String>("KOTLIN", libs.versions.kotlin)
-            buildConfigField<String>("KOTLINX_COROUTINES", libs.versions.kotlinx.coroutines)
-            buildConfigField<String>("KOTLINX_SERIALIZATION", libs.versions.kotlinx.serialization)
+        buildConfig {
+            buildConfigField<String>("JUNIT5_VERSION", libs.versions.junit5)
+            buildConfigField<String>("KOTLIN_BOM", libs.kotlin.bom.map { it.toString() })
+            buildConfigField<String>("KOTLINX_COROUTINES_BOM", libs.kotlinx.coroutines.bom.map { it.toString() })
+            buildConfigField<String>("KOTLINX_SERIALIZATION_BOM", libs.kotlinx.serialization.bom.map { it.toString() })
         }
     }
 }

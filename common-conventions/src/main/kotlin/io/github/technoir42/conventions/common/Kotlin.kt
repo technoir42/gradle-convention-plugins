@@ -24,9 +24,9 @@ fun Project.configureKotlin(enableAbiValidation: Provider<Boolean>) {
     }
 
     dependencies {
-        implementation(platform(CommonDependencies.KOTLIN_BOM))
-        implementation(platform(CommonDependencies.KOTLINX_COROUTINES_BOM))
-        implementation(platform(CommonDependencies.KOTLINX_SERIALIZATION_BOM))
+        implementation(platform(BuildConfig.KOTLIN_BOM))
+        implementation(platform(BuildConfig.KOTLINX_COROUTINES_BOM))
+        implementation(platform(BuildConfig.KOTLINX_SERIALIZATION_BOM))
     }
 
     tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME).configure {
