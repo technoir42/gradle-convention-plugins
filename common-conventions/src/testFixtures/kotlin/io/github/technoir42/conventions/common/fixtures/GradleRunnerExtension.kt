@@ -6,6 +6,8 @@ import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 import java.nio.file.Files
+import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.deleteRecursively
 
 class GradleRunnerExtension(
     private val resourceDir: String,
@@ -20,11 +22,12 @@ class GradleRunnerExtension(
     }
 
     override fun beforeEach(context: ExtensionContext) {
-        val projectDir = Files.createTempDirectory("project-").toFile()
+        val projectDir = Files.createTempDirectory("project-")
         copyResources(resourceDir, projectDir)
         root = GradleProject(projectDir)
     }
 
+    @OptIn(ExperimentalPathApi::class)
     override fun afterEach(context: ExtensionContext) {
         root.dir.deleteRecursively()
     }
@@ -55,7 +58,7 @@ class GradleRunnerExtension(
         @Suppress("SpreadOperator")
         return GradleRunner.create()
             .withArguments(*arguments.toTypedArray())
-            .withProjectDir(root.dir)
+            .withProjectDir(root.dir.toFile())
             .withPluginClasspath()
             .forwardOutput()
     }

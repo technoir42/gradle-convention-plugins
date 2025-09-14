@@ -1,20 +1,24 @@
 package io.github.technoir42.conventions.common.fixtures
 
 import org.intellij.lang.annotations.Language
-import java.io.File
+import java.nio.file.Path
+import kotlin.io.path.appendText
+import kotlin.io.path.div
 
 class GradleProject(
-    val dir: File
+    val dir: Path
 ) {
     fun project(name: String): GradleProject {
         require(":" !in name) { "Project name must not contain ':'" }
-        return GradleProject(dir.resolve(name))
+        return GradleProject(dir / name)
     }
 }
 
-val GradleProject.buildScript: File
-    get() = dir.resolve("build.gradle.kts")
+val GradleProject.buildScript: Path
+    get() = dir / "build.gradle.kts"
 
-fun GradleProject.configureBuildScript(@Language("kotlin") code: String): GradleProject = apply {
-    buildScript.appendText(code)
-}
+fun GradleProject.kotlinFile(className: String, variant: String = "main") =
+    dir / "src/$variant/kotlin/${className.replace('.', '/')}.kt"
+
+fun GradleProject.configureBuildScript(@Language("kotlin") code: String): GradleProject =
+    apply { buildScript.appendText(code) }

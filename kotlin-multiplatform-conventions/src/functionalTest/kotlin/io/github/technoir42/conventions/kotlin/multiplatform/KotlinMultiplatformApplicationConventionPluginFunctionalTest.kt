@@ -4,10 +4,12 @@ import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
 import io.github.technoir42.conventions.common.fixtures.configureBuildScript
 import io.github.technoir42.conventions.common.fixtures.createDependencyGraph
 import io.github.technoir42.conventions.common.fixtures.replaceText
-import io.github.technoir42.conventions.common.fixtures.resolve
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.io.path.createParentDirectories
+import kotlin.io.path.div
+import kotlin.io.path.moveTo
 
 class KotlinMultiplatformApplicationConventionPluginFunctionalTest {
     @RegisterExtension
@@ -90,9 +92,9 @@ class KotlinMultiplatformApplicationConventionPluginFunctionalTest {
                 """.trimIndent()
             )
 
-        val newMainKt = project.dir.resolve("src", "commonMain", "kotlin", "com", "example", "kmp", "application", "Main.kt")
-            .apply { parentFile.mkdirs() }
-        project.dir.resolve("src", "commonMain", "kotlin", "kmp", "application", "Main.kt").renameTo(newMainKt)
+        val newMainKt = project.dir / "src/commonMain/kotlin/com/example/kmp/application/Main.kt"
+        newMainKt.createParentDirectories()
+        (project.dir / "src/commonMain/kotlin/kmp/application/Main.kt").moveTo(newMainKt)
         newMainKt.replaceText("package kmp.application", "package com.example.kmp.application")
 
         val buildResult = gradleRunner.build(":kmp-application:runDebugExecutable")

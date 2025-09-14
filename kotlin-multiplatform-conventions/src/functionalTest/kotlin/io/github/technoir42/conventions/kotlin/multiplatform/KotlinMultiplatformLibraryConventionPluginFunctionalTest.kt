@@ -5,11 +5,13 @@ import io.github.technoir42.conventions.common.fixtures.configureBuildScript
 import io.github.technoir42.conventions.common.fixtures.createDependencyGraph
 import io.github.technoir42.conventions.common.fixtures.jarEntries
 import io.github.technoir42.conventions.common.fixtures.replaceText
-import io.github.technoir42.conventions.common.fixtures.resolve
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.io.path.createDirectories
+import kotlin.io.path.div
+import kotlin.io.path.writeText
 
 class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
     @RegisterExtension
@@ -92,7 +94,7 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
                 """.trimIndent()
             )
 
-        project.dir.resolve("src", "commonMain", "kotlin", "kmp", "library", "KmpLibrary.kt")
+        (project.dir / "src/commonMain/kotlin/kmp/library/KmpLibrary.kt")
             .replaceText(
                 """
                     package kmp.library
@@ -109,37 +111,37 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
 
     @Test
     fun publishing() {
-        val repoDir = gradleRunner.root.dir.resolve("repo")
-        repoDir.mkdirs()
+        val repoDir = gradleRunner.root.dir / "repo"
+        repoDir.createDirectories()
 
         gradleRunner.build(":kmp-library:publish") {
-            gradleProperties += mapOf("publish.url" to repoDir.toURI())
+            gradleProperties += mapOf("publish.url" to repoDir.toUri())
         }
 
-        val artifactDir = repoDir.resolve("io", "github", "technoir42", "kmp-library", "dev")
+        val artifactDir = repoDir / "io/github/technoir42/kmp-library/dev"
         assertThat(artifactDir)
             .isDirectoryContaining("glob:**kmp-library-dev.*")
             .isDirectoryContaining("glob:**kmp-library-dev-sources.*")
 
-        val sourcesJar = artifactDir.resolve("kmp-library-dev-sources.jar")
+        val sourcesJar = artifactDir / "kmp-library-dev-sources.jar"
         assertThat(sourcesJar).exists()
         assertThat(sourcesJar.jarEntries()).contains("commonMain/kmp/library/KmpLibrary.kt")
     }
 
     @Test
     fun `publishing with custom Maven coordinates`() {
-        val repoDir = gradleRunner.root.dir.resolve("repo")
-        repoDir.mkdirs()
+        val repoDir = gradleRunner.root.dir / "repo"
+        repoDir.createDirectories()
 
         gradleRunner.build(":kmp-library:publish") {
             gradleProperties += mapOf(
                 "project.groupId" to "com.example.kmp",
                 "project.version" to "v1",
-                "publish.url" to repoDir.toURI()
+                "publish.url" to repoDir.toUri()
             )
         }
 
-        val artifactDir = repoDir.resolve("com", "example", "kmp", "kmp-library", "v1")
+        val artifactDir = repoDir / "com/example/kmp/kmp-library/v1"
         assertThat(artifactDir).isDirectoryContaining("glob:**kmp-library-v1*")
     }
 
@@ -177,7 +179,7 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
 
         gradleRunner.build(":kmp-library:updateLegacyAbi")
 
-        val abiDump = project.dir.resolve("api", "kmp-library.klib.api")
+        val abiDump = project.dir / "api/kmp-library.klib.api"
         assertThat(abiDump)
             .content()
             .contains(
@@ -187,7 +189,7 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
                 """.trimIndent()
             )
 
-        project.dir.resolve("src", "commonMain", "kotlin", "kmp", "library", "KmpLibrary.kt")
+        (project.dir / "src/commonMain/kotlin/kmp/library/KmpLibrary.kt")
             .writeText(
                 """
                     package kmp.library
