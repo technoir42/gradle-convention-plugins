@@ -1,12 +1,5 @@
-public final class io/github/technoir42/conventions/common/BuildConfigKt {
+public final class io/github/technoir42/conventions/common/BuildConfigGenerationKt {
 	public static final fun configureBuildConfig (Lorg/gradle/api/Project;Lio/github/technoir42/conventions/common/api/BuildConfigSpec;Lorg/gradle/api/provider/Property;)V
-}
-
-public final class io/github/technoir42/conventions/common/CommonDependencies {
-	public static final field INSTANCE Lio/github/technoir42/conventions/common/CommonDependencies;
-	public static final field KOTLINX_COROUTINES_BOM Ljava/lang/String;
-	public static final field KOTLINX_SERIALIZATION_BOM Ljava/lang/String;
-	public static final field KOTLIN_BOM Ljava/lang/String;
 }
 
 public final class io/github/technoir42/conventions/common/CommonKt {

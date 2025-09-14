@@ -12,7 +12,7 @@ fun Project.configureTesting() {
     @Suppress("UnstableApiUsage")
     extensions.configure(TestingExtension::class) {
         suites.withType<JvmTestSuite>().configureEach {
-            useJUnitJupiter(DependencyVersions.JUNIT)
+            useJUnitJupiter(BuildConfig.JUNIT5_VERSION)
         }
     }
 }

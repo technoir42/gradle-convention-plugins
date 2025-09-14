@@ -1,6 +1,5 @@
 package io.github.technoir42.conventions.kotlin.multiplatform
 
-import io.github.technoir42.conventions.common.CommonDependencies
 import io.github.technoir42.conventions.common.configureCompilerOptions
 import io.github.technoir42.conventions.kotlin.multiplatform.api.KotlinMultiplatformBuildFeatures
 import io.github.technoir42.gradle.capitalized
@@ -77,9 +76,9 @@ internal fun Project.configureKotlinMultiplatform(
 
         sourceSets {
             commonMain.dependencies {
-                implementation(dependencies.platform(CommonDependencies.KOTLIN_BOM))
-                implementation(dependencies.platform(CommonDependencies.KOTLINX_COROUTINES_BOM))
-                implementation(dependencies.platform(CommonDependencies.KOTLINX_SERIALIZATION_BOM))
+                implementation(dependencies.platform(BuildConfig.KOTLIN_BOM))
+                implementation(dependencies.platform(BuildConfig.KOTLINX_COROUTINES_BOM))
+                implementation(dependencies.platform(BuildConfig.KOTLINX_SERIALIZATION_BOM))
             }
         }
     }

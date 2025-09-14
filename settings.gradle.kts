@@ -11,7 +11,7 @@ pluginManagement {
         }
     }
     plugins {
-        val conventionPluginsVersion = "v25"
+        val conventionPluginsVersion = "v26"
         id("io.github.technoir42.conventions.gradle-plugin") version conventionPluginsVersion
         id("io.github.technoir42.conventions.jvm-application") version conventionPluginsVersion
         id("io.github.technoir42.conventions.jvm-library") version conventionPluginsVersion

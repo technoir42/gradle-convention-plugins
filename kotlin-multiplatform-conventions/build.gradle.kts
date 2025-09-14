@@ -7,6 +7,11 @@ gradlePluginConfig {
 
     buildFeatures {
         abiValidation = true
+        buildConfig {
+            buildConfigField<String>("KOTLIN_BOM", libs.kotlin.bom.map { it.toString() })
+            buildConfigField<String>("KOTLINX_COROUTINES_BOM", libs.kotlinx.coroutines.bom.map { it.toString() })
+            buildConfigField<String>("KOTLINX_SERIALIZATION_BOM", libs.kotlinx.serialization.bom.map { it.toString() })
+        }
     }
 }
 
