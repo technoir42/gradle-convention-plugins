@@ -39,7 +39,10 @@ fun Project.configureKotlin(enableAbiValidation: Provider<Boolean>) {
 fun HasConfigurableKotlinCompilerOptions<KotlinJvmCompilerOptions>.configureCompilerOptions() {
     compilerOptions {
         jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
-        optIn.add("kotlin.time.ExperimentalTime")
+        optIn.addAll(
+            "kotlin.io.path.ExperimentalPathApi",
+            "kotlin.time.ExperimentalTime"
+        )
         freeCompilerArgs.addAll(
             "-Xcontext-parameters",
             "-Xconsistent-data-class-copy-visibility",
