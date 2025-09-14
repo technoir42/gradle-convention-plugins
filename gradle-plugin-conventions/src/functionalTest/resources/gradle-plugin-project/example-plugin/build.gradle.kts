@@ -2,6 +2,10 @@ plugins {
     id("io.github.technoir42.conventions.gradle-plugin")
 }
 
+gradlePluginConfig {
+    packageName = "com.example.plugin"
+}
+
 gradlePlugin {
     plugins {
         register("example") {

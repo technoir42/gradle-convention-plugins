@@ -1,8 +1,10 @@
 package io.github.technoir42.conventions.kotlin.multiplatform
 
+import io.github.technoir42.conventions.common.fixtures.Generator
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
 import io.github.technoir42.conventions.common.fixtures.configureBuildScript
 import io.github.technoir42.conventions.common.fixtures.createDependencyGraph
+import io.github.technoir42.conventions.common.fixtures.generatedFile
 import io.github.technoir42.conventions.common.fixtures.jarEntries
 import io.github.technoir42.conventions.common.fixtures.replaceText
 import org.assertj.core.api.Assertions.assertThat
@@ -20,6 +22,47 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
     @Test
     fun `builds successfully`() {
         gradleRunner.build(":kmp-library:build")
+    }
+
+    @Test
+    fun `BuildConfig generation`() {
+        val project = gradleRunner.root.project("kmp-library")
+            .configureBuildScript(
+                """
+                    kotlinMultiplatformLibrary {
+                        buildFeatures {
+                            buildConfig {
+                                buildConfigField<String>("STRING_FIELD", "string value")
+                                buildConfigField<String>("LAZY_STRING_FIELD", provider { project.description })
+                                buildConfigField<String>("NULLABLE_STRING_FIELD", null)
+                                buildConfigField<Boolean>("BOOLEAN_FIELD", true)
+                                buildConfigField<Int>("INT_FIELD", 42)
+                                buildConfigField<String>("TEST_STRING_FIELD", "test string value", variant = "test")
+                            }
+                        }
+                    }
+                    
+                    description = "Project description"
+                """.trimIndent()
+            )
+
+        gradleRunner.build(":kmp-library:generateBuildConfig")
+
+        assertThat(project.generatedFile(Generator.BuildConfig, "kmp.library.BuildConfig"))
+            .content()
+            .contains("const val STRING_FIELD: String = \"string value\"")
+            .contains("const val LAZY_STRING_FIELD: String = \"Project description\"")
+            .contains("val NULLABLE_STRING_FIELD: String? = null")
+            .contains("const val BOOLEAN_FIELD: Boolean = true")
+            .contains("const val INT_FIELD: Int = 42")
+            .doesNotContain("TEST_STRING_FIELD")
+
+        gradleRunner.build(":kmp-library:generateTestBuildConfig")
+
+        assertThat(project.generatedFile(Generator.BuildConfig, "kmp.library.TestBuildConfig", variant = "test"))
+            .content()
+            .contains("const val TEST_STRING_FIELD: String = \"test string value\"")
+            .doesNotContain("INT_FIELD")
     }
 
     @Test

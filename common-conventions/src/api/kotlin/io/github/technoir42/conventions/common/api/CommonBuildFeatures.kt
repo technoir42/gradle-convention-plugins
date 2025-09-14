@@ -1,6 +1,8 @@
 package io.github.technoir42.conventions.common.api
 
+import org.gradle.api.Action
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Nested
 
 interface CommonBuildFeatures {
     /**
@@ -9,18 +11,25 @@ interface CommonBuildFeatures {
     val abiValidation: Property<Boolean>
 
     /**
-     * Generate BuildConfig. Disabled by default.
+     * Configuration of `BuildConfig` class generation.
      */
-    val buildConfig: Property<Boolean>
+    @get:Nested
+    val buildConfig: BuildConfigSpec
 
     /**
      * Enable Kotlin serialization. Disabled by default.
      */
     val serialization: Property<Boolean>
 
+    /**
+     * Configuration of BuildConfig generation.
+     */
+    fun buildConfig(configure: Action<BuildConfigSpec>) {
+        configure.execute(buildConfig)
+    }
+
     fun initDefaults() {
         abiValidation.convention(false)
-        buildConfig.convention(false)
         serialization.convention(false)
     }
 }

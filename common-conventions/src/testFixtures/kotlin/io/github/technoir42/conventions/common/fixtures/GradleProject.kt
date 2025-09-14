@@ -14,11 +14,17 @@ class GradleProject(
     }
 }
 
+val GradleProject.buildDir: Path
+    get() = dir / "build"
+
 val GradleProject.buildScript: Path
     get() = dir / "build.gradle.kts"
+
+fun GradleProject.configureBuildScript(@Language("kotlin") code: String): GradleProject =
+    apply { buildScript.appendText(code) }
 
 fun GradleProject.kotlinFile(className: String, variant: String = "main") =
     dir / "src/$variant/kotlin/${className.replace('.', '/')}.kt"
 
-fun GradleProject.configureBuildScript(@Language("kotlin") code: String): GradleProject =
-    apply { buildScript.appendText(code) }
+fun GradleProject.generatedFile(generator: Generator, className: String, variant: String = "main"): Path =
+    buildDir.resolve(generator.outputPath(variant, className))

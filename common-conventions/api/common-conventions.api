@@ -1,5 +1,5 @@
 public final class io/github/technoir42/conventions/common/BuildConfigKt {
-	public static final fun configureBuildConfig (Lorg/gradle/api/Project;Lorg/gradle/api/provider/Provider;Lorg/gradle/api/provider/Property;)V
+	public static final fun configureBuildConfig (Lorg/gradle/api/Project;Lio/github/technoir42/conventions/common/api/BuildConfigSpec;Lorg/gradle/api/provider/Property;)V
 }
 
 public final class io/github/technoir42/conventions/common/CommonDependencies {
