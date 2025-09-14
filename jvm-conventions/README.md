@@ -22,10 +22,16 @@ jvmApplication {
     buildFeatures {
         // Enable ABI validation
         abiValidation = true
-        // Generate BuildConfig
-        buildConfig = true
         // Enable Kotlin serialization
         serialization = true
+
+        // Configuration of `BuildConfig` class generation
+        buildConfig {
+            // Add a String field
+            buildConfigField<String>("STRING_FIELD", "string value")
+            // Add a variant-specific field
+            buildConfigField<String>("TEST_STRING_FIELD", "string value", variant = "test")
+        }
     }
 }
 ```
@@ -45,10 +51,16 @@ jvmLibrary {
     buildFeatures {
         // Enable ABI validation
         abiValidation = true
-        // Generate BuildConfig
-        buildConfig = true
         // Enable Kotlin serialization
         serialization = true
+
+        // Configuration of `BuildConfig` class generation
+        buildConfig {
+            // Add a String field
+            buildConfigField<String>("STRING_FIELD", "string value")
+            // Add a variant-specific field
+            buildConfigField<String>("TEST_STRING_FIELD", "string value", variant = "test")
+        }
     }
 }
 ```

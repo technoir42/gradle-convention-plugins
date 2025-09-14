@@ -22,7 +22,7 @@ interface CommonBuildFeatures {
     val serialization: Property<Boolean>
 
     /**
-     * Configuration of BuildConfig generation.
+     * Configuration of `BuildConfig` class generation.
      */
     fun buildConfig(configure: Action<BuildConfigSpec>) {
         configure.execute(buildConfig)
