@@ -1,6 +1,7 @@
 package io.github.technoir42.conventions.jvm
 
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
+import io.github.technoir42.conventions.common.fixtures.configureBuildScript
 import io.github.technoir42.conventions.common.fixtures.jarEntries
 import io.github.technoir42.conventions.common.fixtures.resolve
 import org.assertj.core.api.Assertions.assertThat
@@ -19,7 +20,7 @@ class JvmLibraryConventionPluginFunctionalTest {
 
     @Test
     fun publishing() {
-        val repoDir = gradleRunner.projectDir.resolve("repo")
+        val repoDir = gradleRunner.root.dir.resolve("repo")
         repoDir.mkdirs()
 
         gradleRunner.build(":jvm-library:publish") {
@@ -38,7 +39,7 @@ class JvmLibraryConventionPluginFunctionalTest {
 
     @Test
     fun `publishing with custom Maven coordinates`() {
-        val repoDir = gradleRunner.projectDir.resolve("repo")
+        val repoDir = gradleRunner.root.dir.resolve("repo")
         repoDir.mkdirs()
 
         gradleRunner.build(":jvm-library:publish") {
@@ -55,36 +56,36 @@ class JvmLibraryConventionPluginFunctionalTest {
 
     @Test
     fun `declaring common dependencies without versions`() {
-        gradleRunner.projectDir.resolve("jvm-library", "build.gradle.kts").appendText(
-            // language=kotlin
-            """
-            dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-reflect")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core")
-            }
-            """.trimIndent()
-        )
+        gradleRunner.root.project("jvm-library")
+            .configureBuildScript(
+                """
+                    dependencies {
+                        implementation("org.jetbrains.kotlin:kotlin-reflect")
+                        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+                        implementation("org.jetbrains.kotlinx:kotlinx-serialization-core")
+                    }
+                """.trimIndent()
+            )
 
         gradleRunner.build(":jvm-library:assemble")
     }
 
     @Test
     fun `ABI validation`() {
-        val moduleDir = gradleRunner.projectDir.resolve("jvm-library")
-        moduleDir.resolve("build.gradle.kts").appendText(
-            """
-                jvmLibrary {
-                    buildFeatures {
-                        abiValidation = true
+        val project = gradleRunner.root.project("jvm-library")
+            .configureBuildScript(
+                """
+                    jvmLibrary {
+                        buildFeatures {
+                            abiValidation = true
+                        }
                     }
-                }
-            """.trimIndent()
-        )
+                """.trimIndent()
+            )
 
         gradleRunner.build(":jvm-library:updateLegacyAbi")
 
-        val abiDump = moduleDir.resolve("api", "jvm-library.api")
+        val abiDump = project.dir.resolve("api", "jvm-library.api")
         assertThat(abiDump)
             .content()
             .contains(
@@ -95,7 +96,7 @@ class JvmLibraryConventionPluginFunctionalTest {
                 """.trimIndent()
             )
 
-        moduleDir.resolve("src", "main", "kotlin", "com", "example", "jvm", "library", "JvmLibrary.kt")
+        project.dir.resolve("src", "main", "kotlin", "com", "example", "jvm", "library", "JvmLibrary.kt")
             .writeText(
                 """
                     package com.example.jvm.library

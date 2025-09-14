@@ -1,6 +1,8 @@
 package io.github.technoir42.conventions.kotlin.multiplatform
 
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
+import io.github.technoir42.conventions.common.fixtures.configureBuildScript
+import io.github.technoir42.conventions.common.fixtures.createDependencyGraph
 import io.github.technoir42.conventions.common.fixtures.jarEntries
 import io.github.technoir42.conventions.common.fixtures.replaceText
 import io.github.technoir42.conventions.common.fixtures.resolve
@@ -20,16 +22,17 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
 
     @Test
     fun `dependency injection`() {
-        gradleRunner.projectDir.resolve("kmp-library", "build.gradle.kts").appendText(
-            //language=kotlin
-            """
-                kotlinMultiplatformLibrary {
-                    buildFeatures {
-                        metro = true
+        gradleRunner.root.project("kmp-library")
+            .configureBuildScript(
+                """
+                    kotlinMultiplatformLibrary {
+                        buildFeatures {
+                            metro = true
+                        }
                     }
-                }
-            """.trimIndent()
-        )
+                """.trimIndent()
+            )
+            .createDependencyGraph()
 
         gradleRunner.build(":kmp-library:assemble")
     }
@@ -50,17 +53,17 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
 
     @Test
     fun `custom targets`() {
-        gradleRunner.projectDir.resolve("kmp-library", "build.gradle.kts").appendText(
-            // language=kotlin
-            """
-            kotlinMultiplatformLibrary {
-                defaultTargets = false
-            }
-            kotlin {
-                linuxArm64()
-            }
-            """.trimIndent()
-        )
+        gradleRunner.root.project("kmp-library")
+            .configureBuildScript(
+                """
+                    kotlinMultiplatformLibrary {
+                        defaultTargets = false
+                    }
+                    kotlin {
+                        linuxArm64()
+                    }
+                """.trimIndent()
+            )
 
         val buildResult = gradleRunner.build(":kmp-library:tasks")
 
@@ -80,17 +83,16 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
 
     @Test
     fun `custom package name`() {
-        val projectDir = gradleRunner.projectDir.resolve("kmp-library")
-        projectDir.resolve("build.gradle.kts").appendText(
-            // language=kotlin
-            """
-            kotlinMultiplatformLibrary {
-                packageName = "com.example.kmp.library"
-            }
-            """.trimIndent()
-        )
+        val project = gradleRunner.root.project("kmp-library")
+            .configureBuildScript(
+                """
+                    kotlinMultiplatformLibrary {
+                        packageName = "com.example.kmp.library"
+                    }
+                """.trimIndent()
+            )
 
-        projectDir.resolve("src", "commonMain", "kotlin", "kmp", "library", "KmpLibrary.kt")
+        project.dir.resolve("src", "commonMain", "kotlin", "kmp", "library", "KmpLibrary.kt")
             .replaceText(
                 """
                     package kmp.library
@@ -107,7 +109,7 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
 
     @Test
     fun publishing() {
-        val repoDir = gradleRunner.projectDir.resolve("repo")
+        val repoDir = gradleRunner.root.dir.resolve("repo")
         repoDir.mkdirs()
 
         gradleRunner.build(":kmp-library:publish") {
@@ -126,7 +128,7 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
 
     @Test
     fun `publishing with custom Maven coordinates`() {
-        val repoDir = gradleRunner.projectDir.resolve("repo")
+        val repoDir = gradleRunner.root.dir.resolve("repo")
         repoDir.mkdirs()
 
         gradleRunner.build(":kmp-library:publish") {
@@ -143,18 +145,17 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
 
     @Test
     fun `declaring common dependencies without versions`() {
-        gradleRunner.projectDir.resolve("kmp-library", "build.gradle.kts").appendText(
-            // language=kotlin
+        gradleRunner.root.project("kmp-library").configureBuildScript(
             """
-            kotlin {
-                sourceSets {
-                    commonMain.dependencies {
-                        implementation("org.jetbrains.kotlin:kotlin-reflect")
-                        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-                        implementation("org.jetbrains.kotlinx:kotlinx-serialization-core")
+                kotlin {
+                    sourceSets {
+                        commonMain.dependencies {
+                            implementation("org.jetbrains.kotlin:kotlin-reflect")
+                            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+                            implementation("org.jetbrains.kotlinx:kotlinx-serialization-core")
+                        }
                     }
                 }
-            }
             """.trimIndent()
         )
 
@@ -163,20 +164,20 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
 
     @Test
     fun `ABI validation`() {
-        val moduleDir = gradleRunner.projectDir.resolve("kmp-library")
-        moduleDir.resolve("build.gradle.kts").appendText(
-            """
-                kotlinMultiplatformLibrary {
-                    buildFeatures {
-                        abiValidation = true
+        val project = gradleRunner.root.project("kmp-library")
+            .configureBuildScript(
+                """
+                    kotlinMultiplatformLibrary {
+                        buildFeatures {
+                            abiValidation = true
+                        }
                     }
-                }
-            """.trimIndent()
-        )
+                """.trimIndent()
+            )
 
         gradleRunner.build(":kmp-library:updateLegacyAbi")
 
-        val abiDump = moduleDir.resolve("api", "kmp-library.klib.api")
+        val abiDump = project.dir.resolve("api", "kmp-library.klib.api")
         assertThat(abiDump)
             .content()
             .contains(
@@ -186,7 +187,7 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
                 """.trimIndent()
             )
 
-        moduleDir.resolve("src", "commonMain", "kotlin", "kmp", "library", "KmpLibrary.kt")
+        project.dir.resolve("src", "commonMain", "kotlin", "kmp", "library", "KmpLibrary.kt")
             .writeText(
                 """
                     package kmp.library

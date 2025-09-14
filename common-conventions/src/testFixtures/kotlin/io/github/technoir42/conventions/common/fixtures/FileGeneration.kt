@@ -1,10 +1,8 @@
 package io.github.technoir42.conventions.common.fixtures
 
-import java.io.File
-
 @Suppress("SpreadOperator")
-fun File.createDependencyGraph(packageName: String = "com.example") {
-    val dependencyGraphFile = resolve(
+fun GradleProject.createDependencyGraph(packageName: String = "com.example") {
+    val dependencyGraphFile = dir.resolve(
         "src",
         "commonMain",
         "kotlin",

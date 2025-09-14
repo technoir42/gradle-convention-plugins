@@ -1,7 +1,7 @@
 package io.github.technoir42.conventions.jvm
 
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
-import io.github.technoir42.conventions.common.fixtures.resolve
+import io.github.technoir42.conventions.common.fixtures.configureBuildScript
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -24,14 +24,13 @@ class JvmApplicationConventionPluginFunctionalTest {
 
     @Test
     fun `declaring common dependencies without versions`() {
-        gradleRunner.projectDir.resolve("jvm-application", "build.gradle.kts").appendText(
-            // language=kotlin
+        gradleRunner.root.project("jvm-application").configureBuildScript(
             """
-            dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-reflect")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core")
-            }
+                dependencies {
+                    implementation("org.jetbrains.kotlin:kotlin-reflect")
+                    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+                    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core")
+                }
             """.trimIndent()
         )
 

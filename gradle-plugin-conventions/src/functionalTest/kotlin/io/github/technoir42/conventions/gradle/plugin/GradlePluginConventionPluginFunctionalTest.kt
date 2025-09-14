@@ -1,6 +1,7 @@
 package io.github.technoir42.conventions.gradle.plugin
 
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
+import io.github.technoir42.conventions.common.fixtures.configureBuildScript
 import io.github.technoir42.conventions.common.fixtures.jarEntries
 import io.github.technoir42.conventions.common.fixtures.replaceText
 import io.github.technoir42.conventions.common.fixtures.resolve
@@ -20,7 +21,7 @@ class GradlePluginConventionPluginFunctionalTest {
 
     @Test
     fun publishing() {
-        val repoDir = gradleRunner.projectDir.resolve("repo")
+        val repoDir = gradleRunner.root.dir.resolve("repo")
         repoDir.mkdirs()
 
         gradleRunner.build(":example-plugin:publish") {
@@ -45,7 +46,7 @@ class GradlePluginConventionPluginFunctionalTest {
 
     @Test
     fun `publishing with custom coordinates`() {
-        val repoDir = gradleRunner.projectDir.resolve("repo")
+        val repoDir = gradleRunner.root.dir.resolve("repo")
         repoDir.mkdirs()
 
         gradleRunner.build(":example-plugin:publish") {
@@ -62,20 +63,20 @@ class GradlePluginConventionPluginFunctionalTest {
 
     @Test
     fun `ABI validation`() {
-        val moduleDir = gradleRunner.projectDir.resolve("example-plugin")
-        moduleDir.resolve("build.gradle.kts").appendText(
-            """
-                gradlePluginConfig {
-                    buildFeatures {
-                        abiValidation = true
+        val project = gradleRunner.root.project("example-plugin")
+            .configureBuildScript(
+                """
+                    gradlePluginConfig {
+                        buildFeatures {
+                            abiValidation = true
+                        }
                     }
-                }
-            """.trimIndent()
-        )
+                """.trimIndent()
+            )
 
         gradleRunner.build(":example-plugin:updateLegacyAbi")
 
-        val abiDump = moduleDir.resolve("api", "example-plugin.api")
+        val abiDump = project.dir.resolve("api", "example-plugin.api")
         assertThat(abiDump)
             .content()
             .contains(
@@ -88,7 +89,7 @@ class GradlePluginConventionPluginFunctionalTest {
                 """.trimIndent()
             )
 
-        moduleDir.resolve("src", "main", "kotlin", "com", "example", "plugin", "ExamplePlugin.kt")
+        project.dir.resolve("src", "main", "kotlin", "com", "example", "plugin", "ExamplePlugin.kt")
             .replaceText(
                 """
                     |    override fun apply(project: Project) {

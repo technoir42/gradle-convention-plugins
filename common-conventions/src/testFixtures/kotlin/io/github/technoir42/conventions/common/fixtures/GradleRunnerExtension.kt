@@ -5,7 +5,6 @@ import org.gradle.testkit.runner.GradleRunner
 import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
-import java.io.File
 import java.nio.file.Files
 
 class GradleRunnerExtension(
@@ -14,20 +13,20 @@ class GradleRunnerExtension(
 ) : BeforeEachCallback, AfterEachCallback {
 
     private val config = GradleConfig()
-
-    lateinit var projectDir: File
+    lateinit var root: GradleProject
 
     init {
         config.configuration()
     }
 
     override fun beforeEach(context: ExtensionContext) {
-        projectDir = Files.createTempDirectory("project-").toFile()
+        val projectDir = Files.createTempDirectory("project-").toFile()
         copyResources(resourceDir, projectDir)
+        root = GradleProject(projectDir)
     }
 
     override fun afterEach(context: ExtensionContext) {
-        projectDir.deleteRecursively()
+        root.dir.deleteRecursively()
     }
 
     fun build(vararg tasks: String, configuration: GradleConfig.() -> Unit = {}): BuildResult {
@@ -56,7 +55,7 @@ class GradleRunnerExtension(
         @Suppress("SpreadOperator")
         return GradleRunner.create()
             .withArguments(*arguments.toTypedArray())
-            .withProjectDir(projectDir)
+            .withProjectDir(root.dir)
             .withPluginClasspath()
             .forwardOutput()
     }

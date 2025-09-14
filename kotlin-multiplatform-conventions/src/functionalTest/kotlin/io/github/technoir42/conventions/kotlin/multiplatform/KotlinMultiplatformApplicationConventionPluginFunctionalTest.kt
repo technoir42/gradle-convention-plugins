@@ -1,6 +1,7 @@
 package io.github.technoir42.conventions.kotlin.multiplatform
 
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
+import io.github.technoir42.conventions.common.fixtures.configureBuildScript
 import io.github.technoir42.conventions.common.fixtures.createDependencyGraph
 import io.github.technoir42.conventions.common.fixtures.replaceText
 import io.github.technoir42.conventions.common.fixtures.resolve
@@ -19,17 +20,16 @@ class KotlinMultiplatformApplicationConventionPluginFunctionalTest {
 
     @Test
     fun `dependency injection`() {
-        gradleRunner.projectDir.resolve("kmp-application", "build.gradle.kts").appendText(
-            //language=kotlin
-            """
-                kotlinMultiplatformApplication {
-                    buildFeatures {
-                        metro = true
+        gradleRunner.root.project("kmp-application")
+            .configureBuildScript(
+                """
+                    kotlinMultiplatformApplication {
+                        buildFeatures {
+                            metro = true
+                        }
                     }
-                }
-            """.trimIndent()
-        )
-        gradleRunner.projectDir.resolve("kmp-application")
+                """.trimIndent()
+            )
             .createDependencyGraph()
 
         gradleRunner.build(":kmp-application:assemble")
@@ -51,17 +51,17 @@ class KotlinMultiplatformApplicationConventionPluginFunctionalTest {
 
     @Test
     fun `custom targets`() {
-        gradleRunner.projectDir.resolve("kmp-application", "build.gradle.kts").appendText(
-            // language=kotlin
-            """
-            kotlinMultiplatformApplication {
-                defaultTargets = false
-            }
-            kotlin {
-                linuxArm64()
-            }
-            """.trimIndent()
-        )
+        gradleRunner.root.project("kmp-application")
+            .configureBuildScript(
+                """
+                    kotlinMultiplatformApplication {
+                        defaultTargets = false
+                    }
+                    kotlin {
+                        linuxArm64()
+                    }
+                """.trimIndent()
+            )
 
         val buildResult = gradleRunner.build(":kmp-application:tasks")
 
@@ -81,19 +81,18 @@ class KotlinMultiplatformApplicationConventionPluginFunctionalTest {
 
     @Test
     fun `custom package name`() {
-        val projectDir = gradleRunner.projectDir.resolve("kmp-application")
-        projectDir.resolve("build.gradle.kts").appendText(
-            // language=kotlin
-            """
-            kotlinMultiplatformApplication {
-                packageName = "com.example.kmp.application"
-            }
-            """.trimIndent()
-        )
+        val project = gradleRunner.root.project("kmp-application")
+            .configureBuildScript(
+                """
+                    kotlinMultiplatformApplication {
+                        packageName = "com.example.kmp.application"
+                    }
+                """.trimIndent()
+            )
 
-        val newMainKt = projectDir.resolve("src", "commonMain", "kotlin", "com", "example", "kmp", "application", "Main.kt")
+        val newMainKt = project.dir.resolve("src", "commonMain", "kotlin", "com", "example", "kmp", "application", "Main.kt")
             .apply { parentFile.mkdirs() }
-        projectDir.resolve("src", "commonMain", "kotlin", "kmp", "application", "Main.kt").renameTo(newMainKt)
+        project.dir.resolve("src", "commonMain", "kotlin", "kmp", "application", "Main.kt").renameTo(newMainKt)
         newMainKt.replaceText("package kmp.application", "package com.example.kmp.application")
 
         val buildResult = gradleRunner.build(":kmp-application:runDebugExecutable")
@@ -110,20 +109,20 @@ class KotlinMultiplatformApplicationConventionPluginFunctionalTest {
 
     @Test
     fun `declaring common dependencies without versions`() {
-        gradleRunner.projectDir.resolve("kmp-application", "build.gradle.kts").appendText(
-            // language=kotlin
-            """
-            kotlin {
-                sourceSets {
-                    commonMain.dependencies {
-                        implementation("org.jetbrains.kotlin:kotlin-reflect")
-                        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-                        implementation("org.jetbrains.kotlinx:kotlinx-serialization-core")
+        gradleRunner.root.project("kmp-application")
+            .configureBuildScript(
+                """
+                    kotlin {
+                        sourceSets {
+                            commonMain.dependencies {
+                                implementation("org.jetbrains.kotlin:kotlin-reflect")
+                                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+                                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core")
+                            }
+                        }
                     }
-                }
-            }
-            """.trimIndent()
-        )
+                """.trimIndent()
+            )
 
         gradleRunner.build(":kmp-application:assemble")
     }
