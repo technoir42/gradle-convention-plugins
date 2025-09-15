@@ -27,6 +27,7 @@ class JvmApplicationConventionPluginFunctionalTest {
                             buildConfig {
                                 buildConfigField<String>("STRING_FIELD", "string value")
                                 buildConfigField<String>("LAZY_STRING_FIELD", provider { project.description })
+                                buildConfigField<String>("NONEXISTENT_STRING_FIELD", provider { null })
                                 buildConfigField<String>("NULLABLE_STRING_FIELD", null)
                                 buildConfigField<Boolean>("BOOLEAN_FIELD", true)
                                 buildConfigField<Int>("INT_FIELD", 42)
@@ -48,6 +49,7 @@ class JvmApplicationConventionPluginFunctionalTest {
             .contains("val NULLABLE_STRING_FIELD: String? = null")
             .contains("const val BOOLEAN_FIELD: Boolean = true")
             .contains("const val INT_FIELD: Int = 42")
+            .doesNotContain("NONEXISTENT_STRING_FIELD")
             .doesNotContain("TEST_STRING_FIELD")
 
         gradleRunner.build(":jvm-application:testClasses")
