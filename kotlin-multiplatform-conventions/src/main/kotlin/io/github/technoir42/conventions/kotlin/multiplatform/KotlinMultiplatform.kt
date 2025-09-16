@@ -1,7 +1,7 @@
 package io.github.technoir42.conventions.kotlin.multiplatform
 
 import io.github.technoir42.conventions.common.configureCompilerOptions
-import io.github.technoir42.conventions.kotlin.multiplatform.api.KotlinMultiplatformBuildFeatures
+import io.github.technoir42.conventions.kotlin.multiplatform.api.KotlinMultiplatformExtension
 import io.github.technoir42.gradle.capitalized
 import org.gradle.api.Project
 import org.gradle.api.provider.Property
@@ -10,7 +10,6 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.withType
 import org.gradle.language.base.plugins.LifecycleBasePlugin
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.abi.AbiValidationMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
@@ -22,16 +21,12 @@ import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 import org.jetbrains.kotlin.konan.target.Family
 import org.jetbrains.kotlin.konan.target.HostManager
 import kotlin.io.path.Path
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension as KmpExtension
 
-internal fun Project.configureKotlinMultiplatform(
-    packageName: Provider<String>,
-    defaultTargets: Provider<Boolean>,
-    buildFeatures: KotlinMultiplatformBuildFeatures,
-    executable: Boolean = false
-) {
+internal fun Project.configureKotlinMultiplatform(config: KotlinMultiplatformExtension, executable: Boolean = false) {
     afterEvaluate {
-        if (defaultTargets.get()) {
-            extensions.configure(KotlinMultiplatformExtension::class) {
+        if (config.defaultTargets.get()) {
+            extensions.configure(KmpExtension::class) {
                 // Tier 1
                 iosArm64()
                 iosSimulatorArm64()
@@ -47,10 +42,10 @@ internal fun Project.configureKotlinMultiplatform(
 
     pluginManager.apply("org.jetbrains.kotlin.multiplatform")
 
-    extensions.configure(KotlinMultiplatformExtension::class) {
+    extensions.configure(KmpExtension::class) {
         @OptIn(ExperimentalAbiValidation::class)
         extensions.configure(AbiValidationMultiplatformExtension::class) {
-            enabled.set(buildFeatures.abiValidation)
+            enabled.set(config.buildFeatures.abiValidation)
         }
 
         compilerOptions {
@@ -70,7 +65,7 @@ internal fun Project.configureKotlinMultiplatform(
             when (this) {
                 is KotlinAndroidTarget -> configureCompilerOptions()
                 is KotlinJvmTarget -> configureCompilerOptions()
-                is KotlinNativeTarget -> configureNativeTarget(packageName, buildFeatures.cinterop, executable)
+                is KotlinNativeTarget -> configureNativeTarget(config.packageName, config.buildFeatures.cinterop, executable)
             }
         }
 
@@ -84,7 +79,7 @@ internal fun Project.configureKotlinMultiplatform(
     }
 
     tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME).configure {
-        if (buildFeatures.abiValidation.get()) {
+        if (config.buildFeatures.abiValidation.get()) {
             dependsOn(tasks.named("checkLegacyAbi"))
         }
     }

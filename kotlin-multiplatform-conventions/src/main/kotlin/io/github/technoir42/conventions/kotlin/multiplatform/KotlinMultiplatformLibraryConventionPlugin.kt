@@ -26,11 +26,7 @@ class KotlinMultiplatformLibraryConventionPlugin : Plugin<Project> {
         val environment = Environment(providers)
         val projectSettings = ProjectSettingsImpl(this)
         configureCommon(projectSettings)
-        configureKotlinMultiplatform(
-            packageName = config.packageName,
-            defaultTargets = config.defaultTargets,
-            buildFeatures = config.buildFeatures
-        )
+        configureKotlinMultiplatform(config)
         configureDetekt()
         configurePublishing(publicationName = "kotlinMultiplatform", environment)
     }

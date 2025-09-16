@@ -23,12 +23,7 @@ class KotlinMultiplatformApplicationConventionPlugin : Plugin<Project> {
 
         val projectSettings = ProjectSettingsImpl(this)
         configureCommon(projectSettings)
-        configureKotlinMultiplatform(
-            packageName = config.packageName,
-            defaultTargets = config.defaultTargets,
-            buildFeatures = config.buildFeatures,
-            executable = true
-        )
+        configureKotlinMultiplatform(config, executable = true)
         configureDetekt()
     }
 }
