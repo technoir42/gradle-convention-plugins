@@ -27,6 +27,8 @@ plugins {
 
 dependencyResolutionManagement {
     repositories {
+        mavenCentral()
+        gradlePluginPortal()
         maven("https://maven.pkg.github.com/technoir42/gradle-convention-plugins") {
             credentials {
                 username = providers.gradleProperty("gpr.user").orNull
