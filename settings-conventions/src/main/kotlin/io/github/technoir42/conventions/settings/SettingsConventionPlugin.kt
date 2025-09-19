@@ -30,5 +30,6 @@ class SettingsConventionPlugin : Plugin<Settings> {
         configureDependencyAnalysis()
         configureDependencyResolution(environment)
         configureDevelocity(environment)
+        configurePublishing()
     }
 }

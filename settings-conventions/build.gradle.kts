@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":gradle-extensions"))
     implementation(libs.dependency.analysis.gradle.plugin)
     implementation(libs.develocity.gradle.plugin)
+    implementation(libs.nmcp.gradle.plugin)
 
     runtimeOnly(libs.foojay.resolver.gradle.plugin)
 }

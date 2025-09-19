@@ -7,9 +7,9 @@ import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
-import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.maven
 import org.gradle.kotlin.dsl.register
+import org.gradle.kotlin.dsl.the
 import org.gradle.kotlin.dsl.withType
 import org.gradle.plugins.signing.SigningExtension
 
@@ -19,7 +19,7 @@ fun Project.configurePublishing(
     extraConfiguration: MavenPublication.() -> Unit = {}
 ) {
     pluginManager.apply("maven-publish")
-    pluginManager.apply("signing")
+    pluginManager.apply("com.gradleup.nmcp")
 
     val projectDescription = provider { description }
 
@@ -42,6 +42,10 @@ fun Project.configurePublishing(
             pom {
                 url.convention(environment.repositoryUrl.map { it.toString() })
                 description.convention(projectDescription)
+
+                scm {
+                    url.convention(environment.repositoryUrl.map { it.toString() })
+                }
             }
 
             versionMapping {
@@ -60,8 +64,7 @@ fun Project.configurePublishing(
     }
 
     afterEvaluate {
-        val publishing = extensions.getByType<PublishingExtension>()
-        publishing.run {
+        extensions.configure(PublishingExtension::class) {
             publications {
                 if (publicationName !in names) {
                     register(publicationName, MavenPublication::class) {
@@ -71,13 +74,19 @@ fun Project.configurePublishing(
                 }
             }
         }
+    }
 
-        extensions.configure(SigningExtension::class) {
-            val secretKey = providers.environmentVariable("SIGNING_KEY")
-            val password = providers.environmentVariable("SIGNING_PASSWORD")
-            useInMemoryPgpKeys(secretKey.orNull, password.orNull)
-            sign(publishing.publications)
-            isRequired = false
-        }
+    configureSigning()
+}
+
+private fun Project.configureSigning() {
+    pluginManager.apply("signing")
+
+    extensions.configure(SigningExtension::class) {
+        val secretKey = providers.environmentVariable("SIGNING_KEY")
+        val password = providers.environmentVariable("SIGNING_PASSWORD")
+        useInMemoryPgpKeys(secretKey.orNull, password.orNull)
+        sign(the<PublishingExtension>().publications)
+        isRequired = false
     }
 }

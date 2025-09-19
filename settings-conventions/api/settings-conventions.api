@@ -1,3 +1,8 @@
+public abstract class io/github/technoir42/conventions/settings/NmcpProjectCollectorService : org/gradle/api/services/BuildService {
+	public fun <init> ()V
+	public final fun getProjectPaths ()Ljava/util/concurrent/ConcurrentLinkedDeque;
+}
+
 public final class io/github/technoir42/conventions/settings/SettingsConventionPlugin : org/gradle/api/Plugin {
 	public fun <init> ()V
 	public synthetic fun apply (Ljava/lang/Object;)V

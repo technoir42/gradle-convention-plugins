@@ -24,6 +24,7 @@ dependencies {
     implementation(libs.buildconfig.gradle.plugin)
 
     runtimeOnly(libs.kotlin.serialization.gradle.plugin)
+    runtimeOnly(libs.nmcp.gradle.plugin)
 
     testFixturesImplementation(gradleTestKit())
     testFixturesImplementation(libs.junit.jupiter.api)
