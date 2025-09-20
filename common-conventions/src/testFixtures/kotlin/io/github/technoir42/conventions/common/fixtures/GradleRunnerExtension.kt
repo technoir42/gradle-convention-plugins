@@ -60,6 +60,11 @@ class GradleRunnerExtension(
             .withArguments(*arguments.toTypedArray())
             .withProjectDir(root.dir.toFile())
             .withPluginClasspath()
+            .apply {
+                if (config.environmentVariables.isNotEmpty()) {
+                    withEnvironment(config.environmentVariables.mapValues { "${it.value}" })
+                }
+            }
             .forwardOutput()
     }
 }

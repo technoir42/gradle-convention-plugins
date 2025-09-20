@@ -2,6 +2,8 @@ package io.github.technoir42.conventions.jvm
 
 import io.github.technoir42.conventions.common.fixtures.Generator
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
+import io.github.technoir42.conventions.common.fixtures.POM_EXPECTED
+import io.github.technoir42.conventions.common.fixtures.PROJECT_METADATA
 import io.github.technoir42.conventions.common.fixtures.buildDir
 import io.github.technoir42.conventions.common.fixtures.configureBuildScript
 import io.github.technoir42.conventions.common.fixtures.generatedFile
@@ -81,6 +83,11 @@ class JvmLibraryConventionPluginFunctionalTest {
             .isDirectoryContaining("glob:**jvm-library-dev-javadoc.*")
             .isDirectoryContaining("glob:**jvm-library-dev-sources.*")
 
+        val pomFile = artifactDir / "jvm-library-dev.pom"
+        assertThat(pomFile)
+            .content()
+            .contains("<name>jvm-library</name>")
+
         val sourcesJar = artifactDir / "jvm-library-dev-sources.jar"
         assertThat(sourcesJar).exists()
         assertThat(sourcesJar.jarEntries()).contains("com/example/jvm/library/JvmLibrary.kt")
@@ -105,6 +112,28 @@ class JvmLibraryConventionPluginFunctionalTest {
 
         val artifactDir = repoDir / "com/example/jvm-library/v1"
         assertThat(artifactDir).isDirectoryContaining("glob:**jvm-library-v1*")
+    }
+
+    @Test
+    fun `publishing with custom metadata`() {
+        val repoDir = gradleRunner.root.dir / "repo"
+        repoDir.createDirectories()
+
+        gradleRunner.root.project("jvm-library")
+            .configureBuildScript("jvmLibrary {\n${PROJECT_METADATA.prependIndent("    ")}\n}")
+
+        gradleRunner.build(":jvm-library:publish") {
+            gradleProperties += mapOf("publish.url" to repoDir.toUri())
+            environmentVariables += mapOf(
+                "GITHUB_SERVER_URL" to "https://github.com",
+                "GITHUB_REPOSITORY" to "example-org/example-project",
+            )
+        }
+
+        val pomFile = repoDir / "io/github/technoir42/jvm-library/dev/jvm-library-dev.pom"
+        assertThat(pomFile)
+            .content()
+            .containsIgnoringNewLines(*POM_EXPECTED)
     }
 
     @Test

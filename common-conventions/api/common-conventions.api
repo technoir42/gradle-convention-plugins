@@ -2,6 +2,12 @@ public final class io/github/technoir42/conventions/common/BuildConfigGeneration
 	public static final fun configureBuildConfig (Lorg/gradle/api/Project;Lio/github/technoir42/conventions/common/api/BuildConfigSpec;Lorg/gradle/api/provider/Property;)V
 }
 
+public final class io/github/technoir42/conventions/common/CommonConventionPlugin : org/gradle/api/Plugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
 public final class io/github/technoir42/conventions/common/CommonKt {
 	public static final fun configureCommon (Lorg/gradle/api/Project;Lio/github/technoir42/conventions/common/api/ProjectSettings;)V
 }
@@ -46,8 +52,8 @@ public final class io/github/technoir42/conventions/common/ProjectSettingsImpl :
 }
 
 public final class io/github/technoir42/conventions/common/PublishingKt {
-	public static final fun configurePublishing (Lorg/gradle/api/Project;Lio/github/technoir42/conventions/common/PublishingOptions;Lio/github/technoir42/gradle/Environment;Lkotlin/jvm/functions/Function1;)V
-	public static synthetic fun configurePublishing$default (Lorg/gradle/api/Project;Lio/github/technoir42/conventions/common/PublishingOptions;Lio/github/technoir42/gradle/Environment;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun configurePublishing (Lorg/gradle/api/Project;Lio/github/technoir42/conventions/common/PublishingOptions;Lio/github/technoir42/conventions/common/api/metadata/ProjectMetadata;Lio/github/technoir42/gradle/Environment;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun configurePublishing$default (Lorg/gradle/api/Project;Lio/github/technoir42/conventions/common/PublishingOptions;Lio/github/technoir42/conventions/common/api/metadata/ProjectMetadata;Lio/github/technoir42/gradle/Environment;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 }
 
 public final class io/github/technoir42/conventions/common/PublishingOptions {

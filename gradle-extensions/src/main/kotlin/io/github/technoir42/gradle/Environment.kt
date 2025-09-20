@@ -13,4 +13,7 @@ class Environment(private val providerFactory: ProviderFactory) {
             .zip(providerFactory.environmentVariable("GITHUB_REPOSITORY")) { serverUrl, repository ->
                 URI(serverUrl).resolve(repository)
             }
+
+    val vcsUrl: Provider<String>
+        get() = repositoryUrl.map { "$it.git" }
 }

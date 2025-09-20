@@ -10,6 +10,7 @@ class GradleConfig(
     val arguments: MutableList<String> = mutableListOf("--stacktrace"),
     val gradleProperties: MutableMap<String, Any> = mutableMapOf(),
     val systemProperties: MutableMap<String, Any> = mutableMapOf(),
+    val environmentVariables: MutableMap<String, Any> = mutableMapOf(),
 ) {
     constructor(copy: GradleConfig) : this(
         buildCache = copy.buildCache,
@@ -20,5 +21,6 @@ class GradleConfig(
         arguments = copy.arguments.toMutableList(),
         gradleProperties = copy.gradleProperties.toMutableMap(),
         systemProperties = copy.systemProperties.toMutableMap(),
+        environmentVariables = copy.environmentVariables.toMutableMap(),
     )
 }

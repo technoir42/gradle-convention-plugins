@@ -1,6 +1,9 @@
 package io.github.technoir42.conventions.gradle.plugin
 
+import io.github.technoir42.conventions.common.api.metadata.ProjectMetadata
+import io.github.technoir42.gradle.Environment
 import io.github.technoir42.gradle.dependencies.api
+import io.github.technoir42.gradle.setDisallowChanges
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.attributes.java.TargetJvmEnvironment
@@ -20,7 +23,7 @@ import org.gradle.testing.base.TestingExtension
 import org.jetbrains.dokka.gradle.DokkaExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 
-internal fun Project.configurePlugin() {
+internal fun Project.configurePlugin(metadata: ProjectMetadata, environment: Environment) {
     extensions.configure(JavaPluginExtension::class) {
         val apiSourceSet = sourceSets.create(API_VARIANT_NAME)
 
@@ -63,6 +66,14 @@ internal fun Project.configurePlugin() {
             dependsOn(functionalTestSuite)
         }
         extensions.configure(GradlePluginDevelopmentExtension::class) {
+            website.setDisallowChanges(metadata.url)
+            vcsUrl.setDisallowChanges(environment.vcsUrl)
+
+            plugins.configureEach {
+                displayName = metadata.name.orNull
+                description = metadata.description.orNull
+            }
+
             testSourceSet(functionalTestSuite.get().sources)
         }
     }

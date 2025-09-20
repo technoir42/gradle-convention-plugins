@@ -28,6 +28,10 @@ naming:
     ignoreAnnotated:
       - org.junit.jupiter.api.Test
 
+performance:
+  SpreadOperator:
+    active: false
+
 style:
   ForbiddenComment:
     active: false

@@ -9,6 +9,12 @@ gradlePluginConfig {
 }
 
 dependencies {
+    apiApi(project(":common-conventions")) {
+        capabilities {
+            requireCapability("${project.group}:common-conventions-api")
+        }
+    }
+
     implementation(project(":gradle-extensions"))
     implementation(libs.dependency.analysis.gradle.plugin)
     implementation(libs.develocity.gradle.plugin)

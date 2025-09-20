@@ -27,12 +27,15 @@ class KotlinMultiplatformLibraryConventionPlugin : Plugin<Project> {
 
         val environment = Environment(providers)
         val projectSettings = ProjectSettingsImpl(this)
-        val publishingOptions = PublishingOptions(componentName = "kotlin", publicationName = "kotlinMultiplatform")
+        val publishingOptions = PublishingOptions(
+            componentName = "kotlin",
+            publicationName = "kotlinMultiplatform"
+        )
 
         configureCommon(projectSettings)
         configureKotlinMultiplatform(config)
         configureDetekt()
         configureDokka()
-        configurePublishing(publishingOptions, environment)
+        configurePublishing(publishingOptions, config.metadata, environment)
     }
 }

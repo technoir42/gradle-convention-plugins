@@ -30,3 +30,12 @@ dependencies {
     testFixturesImplementation(gradleTestKit())
     testFixturesImplementation(libs.junit.jupiter.api)
 }
+
+gradlePlugin {
+    plugins {
+        register("commonConventions") {
+            id = "io.github.technoir42.conventions.common"
+            implementationClass = "io.github.technoir42.conventions.gradle.plugin.GradlePluginConventionPlugin"
+        }
+    }
+}

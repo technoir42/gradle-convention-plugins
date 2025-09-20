@@ -44,7 +44,7 @@ class GradlePluginConventionPlugin : Plugin<Project> {
         configureKotlin(config.buildFeatures.abiValidation)
         configureDetekt()
         configureDokka(DocsFormat.All)
-        configurePublishing(publishingOptions, environment) {
+        configurePublishing(publishingOptions, config.metadata, environment) {
             suppressPomMetadataWarningsFor("apiElements")
             suppressPomMetadataWarningsFor("runtimeElements")
             suppressPomMetadataWarningsFor("apiApiElements")
@@ -52,7 +52,7 @@ class GradlePluginConventionPlugin : Plugin<Project> {
             suppressPomMetadataWarningsFor("apiJavadocElements")
             suppressPomMetadataWarningsFor("apiSourcesElements")
         }
-        configurePlugin()
+        configurePlugin(config.metadata, environment)
         configureTesting()
         configureTestFixtures()
     }

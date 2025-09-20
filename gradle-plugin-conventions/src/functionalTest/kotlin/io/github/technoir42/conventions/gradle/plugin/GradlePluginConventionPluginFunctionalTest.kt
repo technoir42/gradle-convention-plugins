@@ -2,6 +2,8 @@ package io.github.technoir42.conventions.gradle.plugin
 
 import io.github.technoir42.conventions.common.fixtures.Generator
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
+import io.github.technoir42.conventions.common.fixtures.POM_EXPECTED
+import io.github.technoir42.conventions.common.fixtures.PROJECT_METADATA
 import io.github.technoir42.conventions.common.fixtures.buildDir
 import io.github.technoir42.conventions.common.fixtures.configureBuildScript
 import io.github.technoir42.conventions.common.fixtures.generatedFile
@@ -83,6 +85,11 @@ class GradlePluginConventionPluginFunctionalTest {
             .isDirectoryContaining("glob:**example-plugin-dev-api.*")
             .isDirectoryContaining("glob:**example-plugin-dev-api-sources.*")
 
+        val pomFile = artifactDir / "example-plugin-dev.pom"
+        assertThat(pomFile)
+            .content()
+            .contains("<name>example-plugin</name>")
+
         val sourcesJar = artifactDir / "example-plugin-dev-sources.jar"
         assertThat(sourcesJar).exists()
         assertThat(sourcesJar.jarEntries()).contains("com/example/plugin/ExamplePlugin.kt")
@@ -112,6 +119,28 @@ class GradlePluginConventionPluginFunctionalTest {
 
         val artifactDir = repoDir / "com/example/example-plugin/v1"
         assertThat(artifactDir).isDirectoryContaining("glob:**example-plugin-v1*")
+    }
+
+    @Test
+    fun `publishing with custom metadata`() {
+        val repoDir = gradleRunner.root.dir / "repo"
+        repoDir.createDirectories()
+
+        gradleRunner.root.project("example-plugin")
+            .configureBuildScript("gradlePluginConfig {\n${PROJECT_METADATA.prependIndent("    ")}\n}")
+
+        gradleRunner.build(":example-plugin:publish") {
+            gradleProperties += mapOf("publish.url" to repoDir.toUri())
+            environmentVariables += mapOf(
+                "GITHUB_SERVER_URL" to "https://github.com",
+                "GITHUB_REPOSITORY" to "example-org/example-project",
+            )
+        }
+
+        val pomFile = repoDir / "io/github/technoir42/example-plugin/dev/example-plugin-dev.pom"
+        assertThat(pomFile)
+            .content()
+            .containsIgnoringNewLines(*POM_EXPECTED)
     }
 
     @Test

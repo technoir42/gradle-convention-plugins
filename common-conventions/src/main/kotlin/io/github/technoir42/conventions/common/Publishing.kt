@@ -1,10 +1,16 @@
 package io.github.technoir42.conventions.common
 
+import io.github.technoir42.conventions.common.api.metadata.DeveloperInfo
+import io.github.technoir42.conventions.common.api.metadata.LicenseInfo
+import io.github.technoir42.conventions.common.api.metadata.ProjectMetadata
 import io.github.technoir42.gradle.Environment
+import io.github.technoir42.gradle.setDisallowChanges
 import org.gradle.api.Project
 import org.gradle.api.attributes.Usage
+import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.publish.PublicationContainer
 import org.gradle.api.publish.PublishingExtension
+import org.gradle.api.publish.maven.MavenPom
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
@@ -15,39 +21,15 @@ import org.gradle.plugins.signing.SigningExtension
 
 fun Project.configurePublishing(
     options: PublishingOptions,
+    metadata: ProjectMetadata,
     environment: Environment,
     extraConfiguration: MavenPublication.() -> Unit = {}
 ) {
     pluginManager.apply("maven-publish")
     pluginManager.apply("com.gradleup.nmcp")
 
-    val projectDescription = provider { description }
-
     extensions.configure(PublishingExtension::class) {
-        val publishUrl = providers.gradleProperty("publish.url")
-        repositories {
-            if (publishUrl.isPresent) {
-                maven(publishUrl) {
-                    if (url.scheme != "file") {
-                        credentials {
-                            username = providers.gradleProperty("publish.username").orNull
-                            password = providers.gradleProperty("publish.password").orNull
-                        }
-                    }
-                }
-            }
-        }
-
         publications.withType<MavenPublication>().configureEach {
-            pom {
-                url.convention(environment.repositoryUrl.map { it.toString() })
-                description.convention(projectDescription)
-
-                scm {
-                    url.convention(environment.repositoryUrl.map { it.toString() })
-                }
-            }
-
             versionMapping {
                 usage(Usage.JAVA_API) {
                     fromResolutionResult()
@@ -63,8 +45,11 @@ fun Project.configurePublishing(
                 }
                 extraConfiguration()
             }
+
+            pom.configure(metadata, environment, artifactId)
         }
 
+        configureRepositories(providers)
         configureSigning(publications)
     }
 
@@ -74,6 +59,26 @@ fun Project.configurePublishing(
                 if (options.publicationName !in names) {
                     register(options.publicationName, MavenPublication::class) {
                         from(components[options.componentName])
+                    }
+                }
+
+                withType<MavenPublication>().configureEach {
+                    pom.configure(metadata.licenses.get(), metadata.developers.get())
+                }
+            }
+        }
+    }
+}
+
+private fun PublishingExtension.configureRepositories(providerFactory: ProviderFactory) {
+    val publishUrl = providerFactory.gradleProperty("publish.url")
+    repositories {
+        if (publishUrl.isPresent) {
+            maven(publishUrl) {
+                if (url.scheme != "file") {
+                    credentials {
+                        username = providerFactory.gradleProperty("publish.username").orNull
+                        password = providerFactory.gradleProperty("publish.password").orNull
                     }
                 }
             }
@@ -90,5 +95,42 @@ private fun Project.configureSigning(publications: PublicationContainer) {
         useInMemoryPgpKeys(secretKey.orNull, password.orNull)
         sign(publications)
         isRequired = false
+    }
+}
+
+@Suppress("NoNameShadowing", "UnusedPrivateMember") // false positive
+private fun MavenPom.configure(metadata: ProjectMetadata, environment: Environment, artifactId: String) {
+    name.set(metadata.name.orElse(artifactId))
+    url.set(metadata.url.orElse(environment.repositoryUrl.map { it.toString() }))
+    description.set(metadata.description)
+
+    scm {
+        url.setDisallowChanges(environment.repositoryUrl.map { it.toString() })
+        connection.setDisallowChanges(environment.vcsUrl.map { "scm:git:$it" })
+        developerConnection.setDisallowChanges(environment.vcsUrl.map { "scm:git:$it" })
+    }
+}
+
+@Suppress("UnusedPrivateMember") // false positive
+private fun MavenPom.configure(licenses: List<LicenseInfo>, developers: List<DeveloperInfo>) {
+    licenses {
+        licenses.forEach { license ->
+            license {
+                name.setDisallowChanges(license.name)
+                url.setDisallowChanges(license.url)
+            }
+        }
+    }
+
+    developers {
+        developers.forEach { developer ->
+            developer {
+                id.setDisallowChanges(developer.id)
+                name.setDisallowChanges(developer.name)
+                email.setDisallowChanges(developer.email)
+                organization.setDisallowChanges(developer.organization)
+                organizationUrl.setDisallowChanges(developer.organizationUrl)
+            }
+        }
     }
 }

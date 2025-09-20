@@ -45,7 +45,7 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
         configureKotlin(config.buildFeatures.abiValidation)
         configureDetekt()
         configureDokka(DocsFormat.All)
-        configurePublishing(publishingOptions, environment)
+        configurePublishing(publishingOptions, config.metadata, environment)
         configureTesting()
         configureTestFixtures()
     }
