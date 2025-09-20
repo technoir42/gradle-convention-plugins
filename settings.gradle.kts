@@ -40,6 +40,12 @@ dependencyResolutionManagement {
 
 globalSettings {
     projectId = "convention-plugins"
+
+    metadata {
+        description = "Conventions as code for Gradle projects."
+        developer(name = "technoir", email = "technoir.dev@gmail.com")
+        license(name = "The Apache Software License, Version 2.0", url = "http://www.apache.org/licenses/LICENSE-2.0.txt")
+    }
 }
 
 include(":gradle-extensions")
