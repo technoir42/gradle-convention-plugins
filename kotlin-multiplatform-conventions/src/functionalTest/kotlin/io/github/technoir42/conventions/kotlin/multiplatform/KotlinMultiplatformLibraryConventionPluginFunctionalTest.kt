@@ -2,6 +2,7 @@ package io.github.technoir42.conventions.kotlin.multiplatform
 
 import io.github.technoir42.conventions.common.fixtures.Generator
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
+import io.github.technoir42.conventions.common.fixtures.buildDir
 import io.github.technoir42.conventions.common.fixtures.configureBuildScript
 import io.github.technoir42.conventions.common.fixtures.createDependencyGraph
 import io.github.technoir42.conventions.common.fixtures.generatedFile
@@ -171,6 +172,10 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
         val sourcesJar = artifactDir / "kmp-library-dev-sources.jar"
         assertThat(sourcesJar).exists()
         assertThat(sourcesJar.jarEntries()).contains("commonMain/kmp/library/KmpLibrary.kt")
+
+        val javadocJar = artifactDir / "kmp-library-dev-html-docs.jar"
+        assertThat(javadocJar).exists()
+        assertThat(javadocJar.jarEntries()).contains("kmp-library/kmp.library/index.html")
     }
 
     @Test
@@ -258,5 +263,14 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
                 |  +final fun kmp.library/hello() // kmp.library/hello|hello(){}[0]
             """.trimMargin()
         )
+    }
+
+    @Test
+    fun `generating documentation`() {
+        gradleRunner.build(":kmp-library:dokkaGenerate")
+
+        val project = gradleRunner.root.project("kmp-library")
+        assertThat(project.buildDir / "dokka/html/index.html").exists()
+        assertThat(project.buildDir / "dokka/html/kmp-library/kmp.library/index.html").exists()
     }
 }

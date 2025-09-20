@@ -1,9 +1,12 @@
 package io.github.technoir42.conventions.gradle.plugin
 
+import io.github.technoir42.conventions.common.DocsFormat
 import io.github.technoir42.conventions.common.ProjectSettingsImpl
+import io.github.technoir42.conventions.common.PublishingOptions
 import io.github.technoir42.conventions.common.configureBuildConfig
 import io.github.technoir42.conventions.common.configureCommon
 import io.github.technoir42.conventions.common.configureDetekt
+import io.github.technoir42.conventions.common.configureDokka
 import io.github.technoir42.conventions.common.configureJava
 import io.github.technoir42.conventions.common.configureKotlin
 import io.github.technoir42.conventions.common.configureKotlinSerialization
@@ -30,11 +33,18 @@ class GradlePluginConventionPlugin : Plugin<Project> {
 
         val environment = Environment(providers)
         val projectSettings = ProjectSettingsImpl(this)
+        val publishingOptions = PublishingOptions(
+            componentName = "java",
+            publicationName = "pluginMaven",
+            docsFormats = setOf(DocsFormat.Javadoc)
+        )
+
         configureCommon(projectSettings)
         configureJava()
         configureKotlin(config.buildFeatures.abiValidation)
         configureDetekt()
-        configurePublishing(publicationName = "pluginMaven", environment) {
+        configureDokka(DocsFormat.All)
+        configurePublishing(publishingOptions, environment) {
             suppressPomMetadataWarningsFor("apiElements")
             suppressPomMetadataWarningsFor("runtimeElements")
             suppressPomMetadataWarningsFor("apiApiElements")

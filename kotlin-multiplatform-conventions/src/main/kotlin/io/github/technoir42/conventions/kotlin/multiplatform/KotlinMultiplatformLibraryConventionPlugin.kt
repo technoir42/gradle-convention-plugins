@@ -1,9 +1,11 @@
 package io.github.technoir42.conventions.kotlin.multiplatform
 
 import io.github.technoir42.conventions.common.ProjectSettingsImpl
+import io.github.technoir42.conventions.common.PublishingOptions
 import io.github.technoir42.conventions.common.configureBuildConfig
 import io.github.technoir42.conventions.common.configureCommon
 import io.github.technoir42.conventions.common.configureDetekt
+import io.github.technoir42.conventions.common.configureDokka
 import io.github.technoir42.conventions.common.configureKotlinSerialization
 import io.github.technoir42.conventions.common.configurePublishing
 import io.github.technoir42.conventions.kotlin.multiplatform.api.KotlinMultiplatformLibraryExtension
@@ -25,9 +27,12 @@ class KotlinMultiplatformLibraryConventionPlugin : Plugin<Project> {
 
         val environment = Environment(providers)
         val projectSettings = ProjectSettingsImpl(this)
+        val publishingOptions = PublishingOptions(componentName = "kotlin", publicationName = "kotlinMultiplatform")
+
         configureCommon(projectSettings)
         configureKotlinMultiplatform(config)
         configureDetekt()
-        configurePublishing(publicationName = "kotlinMultiplatform", environment)
+        configureDokka()
+        configurePublishing(publishingOptions, environment)
     }
 }

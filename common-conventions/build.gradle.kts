@@ -21,6 +21,7 @@ dependencies {
     implementation(libs.kotlin.gradle.plugin.api)
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.detekt.gradle.plugin)
+    implementation(libs.dokka.gradle.plugin)
     implementation(libs.buildconfig.gradle.plugin)
 
     runtimeOnly(libs.kotlin.serialization.gradle.plugin)

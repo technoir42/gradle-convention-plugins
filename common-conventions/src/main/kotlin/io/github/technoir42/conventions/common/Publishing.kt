@@ -3,18 +3,18 @@ package io.github.technoir42.conventions.common
 import io.github.technoir42.gradle.Environment
 import org.gradle.api.Project
 import org.gradle.api.attributes.Usage
+import org.gradle.api.publish.PublicationContainer
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.maven
 import org.gradle.kotlin.dsl.register
-import org.gradle.kotlin.dsl.the
 import org.gradle.kotlin.dsl.withType
 import org.gradle.plugins.signing.SigningExtension
 
 fun Project.configurePublishing(
-    publicationName: String,
+    options: PublishingOptions,
     environment: Environment,
     extraConfiguration: MavenPublication.() -> Unit = {}
 ) {
@@ -57,36 +57,38 @@ fun Project.configurePublishing(
                 }
             }
 
-            if (name == publicationName) {
+            if (name == options.publicationName) {
+                options.docsFormats.forEach { docsFormat ->
+                    artifact(dokkaJar(docsFormat))
+                }
                 extraConfiguration()
             }
         }
+
+        configureSigning(publications)
     }
 
     afterEvaluate {
         extensions.configure(PublishingExtension::class) {
             publications {
-                if (publicationName !in names) {
-                    register(publicationName, MavenPublication::class) {
-                        val component = components.findByName("java") ?: components["kotlin"]
-                        from(component)
+                if (options.publicationName !in names) {
+                    register(options.publicationName, MavenPublication::class) {
+                        from(components[options.componentName])
                     }
                 }
             }
         }
     }
-
-    configureSigning()
 }
 
-private fun Project.configureSigning() {
+private fun Project.configureSigning(publications: PublicationContainer) {
     pluginManager.apply("signing")
 
     extensions.configure(SigningExtension::class) {
         val secretKey = providers.environmentVariable("SIGNING_KEY")
         val password = providers.environmentVariable("SIGNING_PASSWORD")
         useInMemoryPgpKeys(secretKey.orNull, password.orNull)
-        sign(the<PublishingExtension>().publications)
+        sign(publications)
         isRequired = false
     }
 }

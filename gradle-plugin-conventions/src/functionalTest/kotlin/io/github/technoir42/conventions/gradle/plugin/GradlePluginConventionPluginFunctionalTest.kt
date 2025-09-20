@@ -2,6 +2,7 @@ package io.github.technoir42.conventions.gradle.plugin
 
 import io.github.technoir42.conventions.common.fixtures.Generator
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
+import io.github.technoir42.conventions.common.fixtures.buildDir
 import io.github.technoir42.conventions.common.fixtures.configureBuildScript
 import io.github.technoir42.conventions.common.fixtures.generatedFile
 import io.github.technoir42.conventions.common.fixtures.jarEntries
@@ -78,12 +79,18 @@ class GradlePluginConventionPluginFunctionalTest {
         assertThat(artifactDir)
             .isDirectoryContaining("glob:**example-plugin-dev.*")
             .isDirectoryContaining("glob:**example-plugin-dev-sources.*")
+            .isDirectoryContaining("glob:**example-plugin-dev-javadoc.*")
             .isDirectoryContaining("glob:**example-plugin-dev-api.*")
             .isDirectoryContaining("glob:**example-plugin-dev-api-sources.*")
 
         val sourcesJar = artifactDir / "example-plugin-dev-sources.jar"
         assertThat(sourcesJar).exists()
         assertThat(sourcesJar.jarEntries()).contains("com/example/plugin/ExamplePlugin.kt")
+
+        val javadocJar = artifactDir / "example-plugin-dev-javadoc.jar"
+        assertThat(javadocJar).exists()
+        assertThat(javadocJar.jarEntries()).contains("com/example/plugin/ExamplePlugin.html")
+        assertThat(javadocJar.jarEntries()).contains("com/example/plugin/api/ExampleExtension.html")
 
         val apiSourcesJar = artifactDir / "example-plugin-dev-api-sources.jar"
         assertThat(apiSourcesJar).exists()
@@ -160,5 +167,15 @@ class GradlePluginConventionPluginFunctionalTest {
                 |  +	public final fun hello ()V
             """.trimMargin()
         )
+    }
+
+    @Test
+    fun `generating documentation`() {
+        gradleRunner.build(":example-plugin:dokkaGenerate")
+
+        val project = gradleRunner.root.project("example-plugin")
+        assertThat(project.buildDir / "dokka/html/index.html").exists()
+        assertThat(project.buildDir / "dokka/html/example-plugin/com.example.plugin/index.html").exists()
+        assertThat(project.buildDir / "dokka/html/example-plugin/com.example.plugin.api/index.html").exists()
     }
 }

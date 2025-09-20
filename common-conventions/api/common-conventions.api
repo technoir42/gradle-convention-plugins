@@ -10,6 +10,26 @@ public final class io/github/technoir42/conventions/common/DetektKt {
 	public static final fun configureDetekt (Lorg/gradle/api/Project;)V
 }
 
+public final class io/github/technoir42/conventions/common/DocsFormat : java/lang/Enum {
+	public static final field Companion Lio/github/technoir42/conventions/common/DocsFormat$Companion;
+	public static final field Html Lio/github/technoir42/conventions/common/DocsFormat;
+	public static final field Javadoc Lio/github/technoir42/conventions/common/DocsFormat;
+	public final fun getClassifier ()Ljava/lang/String;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/technoir42/conventions/common/DocsFormat;
+	public static fun values ()[Lio/github/technoir42/conventions/common/DocsFormat;
+}
+
+public final class io/github/technoir42/conventions/common/DocsFormat$Companion {
+	public final fun getAll ()Ljava/util/Set;
+	public final fun getMultiplatform ()Ljava/util/Set;
+}
+
+public final class io/github/technoir42/conventions/common/DokkaKt {
+	public static final fun configureDokka (Lorg/gradle/api/Project;Ljava/util/Set;)V
+	public static synthetic fun configureDokka$default (Lorg/gradle/api/Project;Ljava/util/Set;ILjava/lang/Object;)V
+}
+
 public final class io/github/technoir42/conventions/common/JavaKt {
 	public static final fun configureJava (Lorg/gradle/api/Project;)V
 }
@@ -26,8 +46,24 @@ public final class io/github/technoir42/conventions/common/ProjectSettingsImpl :
 }
 
 public final class io/github/technoir42/conventions/common/PublishingKt {
-	public static final fun configurePublishing (Lorg/gradle/api/Project;Ljava/lang/String;Lio/github/technoir42/gradle/Environment;Lkotlin/jvm/functions/Function1;)V
-	public static synthetic fun configurePublishing$default (Lorg/gradle/api/Project;Ljava/lang/String;Lio/github/technoir42/gradle/Environment;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun configurePublishing (Lorg/gradle/api/Project;Lio/github/technoir42/conventions/common/PublishingOptions;Lio/github/technoir42/gradle/Environment;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun configurePublishing$default (Lorg/gradle/api/Project;Lio/github/technoir42/conventions/common/PublishingOptions;Lio/github/technoir42/gradle/Environment;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+}
+
+public final class io/github/technoir42/conventions/common/PublishingOptions {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/Set;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/Set;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/util/Set;)Lio/github/technoir42/conventions/common/PublishingOptions;
+	public static synthetic fun copy$default (Lio/github/technoir42/conventions/common/PublishingOptions;Ljava/lang/String;Ljava/lang/String;Ljava/util/Set;ILjava/lang/Object;)Lio/github/technoir42/conventions/common/PublishingOptions;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getComponentName ()Ljava/lang/String;
+	public final fun getDocsFormats ()Ljava/util/Set;
+	public final fun getPublicationName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/technoir42/conventions/common/SerializationKt {

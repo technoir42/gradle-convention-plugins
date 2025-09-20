@@ -2,6 +2,7 @@ package io.github.technoir42.conventions.jvm
 
 import io.github.technoir42.conventions.common.fixtures.Generator
 import io.github.technoir42.conventions.common.fixtures.GradleRunnerExtension
+import io.github.technoir42.conventions.common.fixtures.buildDir
 import io.github.technoir42.conventions.common.fixtures.configureBuildScript
 import io.github.technoir42.conventions.common.fixtures.generatedFile
 import io.github.technoir42.conventions.common.fixtures.jarEntries
@@ -77,11 +78,16 @@ class JvmLibraryConventionPluginFunctionalTest {
         val artifactDir = repoDir / "io/github/technoir42/jvm-library/dev"
         assertThat(artifactDir)
             .isDirectoryContaining("glob:**jvm-library-dev.*")
+            .isDirectoryContaining("glob:**jvm-library-dev-javadoc.*")
             .isDirectoryContaining("glob:**jvm-library-dev-sources.*")
 
         val sourcesJar = artifactDir / "jvm-library-dev-sources.jar"
         assertThat(sourcesJar).exists()
         assertThat(sourcesJar.jarEntries()).contains("com/example/jvm/library/JvmLibrary.kt")
+
+        val javadocJar = artifactDir / "jvm-library-dev-javadoc.jar"
+        assertThat(javadocJar).exists()
+        assertThat(javadocJar.jarEntries()).contains("com/example/jvm/library/JvmLibrary.html")
     }
 
     @Test
@@ -166,5 +172,14 @@ class JvmLibraryConventionPluginFunctionalTest {
                 |   }
             """.trimMargin()
         )
+    }
+
+    @Test
+    fun `generating documentation`() {
+        gradleRunner.build(":jvm-library:dokkaGenerate")
+
+        val project = gradleRunner.root.project("jvm-library")
+        assertThat(project.buildDir / "dokka/html/index.html").exists()
+        assertThat(project.buildDir / "dokka/html/jvm-library/com.example.jvm.library/index.html").exists()
     }
 }

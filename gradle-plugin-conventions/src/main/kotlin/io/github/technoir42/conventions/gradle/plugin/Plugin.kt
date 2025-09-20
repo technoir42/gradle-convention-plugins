@@ -17,6 +17,7 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.plugin.devel.GradlePluginDevelopmentExtension
 import org.gradle.plugin.devel.tasks.ValidatePlugins
 import org.gradle.testing.base.TestingExtension
+import org.jetbrains.dokka.gradle.DokkaExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 
 internal fun Project.configurePlugin() {
@@ -28,6 +29,15 @@ internal fun Project.configurePlugin() {
             withSourcesJar()
             usingSourceSet(apiSourceSet)
             capability("$group", "$name-$API_VARIANT_NAME", "$version")
+        }
+
+        if (pluginManager.hasPlugin("org.jetbrains.dokka")) {
+            extensions.configure(DokkaExtension::class) {
+                dokkaSourceSets.named("main") {
+                    sourceRoots.from(apiSourceSet.allSource.srcDirs)
+                    classpath.from(apiSourceSet.compileClasspath)
+                }
+            }
         }
 
         // Align attributes with the main variant
