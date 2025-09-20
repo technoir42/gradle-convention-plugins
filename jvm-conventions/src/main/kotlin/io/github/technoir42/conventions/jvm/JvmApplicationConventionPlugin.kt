@@ -1,5 +1,6 @@
 package io.github.technoir42.conventions.jvm
 
+import io.github.technoir42.conventions.common.CommonConventionPlugin
 import io.github.technoir42.conventions.common.ProjectSettingsImpl
 import io.github.technoir42.conventions.common.configureBuildConfig
 import io.github.technoir42.conventions.common.configureCommon
@@ -13,6 +14,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaApplication
 import org.gradle.api.provider.Provider
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
 
@@ -20,6 +22,8 @@ class JvmApplicationConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         val config = extensions.create<JvmApplicationExtension>(JvmApplicationExtension.NAME)
         config.initDefaults(project.name)
+
+        pluginManager.apply(CommonConventionPlugin::class)
 
         afterEvaluate {
             configureBuildConfig(config.buildFeatures.buildConfig, config.packageName)

@@ -1,5 +1,6 @@
 package io.github.technoir42.conventions.gradle.plugin
 
+import io.github.technoir42.conventions.common.CommonConventionPlugin
 import io.github.technoir42.conventions.common.DocsFormat
 import io.github.technoir42.conventions.common.ProjectSettingsImpl
 import io.github.technoir42.conventions.common.PublishingOptions
@@ -17,12 +18,15 @@ import io.github.technoir42.conventions.gradle.plugin.api.GradlePluginExtension
 import io.github.technoir42.gradle.Environment
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.create
 
 class GradlePluginConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         val config = extensions.create<GradlePluginExtension>(GradlePluginExtension.NAME)
         config.initDefaults(project.name)
+
+        pluginManager.apply(CommonConventionPlugin::class)
 
         afterEvaluate {
             configureBuildConfig(config.buildFeatures.buildConfig, config.packageName)

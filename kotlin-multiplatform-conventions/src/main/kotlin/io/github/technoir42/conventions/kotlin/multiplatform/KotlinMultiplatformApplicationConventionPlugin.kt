@@ -1,5 +1,6 @@
 package io.github.technoir42.conventions.kotlin.multiplatform
 
+import io.github.technoir42.conventions.common.CommonConventionPlugin
 import io.github.technoir42.conventions.common.ProjectSettingsImpl
 import io.github.technoir42.conventions.common.configureBuildConfig
 import io.github.technoir42.conventions.common.configureCommon
@@ -8,12 +9,15 @@ import io.github.technoir42.conventions.common.configureKotlinSerialization
 import io.github.technoir42.conventions.kotlin.multiplatform.api.KotlinMultiplatformApplicationExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.create
 
 class KotlinMultiplatformApplicationConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         val config = extensions.create<KotlinMultiplatformApplicationExtension>(KotlinMultiplatformApplicationExtension.NAME)
         config.initDefaults(project.name)
+
+        pluginManager.apply(CommonConventionPlugin::class)
 
         afterEvaluate {
             configureBuildConfig(config.buildFeatures.buildConfig, config.packageName)

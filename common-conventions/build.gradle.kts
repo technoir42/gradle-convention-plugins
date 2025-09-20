@@ -35,7 +35,7 @@ gradlePlugin {
     plugins {
         register("commonConventions") {
             id = "io.github.technoir42.conventions.common"
-            implementationClass = "io.github.technoir42.conventions.gradle.plugin.GradlePluginConventionPlugin"
+            implementationClass = "io.github.technoir42.conventions.common.CommonConventionPlugin"
         }
     }
 }

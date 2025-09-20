@@ -5,6 +5,7 @@ import io.github.technoir42.conventions.common.api.metadata.ProjectMetadata
 import io.github.technoir42.conventions.settings.api.SettingsExtension
 import io.github.technoir42.gradle.Environment
 import org.gradle.api.Plugin
+import org.gradle.api.Project
 import org.gradle.api.initialization.Settings
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
@@ -27,11 +28,7 @@ class SettingsConventionPlugin : Plugin<Settings> {
         }
 
         gradle.lifecycle.beforeProject {
-            pluginManager.withPlugin("io.github.technoir42.conventions.common") {
-                extensions.configure(CommonExtension::class) {
-                    metadata.initWith(config.metadata)
-                }
-            }
+            configureMetadata(config.metadata)
         }
 
         gradle.lifecycle.afterProject {
@@ -43,6 +40,14 @@ class SettingsConventionPlugin : Plugin<Settings> {
         configureDependencyResolution(environment)
         configureDevelocity(environment)
         configurePublishing()
+    }
+
+    private fun Project.configureMetadata(metadata: ProjectMetadata) {
+        pluginManager.withPlugin("io.github.technoir42.conventions.common") {
+            extensions.configure(CommonExtension::class) {
+                this.metadata.initWith(metadata)
+            }
+        }
     }
 
     private fun ProjectMetadata.initWith(other: ProjectMetadata) {

@@ -1,5 +1,6 @@
 package io.github.technoir42.conventions.kotlin.multiplatform
 
+import io.github.technoir42.conventions.common.CommonConventionPlugin
 import io.github.technoir42.conventions.common.ProjectSettingsImpl
 import io.github.technoir42.conventions.common.PublishingOptions
 import io.github.technoir42.conventions.common.configureBuildConfig
@@ -12,12 +13,15 @@ import io.github.technoir42.conventions.kotlin.multiplatform.api.KotlinMultiplat
 import io.github.technoir42.gradle.Environment
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.create
 
 class KotlinMultiplatformLibraryConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         val config = extensions.create<KotlinMultiplatformLibraryExtension>(KotlinMultiplatformLibraryExtension.NAME)
         config.initDefaults(project.name)
+
+        pluginManager.apply(CommonConventionPlugin::class)
 
         afterEvaluate {
             configureBuildConfig(config.buildFeatures.buildConfig, config.packageName)
