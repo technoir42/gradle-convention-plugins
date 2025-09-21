@@ -21,16 +21,17 @@ dependencies {
             requireCapability("${project.group}:common-conventions-api")
         }
     }
+
     implementation(project(":common-conventions"))
     implementation(project(":libraries:gradle-extensions"))
-    implementation(libs.kotlin.gradle.plugin.api)
     implementation(libs.kotlin.gradle.plugin)
-
-    runtimeOnly(libs.metro.gradle.plugin)
+    implementation(libs.kotlin.gradle.plugin.api)
 
     functionalTestImplementation(testFixtures(project(":common-conventions")))
     functionalTestImplementation(project(":libraries:gradle-test-kit"))
     functionalTestImplementation(libs.assertj.core)
+
+    runtimeOnly(libs.metro.gradle.plugin)
 }
 
 gradlePlugin {

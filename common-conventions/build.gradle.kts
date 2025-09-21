@@ -19,11 +19,15 @@ gradlePluginConfig {
 
 dependencies {
     implementation(project(":libraries:gradle-extensions"))
-    implementation(libs.kotlin.gradle.plugin.api)
-    implementation(libs.kotlin.gradle.plugin)
+    implementation(libs.buildconfig.gradle.plugin)
     implementation(libs.detekt.gradle.plugin)
     implementation(libs.dokka.gradle.plugin)
-    implementation(libs.buildconfig.gradle.plugin)
+    implementation(libs.kotlin.gradle.plugin)
+    implementation(libs.kotlin.gradle.plugin.api)
+    implementation(libs.sort.dependencies.gradle.plugin)
+
+    functionalTestImplementation(project(":libraries:gradle-test-kit"))
+    functionalTestImplementation(libs.assertj.core)
 
     runtimeOnly(libs.kotlin.serialization.gradle.plugin)
     runtimeOnly(libs.nmcp.gradle.plugin)
