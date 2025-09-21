@@ -1,11 +1,11 @@
-Gradle convention plugins
-=========================
+Convention plugins for Gradle
+=============================
 
-[![Build](https://github.com/technoir42/gradle-convention-plugins/actions/workflows/build.yaml/badge.svg?branch=main)](https://github.com/technoir42/gradle-convention-plugins/actions/workflows/build.yaml)
+[![Build](https://github.com/technoir-lab/convention-plugins/actions/workflows/build.yaml/badge.svg?branch=main)](https://github.com/technoir-lab/convention-plugins/actions/workflows/build.yaml)
 
-Convention plugins for my projects.
+Convention as code for Gradle projects.
 
+* [Kotlin Multiplatform](kotlin-multiplatform-conventions)
+* [JVM](jvm-conventions)
 * [Gradle plugin](gradle-plugin-conventions)
-* [JVM conventions](jvm-conventions)
-* [Kotlin Multiplatform conventions](kotlin-multiplatform-conventions)
 * [Settings](settings-conventions)

@@ -29,6 +29,6 @@ jobs:
           -Pgpr.user=${{ github.repository_owner }}
           -Pgpr.token=${{ secrets.GITHUB_TOKEN }}
           -Pproject.version=${{ github.ref_name }}
-          -Ppublish.url=https://maven.pkg.github.com/technoir42/gradle-convention-plugins
-          -Ppublish.username=${{ secrets.DEPLOY_USER }}
-          -Ppublish.password=${{ secrets.DEPLOY_TOKEN }}
+          -Ppublish.url=https://maven.pkg.github.com/technoir-lab/convention-plugins
+          -Ppublish.username=${{ secrets.GPR_DEPLOY_USER }}
+          -Ppublish.password=${{ secrets.GPR_DEPLOY_TOKEN }}

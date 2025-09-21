@@ -9,7 +9,7 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
         // Maven repository where the plugins are published
-        maven("https://maven.pkg.github.com/technoir42/gradle-convention-plugins") {
+        maven("https://maven.pkg.github.com/technoir-lab/convention-plugins") {
             credentials(PasswordCredentials::class)
         }
     }
