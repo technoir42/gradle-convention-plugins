@@ -36,13 +36,13 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
                     kotlinMultiplatformLibrary {
                         buildFeatures {
                             buildConfig {
-                                buildConfigField<String>("STRING_FIELD", "string value")
-                                buildConfigField<String>("LAZY_STRING_FIELD", provider { project.description })
-                                buildConfigField<String>("NONEXISTENT_STRING_FIELD", provider { null })
-                                buildConfigField<String>("NULLABLE_STRING_FIELD", null)
-                                buildConfigField<Boolean>("BOOLEAN_FIELD", true)
-                                buildConfigField<Int>("INT_FIELD", 42)
-                                buildConfigField<String>("TEST_STRING_FIELD", "test string value", variant = "test")
+                                buildConfigField("STRING_FIELD", "string value")
+                                buildConfigField("LAZY_STRING_FIELD", provider { project.description })
+                                buildConfigField("NONEXISTENT_STRING_FIELD", provider<String> { null })
+                                buildConfigField("NULLABLE_STRING_FIELD", null as String?)
+                                buildConfigField("BOOLEAN_FIELD", true)
+                                buildConfigField("INT_FIELD", 42)
+                                buildConfigField("TEST_STRING_FIELD", "test string value", variant = "test")
                             }
                         }
                     }

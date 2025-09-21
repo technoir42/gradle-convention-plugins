@@ -29,9 +29,9 @@ kotlinMultiplatformApplication {
         // Configuration of `BuildConfig` class generation
         buildConfig {
             // Add a String field
-            buildConfigField<String>("STRING_FIELD", "string value")
+            buildConfigField("STRING_FIELD", "string value")
             // Add a variant-specific field
-            buildConfigField<String>("TEST_STRING_FIELD", "string value", variant = "test")
+            buildConfigField("TEST_STRING_FIELD", "string value", variant = "test")
         }
     }
 }
@@ -65,9 +65,9 @@ kotlinLibrary {
         // Configuration of `BuildConfig` class generation
         buildConfig {
             // Add a String field
-            buildConfigField<String>("STRING_FIELD", "string value")
+            buildConfigField("STRING_FIELD", "string value")
             // Add a variant-specific field
-            buildConfigField<String>("TEST_STRING_FIELD", "string value", variant = "test")
+            buildConfigField("TEST_STRING_FIELD", "string value", variant = "test")
         }
     }
 }
