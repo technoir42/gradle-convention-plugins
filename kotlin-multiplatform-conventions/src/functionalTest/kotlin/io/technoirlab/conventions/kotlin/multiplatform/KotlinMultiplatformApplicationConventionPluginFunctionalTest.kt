@@ -2,6 +2,7 @@ package io.technoirlab.conventions.kotlin.multiplatform
 
 import io.technoirlab.conventions.common.fixtures.Generator
 import io.technoirlab.conventions.common.fixtures.GradleRunnerExtension
+import io.technoirlab.conventions.common.fixtures.buildScript
 import io.technoirlab.conventions.common.fixtures.configureBuildScript
 import io.technoirlab.conventions.common.fixtures.createDependencyGraph
 import io.technoirlab.conventions.common.fixtures.generatedFile
@@ -84,6 +85,15 @@ class KotlinMultiplatformApplicationConventionPluginFunctionalTest {
 
     @Test
     fun `default targets`() {
+        gradleRunner.root.project("kmp-application")
+            .configureBuildScript(
+                """
+                    kotlinMultiplatformApplication {
+                        defaultTargets = true
+                    }
+                """.trimIndent()
+            )
+
         val buildResult = gradleRunner.build(":kmp-application:tasks")
 
         assertThat(buildResult.output).contains(
@@ -98,45 +108,15 @@ class KotlinMultiplatformApplicationConventionPluginFunctionalTest {
     }
 
     @Test
-    fun `custom targets`() {
-        gradleRunner.root.project("kmp-application")
-            .configureBuildScript(
-                """
-                    kotlinMultiplatformApplication {
-                        defaultTargets = false
-                    }
-                    kotlin {
-                        linuxArm64()
-                    }
-                """.trimIndent()
-            )
-
-        val buildResult = gradleRunner.build(":kmp-application:tasks")
-
-        assertThat(buildResult.output)
-            .contains(
-                "linuxArm64",
-            )
-            .doesNotContain(
-                "androidNativeArm64",
-                "iosArm64",
-                "iosSimulatorArm64",
-                "linuxX64",
-                "macosArm64",
-                "mingwX64",
-            )
-    }
-
-    @Test
     fun `custom package name`() {
         val project = gradleRunner.root.project("kmp-application")
-            .configureBuildScript(
-                """
-                    kotlinMultiplatformApplication {
-                        packageName = "com.example.kmp.application"
-                    }
-                """.trimIndent()
-            )
+        project.buildScript.replaceText(
+            "kotlinMultiplatformApplication {",
+            """
+                kotlinMultiplatformApplication {
+                    packageName = "com.example.kmp.application"
+            """.trimIndent()
+        )
 
         val newMainKt = project.dir / "src/commonMain/kotlin/com/example/kmp/application/Main.kt"
         newMainKt.createParentDirectories()

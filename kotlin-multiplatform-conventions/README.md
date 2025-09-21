@@ -12,6 +12,9 @@ kotlinMultiplatformApplication {
     // The base package name
     packageName = "com.example.kmp.application"
 
+    // Whether to create the default targets.
+    defaultTargets = true
+
     // Optional build features
     buildFeatures {
         // Enable ABI validation
@@ -44,6 +47,9 @@ plugins {
 kotlinLibrary {
     // The base package name
     packageName = "com.example.kmp.library"
+
+    // Whether to create the default targets.
+    defaultTargets = true
 
     // Optional build features
     buildFeatures {

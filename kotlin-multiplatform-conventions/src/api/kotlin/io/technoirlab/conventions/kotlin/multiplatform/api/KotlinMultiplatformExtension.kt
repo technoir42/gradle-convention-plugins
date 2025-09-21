@@ -7,7 +7,7 @@ import org.gradle.api.tasks.Nested
 
 interface KotlinMultiplatformExtension : CommonExtension {
     /**
-     * Whether to create default targets.
+     * Whether to create the default targets.
      */
     val defaultTargets: Property<Boolean>
 
@@ -23,6 +23,6 @@ interface KotlinMultiplatformExtension : CommonExtension {
 
     override fun initDefaults(projectName: String) {
         super.initDefaults(projectName)
-        defaultTargets.convention(true)
+        defaultTargets.convention(false)
     }
 }

@@ -7,3 +7,9 @@ kotlinMultiplatformLibrary {
         cinterop = true
     }
 }
+
+kotlin {
+    linuxX64()
+    macosArm64()
+    mingwX64()
+}

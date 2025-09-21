@@ -5,6 +5,7 @@ import io.technoirlab.conventions.common.fixtures.GradleRunnerExtension
 import io.technoirlab.conventions.common.fixtures.POM_EXPECTED
 import io.technoirlab.conventions.common.fixtures.PROJECT_METADATA
 import io.technoirlab.conventions.common.fixtures.buildDir
+import io.technoirlab.conventions.common.fixtures.buildScript
 import io.technoirlab.conventions.common.fixtures.configureBuildScript
 import io.technoirlab.conventions.common.fixtures.createDependencyGraph
 import io.technoirlab.conventions.common.fixtures.generatedFile
@@ -89,6 +90,15 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
 
     @Test
     fun `default targets`() {
+        gradleRunner.root.project("kmp-library")
+            .configureBuildScript(
+                """
+                    kotlinMultiplatformLibrary {
+                        defaultTargets = true
+                    }
+                """.trimIndent()
+            )
+
         val buildResult = gradleRunner.build(":kmp-library:tasks")
 
         assertThat(buildResult.output).contains(
@@ -103,45 +113,15 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
     }
 
     @Test
-    fun `custom targets`() {
-        gradleRunner.root.project("kmp-library")
-            .configureBuildScript(
-                """
-                    kotlinMultiplatformLibrary {
-                        defaultTargets = false
-                    }
-                    kotlin {
-                        linuxArm64()
-                    }
-                """.trimIndent()
-            )
-
-        val buildResult = gradleRunner.build(":kmp-library:tasks")
-
-        assertThat(buildResult.output)
-            .contains(
-                "linuxArm64",
-            )
-            .doesNotContain(
-                "androidNativeArm64",
-                "iosArm64",
-                "iosSimulatorArm64",
-                "linuxX64",
-                "macosArm64",
-                "mingwX64",
-            )
-    }
-
-    @Test
     fun `custom package name`() {
         val project = gradleRunner.root.project("kmp-library")
-            .configureBuildScript(
-                """
-                    kotlinMultiplatformLibrary {
-                        packageName = "com.example.kmp.library"
-                    }
-                """.trimIndent()
-            )
+        project.buildScript.replaceText(
+            "kotlinMultiplatformLibrary {",
+            """
+                kotlinMultiplatformLibrary {
+                    packageName = "com.example.kmp.library"
+            """.trimIndent()
+        )
 
         (project.dir / "src/commonMain/kotlin/kmp/library/KmpLibrary.kt")
             .replaceText(
