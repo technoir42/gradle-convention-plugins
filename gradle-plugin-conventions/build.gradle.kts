@@ -1,5 +1,5 @@
 plugins {
-    id("io.github.technoir42.conventions.gradle-plugin")
+    id("io.technoirlab.conventions.gradle-plugin")
 }
 
 gradlePluginConfig {

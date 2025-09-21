@@ -11,18 +11,18 @@ pluginManagement {
         }
     }
     plugins {
-        val conventionPluginsVersion = "v28"
-        id("io.github.technoir42.conventions.gradle-plugin") version conventionPluginsVersion
-        id("io.github.technoir42.conventions.jvm-application") version conventionPluginsVersion
-        id("io.github.technoir42.conventions.jvm-library") version conventionPluginsVersion
-        id("io.github.technoir42.conventions.settings") version conventionPluginsVersion
+        val conventionPluginsVersion = "v29"
+        id("io.technoirlab.conventions.gradle-plugin") version conventionPluginsVersion
+        id("io.technoirlab.conventions.jvm-application") version conventionPluginsVersion
+        id("io.technoirlab.conventions.jvm-library") version conventionPluginsVersion
+        id("io.technoirlab.conventions.settings") version conventionPluginsVersion
     }
 }
 
 plugins {
-    id("io.github.technoir42.conventions.gradle-plugin") apply false
-    id("io.github.technoir42.conventions.jvm-library") apply false
-    id("io.github.technoir42.conventions.settings")
+    id("io.technoirlab.conventions.gradle-plugin") apply false
+    id("io.technoirlab.conventions.jvm-library") apply false
+    id("io.technoirlab.conventions.settings")
 }
 
 dependencyResolutionManagement {

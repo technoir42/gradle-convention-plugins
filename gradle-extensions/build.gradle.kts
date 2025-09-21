@@ -1,5 +1,5 @@
 plugins {
-    id("io.github.technoir42.conventions.jvm-library")
+    id("io.technoirlab.conventions.jvm-library")
 }
 
 dependencies {
