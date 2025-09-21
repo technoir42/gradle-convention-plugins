@@ -50,6 +50,7 @@ class GradleRunnerExtension(
         arguments += if (config.configurationCache) "--configuration-cache" else "--no-configuration-cache"
         arguments += if (config.configurationOnDemand) "--configure-on-demand" else "--no-configure-on-demand"
         arguments += if (config.dryRun) listOf("--dry-run") else emptyList()
+        arguments += if (config.warningsAsErrors) "--warning-mode=fail" else "--warning-mode=all"
         arguments += config.arguments
         arguments += config.gradleProperties.map { "-P${it.key}=${it.value}" }
         arguments += config.systemProperties.map { "-D${it.key}=${it.value}" }
