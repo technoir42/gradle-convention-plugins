@@ -3,7 +3,7 @@ plugins {
 }
 
 gradlePluginConfig {
-    packageName = "io.github.technoir42.conventions.jvm"
+    packageName = "io.technoirlab.conventions.jvm"
 
     buildFeatures {
         abiValidation = true
@@ -26,12 +26,12 @@ dependencies {
 gradlePlugin {
     plugins {
         register("jvmApplicationConventions") {
-            id = "io.github.technoir42.conventions.jvm-application"
-            implementationClass = "io.github.technoir42.conventions.jvm.JvmApplicationConventionPlugin"
+            id = "io.technoirlab.conventions.jvm-application"
+            implementationClass = "io.technoirlab.conventions.jvm.JvmApplicationConventionPlugin"
         }
         register("jvmLibraryConventions") {
-            id = "io.github.technoir42.conventions.jvm-library"
-            implementationClass = "io.github.technoir42.conventions.jvm.JvmLibraryConventionPlugin"
+            id = "io.technoirlab.conventions.jvm-library"
+            implementationClass = "io.technoirlab.conventions.jvm.JvmLibraryConventionPlugin"
         }
     }
 }

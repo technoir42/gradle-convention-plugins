@@ -3,7 +3,7 @@ plugins {
 }
 
 gradlePluginConfig {
-    packageName = "io.github.technoir42.conventions.common"
+    packageName = "io.technoirlab.conventions.common"
 
     buildFeatures {
         abiValidation = true
@@ -34,8 +34,8 @@ dependencies {
 gradlePlugin {
     plugins {
         register("commonConventions") {
-            id = "io.github.technoir42.conventions.common"
-            implementationClass = "io.github.technoir42.conventions.common.CommonConventionPlugin"
+            id = "io.technoirlab.conventions.common"
+            implementationClass = "io.technoirlab.conventions.common.CommonConventionPlugin"
         }
     }
 }

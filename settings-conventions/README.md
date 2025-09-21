@@ -15,12 +15,12 @@ pluginManagement {
     }
     plugins {
         val conventionPluginsVersion = "<version>"
-        id("io.github.technoir42.conventions.settings") version conventionPluginsVersion
+        id("io.technoirlab.conventions.settings") version conventionPluginsVersion
     }
 }
 
 plugins {
-    id("io.github.technoir42.conventions.settings")
+    id("io.technoirlab.conventions.settings")
 }
 
 globalSettings {

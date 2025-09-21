@@ -5,7 +5,7 @@ JVM conventions
 
 ```kotlin
 plugins {
-    id("io.github.technoir42.conventions.jvm-application")
+    id("io.technoirlab.conventions.jvm-application")
 }
 
 jvmApplication {
@@ -40,7 +40,7 @@ jvmApplication {
 
 ```kotlin
 plugins {
-    id("io.github.technoir42.conventions.jvm-library")
+    id("io.technoirlab.conventions.jvm-library")
 }
 
 jvmLibrary {

@@ -1,5 +1,5 @@
 plugins {
-    id("io.github.technoir42.conventions.jvm-application")
+    id("io.technoirlab.conventions.jvm-application")
 }
 
 jvmApplication {

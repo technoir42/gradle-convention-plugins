@@ -26,8 +26,8 @@ dependencies {
 gradlePlugin {
     plugins {
         register("settingsConventions") {
-            id = "io.github.technoir42.conventions.settings"
-            implementationClass = "io.github.technoir42.conventions.settings.SettingsConventionPlugin"
+            id = "io.technoirlab.conventions.settings"
+            implementationClass = "io.technoirlab.conventions.settings.SettingsConventionPlugin"
         }
     }
 }

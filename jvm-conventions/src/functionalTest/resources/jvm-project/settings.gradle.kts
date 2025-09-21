@@ -1,6 +1,6 @@
 plugins {
-    id("io.github.technoir42.conventions.jvm-application") apply false
-    id("io.github.technoir42.conventions.jvm-library") apply false
+    id("io.technoirlab.conventions.jvm-application") apply false
+    id("io.technoirlab.conventions.jvm-library") apply false
 }
 
 dependencyResolutionManagement {

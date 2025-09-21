@@ -1,5 +1,5 @@
 plugins {
-    id("io.github.technoir42.conventions.gradle-plugin") apply false
+    id("io.technoirlab.conventions.gradle-plugin") apply false
 }
 
 dependencyResolutionManagement {

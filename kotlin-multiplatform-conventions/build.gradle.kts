@@ -3,7 +3,7 @@ plugins {
 }
 
 gradlePluginConfig {
-    packageName = "io.github.technoir42.conventions.kotlin.multiplatform"
+    packageName = "io.technoirlab.conventions.kotlin.multiplatform"
 
     buildFeatures {
         abiValidation = true
@@ -35,12 +35,12 @@ dependencies {
 gradlePlugin {
     plugins {
         register("kotlinMultiplatformApplicationConventions") {
-            id = "io.github.technoir42.conventions.kotlin-multiplatform-application"
-            implementationClass = "io.github.technoir42.conventions.kotlin.multiplatform.KotlinMultiplatformApplicationConventionPlugin"
+            id = "io.technoirlab.conventions.kotlin-multiplatform-application"
+            implementationClass = "io.technoirlab.conventions.kotlin.multiplatform.KotlinMultiplatformApplicationConventionPlugin"
         }
         register("kotlinMultiplatformLibraryConventions") {
-            id = "io.github.technoir42.conventions.kotlin-multiplatform-library"
-            implementationClass = "io.github.technoir42.conventions.kotlin.multiplatform.KotlinMultiplatformLibraryConventionPlugin"
+            id = "io.technoirlab.conventions.kotlin-multiplatform-library"
+            implementationClass = "io.technoirlab.conventions.kotlin.multiplatform.KotlinMultiplatformLibraryConventionPlugin"
         }
     }
 }
