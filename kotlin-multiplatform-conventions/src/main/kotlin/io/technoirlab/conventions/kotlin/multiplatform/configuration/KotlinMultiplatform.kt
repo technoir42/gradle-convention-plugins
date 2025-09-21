@@ -51,6 +51,7 @@ internal fun Project.configureKotlinMultiplatform(config: KotlinMultiplatformExt
 
         compilerOptions {
             optIn.addAll(
+                "kotlin.io.path.ExperimentalPathApi",
                 "kotlin.time.ExperimentalTime",
                 "kotlinx.cinterop.ExperimentalForeignApi"
             )
