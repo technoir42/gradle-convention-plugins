@@ -28,11 +28,13 @@ internal fun Project.configureKotlinMultiplatform(config: KotlinMultiplatformExt
     afterEvaluate {
         if (config.defaultTargets.get()) {
             extensions.configure(KmpExtension::class) {
+                // https://kotlinlang.org/docs/native-target-support.html
                 // Tier 1
                 iosArm64()
                 iosSimulatorArm64()
                 macosArm64()
                 // Tier 2
+                linuxArm64()
                 linuxX64()
                 // Tier 3
                 androidNativeArm64()
