@@ -55,6 +55,9 @@ class GradleRunnerExtension(
         arguments += if (config.dryRun) listOf("--dry-run") else emptyList()
         arguments += if (config.warningsAsErrors) "--warning-mode=fail" else "--warning-mode=all"
         arguments += config.arguments
+        if (config.configurationCache) {
+            arguments += "-Dorg.gradle.configuration-cache.parallel=true"
+        }
         if (config.isolatedProjects) {
             arguments += "-Dorg.gradle.unsafe.isolated-projects=true"
         }
