@@ -99,7 +99,10 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
                 """.trimIndent()
             )
 
-        val buildResult = gradleRunner.build(":kmp-library:tasks")
+        val buildResult = gradleRunner.build(":kmp-library:tasks") {
+            // Kotlin Multiplatform plugin calls findProperty when 'signing' plugin is applied
+            isolatedProjects = false
+        }
 
         assertThat(buildResult.output).contains(
             "androidNativeArm64",

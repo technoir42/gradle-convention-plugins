@@ -55,8 +55,11 @@ class GradleRunnerExtension(
         arguments += if (config.dryRun) listOf("--dry-run") else emptyList()
         arguments += if (config.warningsAsErrors) "--warning-mode=fail" else "--warning-mode=all"
         arguments += config.arguments
-        arguments += config.gradleProperties.map { "-P${it.key}=${it.value}" }
+        if (config.isolatedProjects) {
+            arguments += "-Dorg.gradle.unsafe.isolated-projects=true"
+        }
         arguments += config.systemProperties.map { "-D${it.key}=${it.value}" }
+        arguments += config.gradleProperties.map { "-P${it.key}=${it.value}" }
         arguments += tasks
 
         @Suppress("SpreadOperator")
