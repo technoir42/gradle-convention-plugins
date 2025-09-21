@@ -48,9 +48,9 @@ globalSettings {
     }
 }
 
-include(":gradle-extensions")
 include(":common-conventions")
 include(":gradle-plugin-conventions")
 include(":jvm-conventions")
 include(":kotlin-multiplatform-conventions")
 include(":settings-conventions")
+include(":libraries:gradle-extensions")

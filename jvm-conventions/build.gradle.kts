@@ -17,7 +17,7 @@ dependencies {
         }
     }
     implementation(project(":common-conventions"))
-    implementation(project(":gradle-extensions"))
+    implementation(project(":libraries:gradle-extensions"))
 
     functionalTestImplementation(testFixtures(project(":common-conventions")))
     functionalTestImplementation(libs.assertj.core)

@@ -15,7 +15,7 @@ dependencies {
         }
     }
 
-    implementation(project(":gradle-extensions"))
+    implementation(project(":libraries:gradle-extensions"))
     implementation(libs.dependency.analysis.gradle.plugin)
     implementation(libs.develocity.gradle.plugin)
     implementation(libs.nmcp.gradle.plugin)
