@@ -1,4 +1,4 @@
-package io.technoirlab.conventions.common.fixtures
+package io.technoirlab.gradle.test.kit
 
 import java.nio.file.Path
 import java.util.jar.JarFile

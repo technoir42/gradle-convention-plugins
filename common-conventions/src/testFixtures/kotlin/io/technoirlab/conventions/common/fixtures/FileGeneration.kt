@@ -1,5 +1,7 @@
 package io.technoirlab.conventions.common.fixtures
 
+import io.technoirlab.gradle.test.kit.GradleProject
+import io.technoirlab.gradle.test.kit.kotlinFile
 import kotlin.io.path.createParentDirectories
 import kotlin.io.path.writeText
 

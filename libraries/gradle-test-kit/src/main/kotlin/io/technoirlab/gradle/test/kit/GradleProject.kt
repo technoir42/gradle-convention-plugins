@@ -1,4 +1,4 @@
-package io.technoirlab.conventions.common.fixtures
+package io.technoirlab.gradle.test.kit
 
 import org.intellij.lang.annotations.Language
 import java.nio.file.Path

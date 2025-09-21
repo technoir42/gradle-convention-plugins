@@ -1,4 +1,4 @@
-package io.technoirlab.conventions.common.fixtures
+package io.technoirlab.gradle.test.kit
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
@@ -15,7 +15,10 @@ class GradleRunnerExtension(
 ) : BeforeEachCallback, AfterEachCallback {
 
     private val config = GradleConfig()
-    lateinit var root: GradleProject
+    private var internalRoot: GradleProject? = null
+
+    val root: GradleProject
+        get() = checkNotNull(internalRoot) { "Root project isn't initialized. Perhaps test execution hasn't started yet" }
 
     init {
         config.configuration()
@@ -24,12 +27,12 @@ class GradleRunnerExtension(
     override fun beforeEach(context: ExtensionContext) {
         val projectDir = Files.createTempDirectory("project-")
         copyResources(resourceDir, projectDir)
-        root = GradleProject(projectDir)
+        internalRoot = GradleProject(projectDir)
     }
 
-    @OptIn(ExperimentalPathApi::class)
     override fun afterEach(context: ExtensionContext) {
-        root.dir.deleteRecursively()
+        @OptIn(ExperimentalPathApi::class)
+        internalRoot?.dir?.deleteRecursively()
     }
 
     fun build(vararg tasks: String, configuration: GradleConfig.() -> Unit = {}): BuildResult {

@@ -1,14 +1,14 @@
 package io.technoirlab.conventions.gradle.plugin
 
-import io.technoirlab.conventions.common.fixtures.Generator
-import io.technoirlab.conventions.common.fixtures.GradleRunnerExtension
 import io.technoirlab.conventions.common.fixtures.POM_EXPECTED
 import io.technoirlab.conventions.common.fixtures.PROJECT_METADATA
-import io.technoirlab.conventions.common.fixtures.buildDir
-import io.technoirlab.conventions.common.fixtures.configureBuildScript
-import io.technoirlab.conventions.common.fixtures.generatedFile
-import io.technoirlab.conventions.common.fixtures.jarEntries
-import io.technoirlab.conventions.common.fixtures.replaceText
+import io.technoirlab.gradle.test.kit.Generator
+import io.technoirlab.gradle.test.kit.GradleRunnerExtension
+import io.technoirlab.gradle.test.kit.buildDir
+import io.technoirlab.gradle.test.kit.configureBuildScript
+import io.technoirlab.gradle.test.kit.generatedFile
+import io.technoirlab.gradle.test.kit.jarEntries
+import io.technoirlab.gradle.test.kit.replaceText
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.Test

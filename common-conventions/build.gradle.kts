@@ -7,6 +7,7 @@ gradlePluginConfig {
 
     buildFeatures {
         abiValidation = true
+
         buildConfig {
             buildConfigField<String>("JUNIT5_VERSION", libs.versions.junit5)
             buildConfigField<String>("KOTLIN_BOM", libs.kotlin.bom.map { it.toString() })
@@ -27,8 +28,7 @@ dependencies {
     runtimeOnly(libs.kotlin.serialization.gradle.plugin)
     runtimeOnly(libs.nmcp.gradle.plugin)
 
-    testFixturesImplementation(gradleTestKit())
-    testFixturesImplementation(libs.junit.jupiter.api)
+    testFixturesImplementation(project(":libraries:gradle-test-kit"))
 }
 
 gradlePlugin {

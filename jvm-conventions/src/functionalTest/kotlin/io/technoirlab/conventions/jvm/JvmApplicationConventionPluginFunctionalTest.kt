@@ -1,9 +1,9 @@
 package io.technoirlab.conventions.jvm
 
-import io.technoirlab.conventions.common.fixtures.Generator
-import io.technoirlab.conventions.common.fixtures.GradleRunnerExtension
-import io.technoirlab.conventions.common.fixtures.configureBuildScript
-import io.technoirlab.conventions.common.fixtures.generatedFile
+import io.technoirlab.gradle.test.kit.Generator
+import io.technoirlab.gradle.test.kit.GradleRunnerExtension
+import io.technoirlab.gradle.test.kit.configureBuildScript
+import io.technoirlab.gradle.test.kit.generatedFile
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension

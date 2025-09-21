@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.dokka.gradle.plugin)
 
     functionalTestImplementation(testFixtures(project(":common-conventions")))
+    functionalTestImplementation(project(":libraries:gradle-test-kit"))
     functionalTestImplementation(libs.assertj.core)
 }
 
