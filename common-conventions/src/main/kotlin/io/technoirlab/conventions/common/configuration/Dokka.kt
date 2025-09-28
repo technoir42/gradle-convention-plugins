@@ -7,7 +7,10 @@ import org.gradle.jvm.tasks.Jar
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
+import org.gradle.kotlin.dsl.withType
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.dokka.gradle.DokkaExtension
+import org.jetbrains.dokka.gradle.tasks.DokkaGeneratePublicationTask
 
 fun Project.configureDokka(docsFormats: Set<DocsFormat> = DocsFormat.Multiplatform) {
     pluginManager.apply("org.jetbrains.dokka")
@@ -26,6 +29,10 @@ fun Project.configureDokka(docsFormats: Set<DocsFormat> = DocsFormat.Multiplatfo
                 destinationDirectory.set(layout.buildDirectory.dir("dokka"))
             }
         }
+    }
+
+    tasks.named(LifecycleBasePlugin.BUILD_TASK_NAME) {
+        dependsOn(tasks.withType(DokkaGeneratePublicationTask::class))
     }
 }
 
