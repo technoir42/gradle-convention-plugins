@@ -15,6 +15,7 @@ pluginManagement {
         id("io.technoirlab.conventions.gradle-plugin") version conventionPluginsVersion
         id("io.technoirlab.conventions.jvm-application") version conventionPluginsVersion
         id("io.technoirlab.conventions.jvm-library") version conventionPluginsVersion
+        id("io.technoirlab.conventions.root") version conventionPluginsVersion
         id("io.technoirlab.conventions.settings") version conventionPluginsVersion
     }
 }
@@ -22,6 +23,7 @@ pluginManagement {
 plugins {
     id("io.technoirlab.conventions.gradle-plugin") apply false
     id("io.technoirlab.conventions.jvm-library") apply false
+    id("io.technoirlab.conventions.root") apply false
     id("io.technoirlab.conventions.settings")
 }
 
