@@ -41,7 +41,7 @@ class KotlinMultiplatformLibraryConventionPlugin : Plugin<Project> {
         configureCommon(projectSettings)
         configureKotlinMultiplatform(config)
         configureDetekt()
-        configureDokka()
+        configureDokka(environment)
         configurePublishing(publishingOptions, config.metadata, environment)
     }
 }

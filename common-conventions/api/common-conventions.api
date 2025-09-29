@@ -38,8 +38,8 @@ public final class io/technoirlab/conventions/common/configuration/DocsFormat$Co
 }
 
 public final class io/technoirlab/conventions/common/configuration/DokkaKt {
-	public static final fun configureDokka (Lorg/gradle/api/Project;Ljava/util/Set;)V
-	public static synthetic fun configureDokka$default (Lorg/gradle/api/Project;Ljava/util/Set;ILjava/lang/Object;)V
+	public static final fun configureDokka (Lorg/gradle/api/Project;Lio/technoirlab/gradle/Environment;Ljava/util/Set;)V
+	public static synthetic fun configureDokka$default (Lorg/gradle/api/Project;Lio/technoirlab/gradle/Environment;Ljava/util/Set;ILjava/lang/Object;)V
 }
 
 public final class io/technoirlab/conventions/common/configuration/JavaKt {

@@ -8,6 +8,9 @@ class Environment(private val providerFactory: ProviderFactory) {
     val isCi: Boolean
         get() = providerFactory.environmentVariable("GITHUB_ACTIONS").isPresent
 
+    val branchName: Provider<String>
+        get() = providerFactory.environmentVariable("GITHUB_REF_NAME")
+
     val repositoryUrl: Provider<URI>
         get() = providerFactory.environmentVariable("GITHUB_SERVER_URL")
             .zip(providerFactory.environmentVariable("GITHUB_REPOSITORY")) { serverUrl, repository ->

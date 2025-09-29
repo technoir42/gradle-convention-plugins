@@ -8,8 +8,7 @@ import org.gradle.kotlin.dsl.configure
 fun Project.configureJava() {
     extensions.configure(JavaPluginExtension::class) {
         toolchain {
-            @Suppress("MagicNumber")
-            languageVersion.set(JavaLanguageVersion.of(21))
+            languageVersion.set(JavaLanguageVersion.of(JDK_VERSION))
         }
 
         if ("java" in components.names) {
@@ -17,3 +16,5 @@ fun Project.configureJava() {
         }
     }
 }
+
+internal const val JDK_VERSION = 21
