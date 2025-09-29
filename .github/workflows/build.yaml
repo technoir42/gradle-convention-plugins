@@ -7,12 +7,19 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v5
 
       - name: Set up JDK
@@ -27,7 +34,7 @@ jobs:
           dependency-graph: generate-and-submit
 
       - name: Build with Gradle
-        run: >
-          ./gradlew build
-          -Pgpr.user=${{ github.repository_owner }}
+        run: |
+          ./gradlew build \
+          -Pgpr.user=${{ github.repository_owner }} \
           -Pgpr.token=${{ secrets.GITHUB_TOKEN }}

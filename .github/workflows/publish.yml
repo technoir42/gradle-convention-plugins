@@ -5,12 +5,20 @@ on:
     tags: [ "*" ]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v5
 
       - name: Set up JDK
@@ -26,12 +34,12 @@ jobs:
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
-        run: >
-          ./gradlew publish
-          --no-configuration-cache
-          -Pgpr.user=${{ github.repository_owner }}
-          -Pgpr.token=${{ secrets.GITHUB_TOKEN }}
-          -Pproject.version=${{ github.ref_name }}
-          -Ppublish.url=https://maven.pkg.github.com/technoir-lab/convention-plugins
-          -Ppublish.username=${{ secrets.GPR_DEPLOY_USER }}
+        run: |
+          ./gradlew publish \
+          --no-configuration-cache \
+          -Pgpr.user=${{ github.repository_owner }} \
+          -Pgpr.token=${{ secrets.GITHUB_TOKEN }} \
+          -Pproject.version=${{ github.ref_name }} \
+          -Ppublish.url=https://maven.pkg.github.com/technoir-lab/convention-plugins \
+          -Ppublish.username=${{ secrets.GPR_DEPLOY_USER }} \
           -Ppublish.password=${{ secrets.GPR_DEPLOY_TOKEN }}
