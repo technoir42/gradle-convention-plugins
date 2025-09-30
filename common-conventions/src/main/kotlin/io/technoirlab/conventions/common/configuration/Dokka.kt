@@ -27,6 +27,8 @@ fun Project.configureDokka(environment: Environment, docsFormats: Set<DocsFormat
 
     extensions.configure(DokkaExtension::class) {
         dokkaPublications.configureEach {
+            suppressInheritedMembers.set(true)
+
             val docsFormat = DocsFormat.entries.first { it.name.lowercase() == name }
             val generateTask = tasks.named("dokkaGeneratePublication${formatName.capitalized()}")
             tasks.register<Jar>("dokka${formatName.capitalized()}Jar") {
