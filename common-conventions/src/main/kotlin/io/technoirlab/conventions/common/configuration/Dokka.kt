@@ -9,6 +9,7 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.jvm.tasks.Jar
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
@@ -40,6 +41,29 @@ fun Project.configureDokka(environment: Environment, docsFormats: Set<DocsFormat
         val sourceUrl = environment.getSourceUrl(srcDir, layout.settingsDirectory)
         dokkaSourceSets.configureEach {
             jdkVersion.set(JDK_VERSION)
+
+            externalDocumentationLinks {
+                register("gradle-api") {
+                    url("https://docs.gradle.org/${gradle.gradleVersion}/javadoc/")
+                    packageListUrl("https://docs.gradle.org/${gradle.gradleVersion}/javadoc/element-list")
+                }
+
+                register("kotlinx-coroutines") {
+                    url("https://kotlinlang.org/api/kotlinx.coroutines/")
+                }
+
+                register("kotlinx-datetime") {
+                    url("https://kotlinlang.org/api/kotlinx-datetime/")
+                }
+
+                register("kotlinx-io") {
+                    url("https://kotlinlang.org/api/kotlinx-io/")
+                }
+
+                register("kotlinx-serialization") {
+                    url("https://kotlinlang.org/api/kotlinx.serialization/")
+                }
+            }
 
             if (sourceUrl.isPresent) {
                 sourceLink {
