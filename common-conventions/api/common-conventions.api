@@ -18,6 +18,10 @@ public final class io/technoirlab/conventions/common/configuration/CommonKt {
 	public static final fun configureCommon (Lorg/gradle/api/Project;Lio/technoirlab/conventions/common/api/ProjectSettings;)V
 }
 
+public final class io/technoirlab/conventions/common/configuration/DependencySortingKt {
+	public static final fun configureDependencySorting (Lorg/gradle/api/Project;)V
+}
+
 public final class io/technoirlab/conventions/common/configuration/DetektKt {
 	public static final fun configureDetekt (Lorg/gradle/api/Project;)V
 }

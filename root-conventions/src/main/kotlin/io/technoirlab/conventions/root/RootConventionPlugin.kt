@@ -2,6 +2,7 @@ package io.technoirlab.conventions.root
 
 import io.technoirlab.conventions.common.ProjectSettingsImpl
 import io.technoirlab.conventions.common.configuration.configureCommon
+import io.technoirlab.conventions.common.configuration.configureDependencySorting
 import io.technoirlab.conventions.root.configuration.configureDokka
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -14,6 +15,7 @@ class RootConventionPlugin : Plugin<Project> {
 
         val projectSettings = ProjectSettingsImpl(this)
         configureCommon(projectSettings)
+        configureDependencySorting()
         configureDokka()
     }
 }
