@@ -56,6 +56,7 @@ fun Project.configureDokka(environment: Environment, docsFormats: Set<DocsFormat
 
                 register("kotlinx-datetime") {
                     url("https://kotlinlang.org/api/kotlinx-datetime/")
+                    packageListUrl("https://kotlinlang.org/api/kotlinx-datetime/kotlinx-datetime/package-list")
                 }
 
                 register("kotlinx-io") {
