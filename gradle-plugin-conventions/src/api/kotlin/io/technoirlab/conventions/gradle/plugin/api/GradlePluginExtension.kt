@@ -12,10 +12,16 @@ interface GradlePluginExtension : CommonExtension {
     @get:Nested
     override val buildFeatures: GradlePluginBuildFeatures
 
+    /**
+     * Optional build features.
+     */
     fun buildFeatures(action: Action<GradlePluginBuildFeatures>) {
         action.execute(buildFeatures)
     }
 
+    /**
+     * @suppress
+     */
     companion object {
         const val NAME = "gradlePluginConfig"
     }

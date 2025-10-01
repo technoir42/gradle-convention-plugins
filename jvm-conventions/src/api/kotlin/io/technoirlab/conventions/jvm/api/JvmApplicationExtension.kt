@@ -25,10 +25,16 @@ interface JvmApplicationExtension : CommonExtension {
     @get:Nested
     override val buildFeatures: JvmBuildFeatures
 
+    /**
+     * Optional build features.
+     */
     fun buildFeatures(action: Action<JvmBuildFeatures>) {
         action.execute(buildFeatures)
     }
 
+    /**
+     * @suppress
+     */
     companion object {
         const val NAME = "jvmApplication"
     }

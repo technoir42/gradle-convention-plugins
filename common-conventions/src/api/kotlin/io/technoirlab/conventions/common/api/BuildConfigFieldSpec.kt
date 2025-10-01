@@ -9,6 +9,9 @@ data class BuildConfigFieldSpec<T : Serializable>(
     val variant: String?
 ) : Serializable {
 
+    /**
+     * @suppress
+     */
     companion object {
         private const val serialVersionUID: Long = 2151125696433872655L
     }

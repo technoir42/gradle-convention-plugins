@@ -25,6 +25,9 @@ interface SettingsExtension {
         configure.execute(metadata)
     }
 
+    /**
+     * @suppress
+     */
     companion object {
         const val NAME = "globalSettings"
     }

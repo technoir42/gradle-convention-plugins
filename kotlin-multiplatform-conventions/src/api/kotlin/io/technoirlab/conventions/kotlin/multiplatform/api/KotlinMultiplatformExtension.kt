@@ -17,6 +17,9 @@ interface KotlinMultiplatformExtension : CommonExtension {
     @get:Nested
     override val buildFeatures: KotlinMultiplatformBuildFeatures
 
+    /**
+     * Optional build features.
+     */
     fun buildFeatures(action: Action<KotlinMultiplatformBuildFeatures>) {
         action.execute(buildFeatures)
     }
