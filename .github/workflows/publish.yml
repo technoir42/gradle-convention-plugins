@@ -38,6 +38,7 @@ jobs:
         run: |
           ./gradlew publish \
           --no-configuration-cache \
+          --scan \
           -Pgpr.user=${{ github.repository_owner }} \
           -Pgpr.token=${{ secrets.GITHUB_TOKEN }} \
           -Pproject.version=${{ github.ref_name }} \
@@ -77,6 +78,7 @@ jobs:
       - name: Generate documentation
         run: |
           ./gradlew :dokkaGenerate \
+          --scan \
           -Pgpr.user=${{ github.repository_owner }} \
           -Pgpr.token=${{ secrets.GITHUB_TOKEN }}
 
