@@ -18,6 +18,11 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.create
 
+/**
+ * Conventions for Kotlin Multiplatform library projects.
+ *
+ * DSL: [KotlinMultiplatformLibraryExtension]
+ */
 class KotlinMultiplatformLibraryConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         val config = extensions.create<KotlinMultiplatformLibraryExtension>(KotlinMultiplatformLibraryExtension.NAME)

@@ -18,6 +18,11 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
 
+/**
+ * Conventions for JVM application projects.
+ *
+ * DSL: [JvmApplicationExtension]
+ */
 class JvmApplicationConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         val config = extensions.create<JvmApplicationExtension>(JvmApplicationExtension.NAME)

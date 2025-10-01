@@ -22,6 +22,11 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.create
 
+/**
+ * Conventions for Gradle plugin projects.
+ *
+ * DSL: [GradlePluginExtension]
+ */
 class GradlePluginConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         val config = extensions.create<GradlePluginExtension>(GradlePluginExtension.NAME)

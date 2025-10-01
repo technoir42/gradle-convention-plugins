@@ -21,6 +21,11 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.create
 
+/**
+ * Conventions for JVM library projects.
+ *
+ * DSL: [JvmLibraryExtension]
+ */
 class JvmLibraryConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         val config = extensions.create<JvmLibraryExtension>(JvmLibraryExtension.NAME)
