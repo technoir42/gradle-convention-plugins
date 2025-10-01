@@ -9,6 +9,7 @@ gradlePluginConfig {
 }
 
 dependencies {
+    implementation(project(":common-conventions"))
     implementation(libs.dokka.gradle.plugin)
 }
 
