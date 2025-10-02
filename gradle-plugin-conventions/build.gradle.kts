@@ -18,7 +18,6 @@ dependencies {
     implementation(project(":common-conventions"))
     implementation(project(":libraries:gradle-extensions"))
     implementation(libs.dokka.gradle.plugin)
-    implementation(libs.kotlin.gradle.plugin.api)
 
     functionalTestImplementation(testFixtures(project(":common-conventions")))
     functionalTestImplementation(project(":libraries:gradle-test-kit"))
