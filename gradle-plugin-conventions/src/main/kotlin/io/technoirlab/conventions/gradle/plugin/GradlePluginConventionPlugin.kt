@@ -15,6 +15,7 @@ import io.technoirlab.conventions.common.configuration.configurePublishing
 import io.technoirlab.conventions.common.configuration.configureTestFixtures
 import io.technoirlab.conventions.common.configuration.configureTesting
 import io.technoirlab.conventions.gradle.plugin.api.GradlePluginExtension
+import io.technoirlab.conventions.gradle.plugin.configuration.configureDependencyAnalysis
 import io.technoirlab.conventions.gradle.plugin.configuration.configurePlugin
 import io.technoirlab.gradle.Environment
 import org.gradle.api.Plugin
@@ -65,5 +66,6 @@ class GradlePluginConventionPlugin : Plugin<Project> {
         configurePlugin(config.metadata, environment)
         configureTesting()
         configureTestFixtures()
+        configureDependencyAnalysis()
     }
 }
