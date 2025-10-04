@@ -4,8 +4,8 @@ import io.technoirlab.conventions.common.fixtures.POM_EXPECTED
 import io.technoirlab.conventions.common.fixtures.PROJECT_METADATA
 import io.technoirlab.gradle.test.kit.Generator
 import io.technoirlab.gradle.test.kit.GradleRunnerExtension
+import io.technoirlab.gradle.test.kit.appendBuildScript
 import io.technoirlab.gradle.test.kit.buildDir
-import io.technoirlab.gradle.test.kit.configureBuildScript
 import io.technoirlab.gradle.test.kit.generatedFile
 import io.technoirlab.gradle.test.kit.jarEntries
 import org.assertj.core.api.Assertions.assertThat
@@ -28,7 +28,7 @@ class JvmLibraryConventionPluginFunctionalTest {
     @Test
     fun `BuildConfig generation`() {
         val project = gradleRunner.root.project("jvm-library")
-            .configureBuildScript(
+            .appendBuildScript(
                 """
                     jvmLibrary {
                         buildFeatures {
@@ -120,7 +120,7 @@ class JvmLibraryConventionPluginFunctionalTest {
         repoDir.createDirectories()
 
         gradleRunner.root.project("jvm-library")
-            .configureBuildScript("jvmLibrary {\n${PROJECT_METADATA.prependIndent("    ")}\n}")
+            .appendBuildScript("jvmLibrary {\n${PROJECT_METADATA.prependIndent("    ")}\n}")
 
         gradleRunner.build(":jvm-library:publish") {
             gradleProperties += mapOf("publish.url" to repoDir.toUri())
@@ -139,7 +139,7 @@ class JvmLibraryConventionPluginFunctionalTest {
     @Test
     fun `declaring common dependencies without versions`() {
         gradleRunner.root.project("jvm-library")
-            .configureBuildScript(
+            .appendBuildScript(
                 """
                     dependencies {
                         implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -155,7 +155,7 @@ class JvmLibraryConventionPluginFunctionalTest {
     @Test
     fun `ABI validation`() {
         val project = gradleRunner.root.project("jvm-library")
-            .configureBuildScript(
+            .appendBuildScript(
                 """
                     jvmLibrary {
                         buildFeatures {

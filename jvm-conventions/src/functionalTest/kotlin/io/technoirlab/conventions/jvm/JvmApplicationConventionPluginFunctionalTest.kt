@@ -2,7 +2,7 @@ package io.technoirlab.conventions.jvm
 
 import io.technoirlab.gradle.test.kit.Generator
 import io.technoirlab.gradle.test.kit.GradleRunnerExtension
-import io.technoirlab.gradle.test.kit.configureBuildScript
+import io.technoirlab.gradle.test.kit.appendBuildScript
 import io.technoirlab.gradle.test.kit.generatedFile
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -20,7 +20,7 @@ class JvmApplicationConventionPluginFunctionalTest {
     @Test
     fun `BuildConfig generation`() {
         val project = gradleRunner.root.project("jvm-application")
-            .configureBuildScript(
+            .appendBuildScript(
                 """
                     jvmApplication {
                         buildFeatures {
@@ -69,7 +69,7 @@ class JvmApplicationConventionPluginFunctionalTest {
 
     @Test
     fun `declaring common dependencies without versions`() {
-        gradleRunner.root.project("jvm-application").configureBuildScript(
+        gradleRunner.root.project("jvm-application").appendBuildScript(
             """
                 dependencies {
                     implementation("org.jetbrains.kotlin:kotlin-reflect")

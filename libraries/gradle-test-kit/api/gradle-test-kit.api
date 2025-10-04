@@ -41,7 +41,7 @@ public final class io/technoirlab/gradle/test/kit/GradleProject {
 }
 
 public final class io/technoirlab/gradle/test/kit/GradleProjectKt {
-	public static final fun configureBuildScript (Lio/technoirlab/gradle/test/kit/GradleProject;Ljava/lang/String;)Lio/technoirlab/gradle/test/kit/GradleProject;
+	public static final fun appendBuildScript (Lio/technoirlab/gradle/test/kit/GradleProject;Ljava/lang/String;)Lio/technoirlab/gradle/test/kit/GradleProject;
 	public static final fun generatedFile (Lio/technoirlab/gradle/test/kit/GradleProject;Lio/technoirlab/gradle/test/kit/Generator;Ljava/lang/String;Ljava/lang/String;)Ljava/nio/file/Path;
 	public static synthetic fun generatedFile$default (Lio/technoirlab/gradle/test/kit/GradleProject;Lio/technoirlab/gradle/test/kit/Generator;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/nio/file/Path;
 	public static final fun getBuildDir (Lio/technoirlab/gradle/test/kit/GradleProject;)Ljava/nio/file/Path;

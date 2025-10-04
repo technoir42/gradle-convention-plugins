@@ -20,7 +20,7 @@ val GradleProject.buildDir: Path
 val GradleProject.buildScript: Path
     get() = dir / "build.gradle.kts"
 
-fun GradleProject.configureBuildScript(@Language("kotlin") code: String): GradleProject =
+fun GradleProject.appendBuildScript(@Language("kotlin") code: String): GradleProject =
     apply { buildScript.appendText(code) }
 
 fun GradleProject.kotlinFile(className: String, variant: String = "main") =

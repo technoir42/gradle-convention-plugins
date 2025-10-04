@@ -4,8 +4,8 @@ import io.technoirlab.conventions.common.fixtures.POM_EXPECTED
 import io.technoirlab.conventions.common.fixtures.PROJECT_METADATA
 import io.technoirlab.gradle.test.kit.Generator
 import io.technoirlab.gradle.test.kit.GradleRunnerExtension
+import io.technoirlab.gradle.test.kit.appendBuildScript
 import io.technoirlab.gradle.test.kit.buildDir
-import io.technoirlab.gradle.test.kit.configureBuildScript
 import io.technoirlab.gradle.test.kit.generatedFile
 import io.technoirlab.gradle.test.kit.jarEntries
 import io.technoirlab.gradle.test.kit.replaceText
@@ -28,7 +28,7 @@ class GradlePluginConventionPluginFunctionalTest {
     @Test
     fun `BuildConfig generation`() {
         val project = gradleRunner.root.project("example-plugin")
-            .configureBuildScript(
+            .appendBuildScript(
                 """
                     gradlePluginConfig {
                         buildFeatures {
@@ -127,7 +127,7 @@ class GradlePluginConventionPluginFunctionalTest {
         repoDir.createDirectories()
 
         gradleRunner.root.project("example-plugin")
-            .configureBuildScript("gradlePluginConfig {\n${PROJECT_METADATA.prependIndent("    ")}\n}")
+            .appendBuildScript("gradlePluginConfig {\n${PROJECT_METADATA.prependIndent("    ")}\n}")
 
         gradleRunner.build(":example-plugin:publish") {
             gradleProperties += mapOf("publish.url" to repoDir.toUri())
@@ -146,7 +146,7 @@ class GradlePluginConventionPluginFunctionalTest {
     @Test
     fun `ABI validation`() {
         val project = gradleRunner.root.project("example-plugin")
-            .configureBuildScript(
+            .appendBuildScript(
                 """
                     gradlePluginConfig {
                         buildFeatures {

@@ -3,8 +3,8 @@ package io.technoirlab.conventions.kotlin.multiplatform
 import io.technoirlab.conventions.common.fixtures.createDependencyGraph
 import io.technoirlab.gradle.test.kit.Generator
 import io.technoirlab.gradle.test.kit.GradleRunnerExtension
+import io.technoirlab.gradle.test.kit.appendBuildScript
 import io.technoirlab.gradle.test.kit.buildScript
-import io.technoirlab.gradle.test.kit.configureBuildScript
 import io.technoirlab.gradle.test.kit.generatedFile
 import io.technoirlab.gradle.test.kit.replaceText
 import org.assertj.core.api.Assertions.assertThat
@@ -26,7 +26,7 @@ class KotlinMultiplatformApplicationConventionPluginFunctionalTest {
     @Test
     fun `BuildConfig generation`() {
         val project = gradleRunner.root.project("kmp-application")
-            .configureBuildScript(
+            .appendBuildScript(
                 """
                     kotlinMultiplatformApplication {
                         buildFeatures {
@@ -69,7 +69,7 @@ class KotlinMultiplatformApplicationConventionPluginFunctionalTest {
     @Test
     fun `dependency injection`() {
         gradleRunner.root.project("kmp-application")
-            .configureBuildScript(
+            .appendBuildScript(
                 """
                     kotlinMultiplatformApplication {
                         buildFeatures {
@@ -86,7 +86,7 @@ class KotlinMultiplatformApplicationConventionPluginFunctionalTest {
     @Test
     fun `default targets`() {
         gradleRunner.root.project("kmp-application")
-            .configureBuildScript(
+            .appendBuildScript(
                 """
                     kotlinMultiplatformApplication {
                         defaultTargets = true
@@ -138,7 +138,7 @@ class KotlinMultiplatformApplicationConventionPluginFunctionalTest {
     @Test
     fun `declaring common dependencies without versions`() {
         gradleRunner.root.project("kmp-application")
-            .configureBuildScript(
+            .appendBuildScript(
                 """
                     kotlin {
                         sourceSets {

@@ -1,7 +1,7 @@
 package io.technoirlab.conventions.common
 
 import io.technoirlab.gradle.test.kit.GradleRunnerExtension
-import io.technoirlab.gradle.test.kit.configureBuildScript
+import io.technoirlab.gradle.test.kit.appendBuildScript
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -14,7 +14,7 @@ class CommonConventionPluginFunctionalTest {
     @Test
     fun `sorting dependencies`() {
         val project = gradleRunner.root.project("library")
-            .configureBuildScript(
+            .appendBuildScript(
                 """
                     dependencies {
                         implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.20")

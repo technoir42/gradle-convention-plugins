@@ -5,9 +5,9 @@ import io.technoirlab.conventions.common.fixtures.PROJECT_METADATA
 import io.technoirlab.conventions.common.fixtures.createDependencyGraph
 import io.technoirlab.gradle.test.kit.Generator
 import io.technoirlab.gradle.test.kit.GradleRunnerExtension
+import io.technoirlab.gradle.test.kit.appendBuildScript
 import io.technoirlab.gradle.test.kit.buildDir
 import io.technoirlab.gradle.test.kit.buildScript
-import io.technoirlab.gradle.test.kit.configureBuildScript
 import io.technoirlab.gradle.test.kit.generatedFile
 import io.technoirlab.gradle.test.kit.jarEntries
 import io.technoirlab.gradle.test.kit.replaceText
@@ -31,7 +31,7 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
     @Test
     fun `BuildConfig generation`() {
         val project = gradleRunner.root.project("kmp-library")
-            .configureBuildScript(
+            .appendBuildScript(
                 """
                     kotlinMultiplatformLibrary {
                         buildFeatures {
@@ -74,7 +74,7 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
     @Test
     fun `dependency injection`() {
         gradleRunner.root.project("kmp-library")
-            .configureBuildScript(
+            .appendBuildScript(
                 """
                     kotlinMultiplatformLibrary {
                         buildFeatures {
@@ -91,7 +91,7 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
     @Test
     fun `default targets`() {
         gradleRunner.root.project("kmp-library")
-            .configureBuildScript(
+            .appendBuildScript(
                 """
                     kotlinMultiplatformLibrary {
                         defaultTargets = true
@@ -192,7 +192,7 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
         repoDir.createDirectories()
 
         gradleRunner.root.project("kmp-library")
-            .configureBuildScript("kotlinMultiplatformLibrary {\n${PROJECT_METADATA.prependIndent("    ")}\n}")
+            .appendBuildScript("kotlinMultiplatformLibrary {\n${PROJECT_METADATA.prependIndent("    ")}\n}")
 
         gradleRunner.build(":kmp-library:publish") {
             gradleProperties += mapOf("publish.url" to repoDir.toUri())
@@ -215,7 +215,7 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
 
     @Test
     fun `declaring common dependencies without versions`() {
-        gradleRunner.root.project("kmp-library").configureBuildScript(
+        gradleRunner.root.project("kmp-library").appendBuildScript(
             """
                 kotlin {
                     sourceSets {
@@ -235,7 +235,7 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
     @Test
     fun `ABI validation`() {
         val project = gradleRunner.root.project("kmp-library")
-            .configureBuildScript(
+            .appendBuildScript(
                 """
                     kotlinMultiplatformLibrary {
                         buildFeatures {
