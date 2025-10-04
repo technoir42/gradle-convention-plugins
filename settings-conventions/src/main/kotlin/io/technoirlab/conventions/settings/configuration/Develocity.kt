@@ -1,14 +1,18 @@
 package io.technoirlab.conventions.settings.configuration
 
+import io.technoirlab.conventions.settings.api.SettingsExtension
 import io.technoirlab.gradle.Environment
 import org.gradle.api.initialization.Settings
 import org.gradle.kotlin.dsl.develocity
 
-internal fun Settings.configureDevelocity(environment: Environment) {
+internal fun Settings.configureDevelocity(config: SettingsExtension, environment: Environment) {
     develocity {
+        projectId.set(config.projectId)
+        server.set(config.develocityUrl.map { it.toString() })
+
         buildScan {
             val isCi = environment.isCi
-            publishing.onlyIf { false }
+            publishing.onlyIf { config.develocityUrl.isPresent }
             uploadInBackground.set(!isCi)
 
             if (isCi) {

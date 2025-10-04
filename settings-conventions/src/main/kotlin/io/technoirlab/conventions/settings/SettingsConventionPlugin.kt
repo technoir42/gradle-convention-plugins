@@ -38,7 +38,7 @@ class SettingsConventionPlugin : Plugin<Settings> {
         val environment = Environment(providers)
         configureDependencyAnalysis()
         configureDependencyResolution(environment)
-        configureDevelocity(environment)
+        configureDevelocity(config, environment)
         configurePublishing()
     }
 
