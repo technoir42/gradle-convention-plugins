@@ -21,6 +21,10 @@ internal fun Settings.configureDevelocity(config: SettingsExtension, environment
                 tag("Local")
             }
 
+            if (environment.isLaunchedFromTest) {
+                tag("Test")
+            }
+
             termsOfUseUrl.set("https://gradle.com/help/legal-terms-of-use")
             termsOfUseAgree.set("yes")
         }

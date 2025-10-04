@@ -8,6 +8,9 @@ class Environment(private val providerFactory: ProviderFactory) {
     val isCi: Boolean
         get() = providerFactory.environmentVariable("GITHUB_ACTIONS").isPresent
 
+    val isLaunchedFromTest: Boolean
+        get() = providerFactory.systemProperty("org.gradle.test.worker").isPresent
+
     val branchName: Provider<String>
         get() = providerFactory.environmentVariable("GITHUB_REF_NAME")
 
