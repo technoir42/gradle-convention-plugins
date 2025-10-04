@@ -4,7 +4,7 @@ import com.squareup.sort.SortDependenciesExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
-fun Project.configureDependencySorting() {
+internal fun Project.configureDependencySorting() {
     pluginManager.apply("com.squareup.sort-dependencies")
 
     extensions.configure(SortDependenciesExtension::class) {

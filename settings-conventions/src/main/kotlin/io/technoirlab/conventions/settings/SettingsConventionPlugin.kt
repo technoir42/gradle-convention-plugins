@@ -11,8 +11,8 @@ import io.technoirlab.gradle.Environment
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.initialization.Settings
-import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.findByType
 
 @Suppress("UnstableApiUsage")
 class SettingsConventionPlugin : Plugin<Settings> {
@@ -44,9 +44,7 @@ class SettingsConventionPlugin : Plugin<Settings> {
 
     private fun Project.configureMetadata(metadata: ProjectMetadata) {
         pluginManager.withPlugin("io.technoirlab.conventions.common") {
-            extensions.configure(CommonExtension::class) {
-                this.metadata.initWith(metadata)
-            }
+            extensions.findByType(CommonExtension::class)?.metadata?.initWith(metadata)
         }
     }
 

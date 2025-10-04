@@ -1,11 +1,9 @@
 package io.technoirlab.conventions.gradle.plugin
 
 import io.technoirlab.conventions.common.CommonConventionPlugin
-import io.technoirlab.conventions.common.ProjectSettingsImpl
 import io.technoirlab.conventions.common.configuration.DocsFormat
 import io.technoirlab.conventions.common.configuration.PublishingOptions
 import io.technoirlab.conventions.common.configuration.configureBuildConfig
-import io.technoirlab.conventions.common.configuration.configureCommon
 import io.technoirlab.conventions.common.configuration.configureDetekt
 import io.technoirlab.conventions.common.configuration.configureDokka
 import io.technoirlab.conventions.common.configuration.configureJava
@@ -43,14 +41,12 @@ class GradlePluginConventionPlugin : Plugin<Project> {
         pluginManager.apply("org.gradle.kotlin.kotlin-dsl")
 
         val environment = Environment(providers)
-        val projectSettings = ProjectSettingsImpl(this)
         val publishingOptions = PublishingOptions(
             componentName = "java",
             publicationName = "pluginMaven",
             docsFormats = setOf(DocsFormat.Javadoc)
         )
 
-        configureCommon(projectSettings)
         configureJava()
         configureKotlin(config.buildFeatures.abiValidation)
         configureDetekt()

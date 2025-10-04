@@ -8,4 +8,5 @@ dependencyResolutionManagement {
     }
 }
 
-include(":library")
+include(":library1")
+include(":library2")

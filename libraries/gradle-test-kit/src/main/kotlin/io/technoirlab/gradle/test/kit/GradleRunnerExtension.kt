@@ -6,8 +6,10 @@ import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 import java.nio.file.Files
+import java.nio.file.Path
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.deleteRecursively
+import kotlin.io.path.div
 
 class GradleRunnerExtension(
     private val resourceDir: String,
@@ -78,3 +80,6 @@ class GradleRunnerExtension(
             .forwardOutput()
     }
 }
+
+val GradleRunnerExtension.settingsScript: Path
+    get() = root.dir / "settings.gradle.kts"

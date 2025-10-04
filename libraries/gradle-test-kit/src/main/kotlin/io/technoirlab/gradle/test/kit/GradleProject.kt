@@ -20,6 +20,9 @@ val GradleProject.buildDir: Path
 val GradleProject.buildScript: Path
     get() = dir / "build.gradle.kts"
 
+val GradleProject.gradleProperties: Path
+    get() = dir / "gradle.properties"
+
 fun GradleProject.appendBuildScript(@Language("kotlin") code: String): GradleProject =
     apply { buildScript.appendText(code) }
 
