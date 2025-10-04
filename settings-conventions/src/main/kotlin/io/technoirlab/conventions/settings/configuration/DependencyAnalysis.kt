@@ -12,6 +12,10 @@ internal fun Settings.configureDependencyAnalysis() {
                 include("org.junit.jupiter:junit-jupiter-api")
                 include("org.junit.jupiter:junit-jupiter-params")
             }
+            bundle("kotlin-gradle-plugin") {
+                primary("org.jetbrains.kotlin:kotlin-gradle-plugin")
+                include("org.jetbrains.kotlin:kotlin-native-utils")
+            }
         }
         issues {
             all {
