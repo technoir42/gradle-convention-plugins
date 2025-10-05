@@ -1,6 +1,5 @@
 package io.technoirlab.conventions.kotlin.multiplatform.configuration
 
-import io.technoirlab.conventions.common.configuration.configureCompilerOptions
 import io.technoirlab.conventions.kotlin.multiplatform.BuildConfig
 import io.technoirlab.conventions.kotlin.multiplatform.api.KotlinMultiplatformExtension
 import io.technoirlab.gradle.capitalized
@@ -11,6 +10,8 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.withType
 import org.gradle.language.base.plugins.LifecycleBasePlugin
+import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.dsl.abi.AbiValidationMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
@@ -24,7 +25,11 @@ import org.jetbrains.kotlin.konan.target.HostManager
 import kotlin.io.path.Path
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension as KmpExtension
 
-internal fun Project.configureKotlinMultiplatform(config: KotlinMultiplatformExtension, executable: Boolean = false) {
+internal fun Project.configureKotlinMultiplatform(
+    config: KotlinMultiplatformExtension,
+    kotlinVersion: Provider<KotlinVersion> = provider { KotlinVersion.DEFAULT },
+    executable: Boolean = false
+) {
     afterEvaluate {
         if (config.defaultTargets.get()) {
             extensions.configure(KmpExtension::class) {
@@ -52,6 +57,9 @@ internal fun Project.configureKotlinMultiplatform(config: KotlinMultiplatformExt
         }
 
         compilerOptions {
+            apiVersion.set(kotlinVersion)
+            languageVersion.set(kotlinVersion)
+
             optIn.addAll(
                 "kotlin.time.ExperimentalTime",
                 "kotlinx.cinterop.ExperimentalForeignApi"
@@ -66,8 +74,14 @@ internal fun Project.configureKotlinMultiplatform(config: KotlinMultiplatformExt
 
         targets.configureEach {
             when (this) {
-                is KotlinAndroidTarget -> configureCompilerOptions()
-                is KotlinJvmTarget -> configureCompilerOptions()
+                is KotlinAndroidTarget -> compilerOptions {
+                    jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
+                }
+
+                is KotlinJvmTarget -> compilerOptions {
+                    jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
+                }
+
                 is KotlinNativeTarget -> configureNativeTarget(config.packageName, config.buildFeatures.cinterop, executable)
             }
         }

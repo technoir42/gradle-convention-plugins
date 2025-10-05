@@ -11,5 +11,8 @@ import org.gradle.kotlin.dsl.create
 class ExamplePlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.extensions.create<ExampleExtension>(ExampleExtension.NAME)
+        // body placeholder
     }
+
+    // function placeholder
 }

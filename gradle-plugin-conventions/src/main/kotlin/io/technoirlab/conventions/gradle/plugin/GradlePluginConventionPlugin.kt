@@ -15,11 +15,14 @@ import io.technoirlab.conventions.common.configuration.configureTesting
 import io.technoirlab.conventions.gradle.plugin.api.GradlePluginExtension
 import io.technoirlab.conventions.gradle.plugin.configuration.configureDependencyAnalysis
 import io.technoirlab.conventions.gradle.plugin.configuration.configurePlugin
+import io.technoirlab.conventions.gradle.plugin.configuration.embeddedKotlinVersion
+import io.technoirlab.conventions.gradle.plugin.configuration.kotlinLanguageVersion
 import io.technoirlab.gradle.Environment
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.create
+import org.gradle.util.GradleVersion
 
 /**
  * Conventions for Gradle plugin projects.
@@ -38,8 +41,11 @@ class GradlePluginConventionPlugin : Plugin<Project> {
             configureKotlinSerialization(config.buildFeatures.serialization)
         }
 
-        pluginManager.apply("org.gradle.kotlin.kotlin-dsl")
+        pluginManager.apply("java-gradle-plugin")
+        pluginManager.apply("org.jetbrains.kotlin.jvm")
+        pluginManager.apply("org.jetbrains.kotlin.plugin.sam.with.receiver")
 
+        val gradleVersion = config.minGradleVersion.map { GradleVersion.version(it) }
         val environment = Environment(providers)
         val publishingOptions = PublishingOptions(
             componentName = "java",
@@ -48,7 +54,11 @@ class GradlePluginConventionPlugin : Plugin<Project> {
         )
 
         configureJava()
-        configureKotlin(config.buildFeatures.abiValidation)
+        configureKotlin(
+            kotlinVersion = gradleVersion.map { it.kotlinLanguageVersion },
+            stdlibVersion = gradleVersion.map { it.embeddedKotlinVersion },
+            enableAbiValidation = config.buildFeatures.abiValidation
+        )
         configureDetekt()
         configureDokka(environment, DocsFormat.All)
         configurePublishing(publishingOptions, config.metadata, environment) {
@@ -59,7 +69,7 @@ class GradlePluginConventionPlugin : Plugin<Project> {
             suppressPomMetadataWarningsFor("apiJavadocElements")
             suppressPomMetadataWarningsFor("apiSourcesElements")
         }
-        configurePlugin(config.metadata, environment)
+        configurePlugin(config, environment)
         configureTesting()
         configureTestFixtures()
         configureDependencyAnalysis()

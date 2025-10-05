@@ -1,14 +1,16 @@
 package io.technoirlab.conventions.gradle.plugin.configuration
 
-import io.technoirlab.conventions.common.api.metadata.ProjectMetadata
+import io.technoirlab.conventions.gradle.plugin.api.GradlePluginExtension
 import io.technoirlab.gradle.Environment
 import io.technoirlab.gradle.dependencies.api
 import io.technoirlab.gradle.setDisallowChanges
+import org.gradle.api.HasImplicitReceiver
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.plugins.jvm.JvmTestSuite
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.gradleKotlinDsl
 import org.gradle.kotlin.dsl.project
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
@@ -17,8 +19,9 @@ import org.gradle.plugin.devel.GradlePluginDevelopmentExtension
 import org.gradle.plugin.devel.tasks.ValidatePlugins
 import org.gradle.testing.base.TestingExtension
 import org.jetbrains.dokka.gradle.DokkaExtension
+import org.jetbrains.kotlin.samWithReceiver.gradle.SamWithReceiverExtension
 
-internal fun Project.configurePlugin(metadata: ProjectMetadata, environment: Environment) {
+internal fun Project.configurePlugin(config: GradlePluginExtension, environment: Environment) {
     configureApiVariant(API_VARIANT_NAME)
 
     @Suppress("UnstableApiUsage")
@@ -35,12 +38,12 @@ internal fun Project.configurePlugin(metadata: ProjectMetadata, environment: Env
         }
 
         extensions.configure(GradlePluginDevelopmentExtension::class) {
-            website.setDisallowChanges(metadata.url)
+            website.setDisallowChanges(config.metadata.url)
             vcsUrl.setDisallowChanges(environment.vcsUrl)
 
             plugins.configureEach {
-                displayName = metadata.name.orNull
-                description = metadata.description.orNull
+                displayName = config.metadata.name.orNull
+                description = config.metadata.description.orNull
             }
 
             testSourceSet(functionalTestSuite.get().sources)
@@ -49,6 +52,14 @@ internal fun Project.configurePlugin(metadata: ProjectMetadata, environment: Env
 
     tasks.withType<ValidatePlugins>().configureEach {
         enableStricterValidation.set(true)
+    }
+
+    extensions.configure(SamWithReceiverExtension::class) {
+        annotation(checkNotNull(HasImplicitReceiver::class.qualifiedName))
+    }
+
+    dependencies {
+        "compileOnly"(gradleKotlinDsl())
     }
 }
 

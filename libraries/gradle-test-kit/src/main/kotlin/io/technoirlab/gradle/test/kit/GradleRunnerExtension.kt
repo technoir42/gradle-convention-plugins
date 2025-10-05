@@ -73,6 +73,7 @@ class GradleRunnerExtension(
             .withProjectDir(root.dir.toFile())
             .withPluginClasspath()
             .apply {
+                config.gradleVersion?.let { withGradleVersion(it) }
                 if (config.environmentVariables.isNotEmpty()) {
                     withEnvironment(config.environmentVariables.mapValues { "${it.value}" })
                 }

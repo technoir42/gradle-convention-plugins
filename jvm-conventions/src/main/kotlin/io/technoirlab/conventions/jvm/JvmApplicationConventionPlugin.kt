@@ -38,7 +38,7 @@ class JvmApplicationConventionPlugin : Plugin<Project> {
 
         configureJava()
         configureApplication(config)
-        configureKotlin(config.buildFeatures.abiValidation)
+        configureKotlin(enableAbiValidation = config.buildFeatures.abiValidation)
         configureDetekt()
         configureTesting()
     }

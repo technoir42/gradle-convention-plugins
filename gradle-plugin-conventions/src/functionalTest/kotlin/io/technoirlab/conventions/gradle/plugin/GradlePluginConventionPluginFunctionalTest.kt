@@ -172,20 +172,7 @@ class GradlePluginConventionPluginFunctionalTest {
             )
 
         (project.dir / "src/main/kotlin/com/example/plugin/ExamplePlugin.kt")
-            .replaceText(
-                """
-                    |    override fun apply(project: Project) {
-                    |        project.extensions.create<ExampleExtension>(ExampleExtension.NAME)
-                    |    }
-                """.trimMargin(),
-                """
-                    |    override fun apply(project: Project) {
-                    |        project.extensions.create<ExampleExtension>(ExampleExtension.NAME)
-                    |    }
-                    |
-                    |    fun hello() = Unit
-                """.trimMargin()
-            )
+            .replaceText("// function placeholder", "fun hello() = Unit")
 
         val buildResult = gradleRunner.buildAndFail(":example-plugin:check")
 
@@ -206,5 +193,37 @@ class GradlePluginConventionPluginFunctionalTest {
         assertThat(project.buildDir / "dokka/html/index.html").exists()
         assertThat(project.buildDir / "dokka/html/example-plugin/com.example.plugin/index.html").exists()
         assertThat(project.buildDir / "dokka/html/example-plugin/com.example.plugin.api/index.html").exists()
+    }
+
+    @Test
+    fun `Gradle 8 compatibility`() {
+        val project = gradleRunner.root.project("example-plugin")
+            .appendBuildScript("gradlePluginConfig { minGradleVersion = \"8.14\" }")
+
+        gradleRunner.build(":example-plugin:build") {
+            gradleVersion = "8.14.3"
+        }
+
+        (project.dir / "src/main/kotlin/com/example/plugin/ExamplePlugin.kt")
+            // Enum.entries became stable in Kotlin 1.9
+            .replaceText("// body placeholder", """DeprecationLevel.entries""")
+
+        val buildResult = gradleRunner.buildAndFail(":example-plugin:build") {
+            gradleVersion = "8.14.3"
+        }
+        assertThat(buildResult.output).contains("The feature \"enum entries\" is only available since language version 1.9")
+    }
+
+    @Test
+    fun `Gradle 9 compatibility`() {
+        val project = gradleRunner.root.project("example-plugin")
+            .appendBuildScript("gradlePluginConfig { minGradleVersion = \"9.0\" }")
+        (project.dir / "src/main/kotlin/com/example/plugin/ExamplePlugin.kt")
+            // Multi-dollar string interpolation was introduced in Kotlin 2.2
+            .replaceText("// body placeholder", """$$"abc"""")
+
+        gradleRunner.build(":example-plugin:build") {
+            gradleVersion = "9.0.0"
+        }
     }
 }

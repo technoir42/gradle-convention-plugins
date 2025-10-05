@@ -7,16 +7,33 @@ import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.language.base.plugins.LifecycleBasePlugin
-import org.jetbrains.kotlin.gradle.dsl.HasConfigurableKotlinCompilerOptions
 import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.dsl.abi.AbiValidationExtension
 import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 
-fun Project.configureKotlin(enableAbiValidation: Provider<Boolean>) {
+fun Project.configureKotlin(
+    kotlinVersion: Provider<KotlinVersion> = provider { KotlinVersion.DEFAULT },
+    stdlibVersion: Provider<String> = provider { null },
+    enableAbiValidation: Provider<Boolean>
+) {
     extensions.configure(KotlinJvmProjectExtension::class) {
-        configureCompilerOptions()
+        compilerOptions {
+            apiVersion.set(kotlinVersion)
+            languageVersion.set(kotlinVersion)
+            jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
+            optIn.addAll(
+                "kotlin.io.path.ExperimentalPathApi",
+                "kotlin.time.ExperimentalTime"
+            )
+            freeCompilerArgs.addAll(
+                "-Xcontext-parameters",
+                "-Xconsistent-data-class-copy-visibility",
+                "-Xnested-type-aliases",
+            )
+        }
 
         @OptIn(ExperimentalAbiValidation::class)
         extensions.configure(AbiValidationExtension::class) {
@@ -35,19 +52,14 @@ fun Project.configureKotlin(enableAbiValidation: Provider<Boolean>) {
             dependsOn(tasks.named("checkLegacyAbi"))
         }
     }
-}
 
-fun HasConfigurableKotlinCompilerOptions<KotlinJvmCompilerOptions>.configureCompilerOptions() {
-    compilerOptions {
-        jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
-        optIn.addAll(
-            "kotlin.io.path.ExperimentalPathApi",
-            "kotlin.time.ExperimentalTime"
-        )
-        freeCompilerArgs.addAll(
-            "-Xcontext-parameters",
-            "-Xconsistent-data-class-copy-visibility",
-            "-Xnested-type-aliases",
-        )
+    afterEvaluate {
+        extensions.configure(KotlinJvmExtension::class) {
+            compilerOptions {
+                if (stdlibVersion.isPresent) {
+                    coreLibrariesVersion = stdlibVersion.get()
+                }
+            }
+        }
     }
 }
