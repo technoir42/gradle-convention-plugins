@@ -1,5 +1,6 @@
 package io.technoirlab.conventions.settings.configuration
 
+import com.gradle.develocity.agent.gradle.scan.BuildScanConfiguration
 import io.technoirlab.conventions.settings.api.SettingsExtension
 import io.technoirlab.gradle.Environment
 import org.gradle.api.initialization.Settings
@@ -28,7 +29,18 @@ internal fun Settings.configureDevelocity(config: SettingsExtension, environment
             if (isCi) {
                 termsOfUseUrl.set("https://gradle.com/help/legal-terms-of-use")
                 termsOfUseAgree.set("yes")
+            } else {
+                configureObfuscation()
             }
         }
+    }
+}
+
+private fun BuildScanConfiguration.configureObfuscation() {
+    obfuscation {
+        username { "user" }
+        hostname { "localhost" }
+        ipAddresses { listOf("127.0.0.1") }
+        externalProcessName { "non-build-process" }
     }
 }
