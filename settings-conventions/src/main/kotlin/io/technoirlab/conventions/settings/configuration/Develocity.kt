@@ -25,8 +25,10 @@ internal fun Settings.configureDevelocity(config: SettingsExtension, environment
                 tag("Test")
             }
 
-            termsOfUseUrl.set("https://gradle.com/help/legal-terms-of-use")
-            termsOfUseAgree.set("yes")
+            if (isCi) {
+                termsOfUseUrl.set("https://gradle.com/help/legal-terms-of-use")
+                termsOfUseAgree.set("yes")
+            }
         }
     }
 }
