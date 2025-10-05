@@ -3,7 +3,6 @@ name: Publish
 on:
   push:
     tags: [ "*" ]
-  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}
@@ -14,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read
+      contents: write # Required for creating release
       packages: write
 
     steps:
@@ -45,6 +44,10 @@ jobs:
           -Ppublish.username=${{ secrets.GPR_DEPLOY_USER }} \
           -Ppublish.password=${{ secrets.GPR_DEPLOY_TOKEN }}
 
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+
   documentation:
     name: Documentation
     runs-on: ubuntu-latest
@@ -65,8 +68,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
-          java-version: "21"
-          distribution: "corretto"
+          java-version: 21
+          distribution: corretto
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
