@@ -20,10 +20,10 @@ dependencies {
     implementation(libs.develocity.gradle.plugin)
     implementation(libs.nmcp.gradle.plugin)
 
-    runtimeOnly(libs.foojay.resolver.gradle.plugin)
-
     functionalTestImplementation(project(":libraries:gradle-test-kit"))
     functionalTestImplementation(libs.assertj.core)
+
+    runtimeOnly(libs.foojay.resolver.gradle.plugin)
 }
 
 gradlePlugin {
