@@ -9,6 +9,8 @@ gradlePluginConfig {
         abiValidation = true
 
         buildConfig {
+            buildConfigField("GROUP_ID", provider { "$group" })
+            buildConfigField("VERSION", provider { "$version" })
             buildConfigField("JUNIT5_VERSION", libs.versions.junit5)
             buildConfigField("KOTLIN_BOM", libs.kotlin.bom.map { it.toString() })
             buildConfigField("KOTLINX_COROUTINES_BOM", libs.kotlinx.coroutines.bom.map { it.toString() })

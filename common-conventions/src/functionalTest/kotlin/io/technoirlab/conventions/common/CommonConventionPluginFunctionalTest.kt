@@ -51,6 +51,19 @@ class CommonConventionPluginFunctionalTest {
     }
 
     @Test
+    fun `dependencies from the same group can be used without explicit version`() {
+        gradleRunner.root.project("library1").appendBuildScript(
+            """
+                dependencies {
+                    implementation("io.technoirlab.conventions:gradle-extensions")
+                }
+            """.trimIndent()
+        )
+
+        gradleRunner.build(":library1:jar")
+    }
+
+    @Test
     fun `sorting dependencies`() {
         val project = gradleRunner.root.project("library1")
             .appendBuildScript(
