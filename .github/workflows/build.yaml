@@ -38,3 +38,20 @@ jobs:
           --scan \
           -Pgpr.user=${{ github.repository_owner }} \
           -Pgpr.token=${{ secrets.GITHUB_TOKEN }}
+
+  actions-lint:
+    name: Lint workflows
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Lint workflows
+        uses: reviewdog/action-actionlint@v1
+        with:
+          level: warning
+          fail_level: error
