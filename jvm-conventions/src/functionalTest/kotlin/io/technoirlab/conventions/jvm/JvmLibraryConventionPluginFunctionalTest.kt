@@ -73,8 +73,8 @@ class JvmLibraryConventionPluginFunctionalTest {
         val repoDir = gradleRunner.root.dir / "repo"
         repoDir.createDirectories()
 
-        gradleRunner.build(":jvm-library:publish") {
-            gradleProperties += mapOf("publish.url" to repoDir.toUri())
+        gradleRunner.build(":jvm-library:publishAllPublicationsToLocalRepository") {
+            gradleProperties += mapOf("publish.local.url" to repoDir.toUri())
         }
 
         val artifactDir = repoDir / "io/technoirlab/jvm-library/dev"
@@ -102,11 +102,11 @@ class JvmLibraryConventionPluginFunctionalTest {
         val repoDir = gradleRunner.root.dir / "repo"
         repoDir.createDirectories()
 
-        gradleRunner.build(":jvm-library:publish") {
+        gradleRunner.build(":jvm-library:publishAllPublicationsToLocalRepository") {
             gradleProperties += mapOf(
                 "project.groupId" to "com.example",
                 "project.version" to "v1",
-                "publish.url" to repoDir.toUri()
+                "publish.local.url" to repoDir.toUri()
             )
         }
 
@@ -122,8 +122,8 @@ class JvmLibraryConventionPluginFunctionalTest {
         gradleRunner.root.project("jvm-library")
             .appendBuildScript("jvmLibrary {\n${PROJECT_METADATA.prependIndent("    ")}\n}")
 
-        gradleRunner.build(":jvm-library:publish") {
-            gradleProperties += mapOf("publish.url" to repoDir.toUri())
+        gradleRunner.build(":jvm-library:publishAllPublicationsToLocalRepository") {
+            gradleProperties += mapOf("publish.local.url" to repoDir.toUri())
             environmentVariables += mapOf(
                 "GITHUB_SERVER_URL" to "https://github.com",
                 "GITHUB_REPOSITORY" to "example-org/example-project",

@@ -4,17 +4,16 @@ import io.technoirlab.conventions.common.api.metadata.DeveloperInfo
 import io.technoirlab.conventions.common.api.metadata.LicenseInfo
 import io.technoirlab.conventions.common.api.metadata.ProjectMetadata
 import io.technoirlab.gradle.Environment
+import io.technoirlab.gradle.maven
 import io.technoirlab.gradle.setDisallowChanges
 import org.gradle.api.Project
 import org.gradle.api.attributes.Usage
-import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.publish.PublicationContainer
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPom
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
-import org.gradle.kotlin.dsl.maven
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 import org.gradle.plugins.signing.SigningExtension
@@ -49,7 +48,11 @@ fun Project.configurePublishing(
             pom.configure(metadata, environment, artifactId)
         }
 
-        configureRepositories(providers)
+        repositories {
+            val publishRepositories = environment.getMavenRepositories("publish").get()
+            publishRepositories.forEach { maven(it) }
+        }
+
         configureSigning(publications)
     }
 
@@ -64,22 +67,6 @@ fun Project.configurePublishing(
 
                 withType<MavenPublication>().configureEach {
                     pom.configure(metadata.licenses.get(), metadata.developers.get())
-                }
-            }
-        }
-    }
-}
-
-private fun PublishingExtension.configureRepositories(providerFactory: ProviderFactory) {
-    val publishUrl = providerFactory.gradleProperty("publish.url")
-    repositories {
-        if (publishUrl.isPresent) {
-            maven(publishUrl) {
-                if (url.scheme != "file") {
-                    credentials {
-                        username = providerFactory.gradleProperty("publish.username").orNull
-                        password = providerFactory.gradleProperty("publish.password").orNull
-                    }
                 }
             }
         }

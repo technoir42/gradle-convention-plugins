@@ -146,8 +146,8 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
         val repoDir = gradleRunner.root.dir / "repo"
         repoDir.createDirectories()
 
-        gradleRunner.build(":kmp-library:publish") {
-            gradleProperties += mapOf("publish.url" to repoDir.toUri())
+        gradleRunner.build(":kmp-library:publishAllPublicationsToLocalRepository") {
+            gradleProperties += mapOf("publish.local.url" to repoDir.toUri())
         }
 
         val artifactDir = repoDir / "io/technoirlab/kmp-library/dev"
@@ -174,11 +174,11 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
         val repoDir = gradleRunner.root.dir / "repo"
         repoDir.createDirectories()
 
-        gradleRunner.build(":kmp-library:publish") {
+        gradleRunner.build(":kmp-library:publishAllPublicationsToLocalRepository") {
             gradleProperties += mapOf(
                 "project.groupId" to "com.example.kmp",
                 "project.version" to "v1",
-                "publish.url" to repoDir.toUri()
+                "publish.local.url" to repoDir.toUri()
             )
         }
 
@@ -194,8 +194,8 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
         gradleRunner.root.project("kmp-library")
             .appendBuildScript("kotlinMultiplatformLibrary {\n${PROJECT_METADATA.prependIndent("    ")}\n}")
 
-        gradleRunner.build(":kmp-library:publish") {
-            gradleProperties += mapOf("publish.url" to repoDir.toUri())
+        gradleRunner.build(":kmp-library:publishAllPublicationsToLocalRepository") {
+            gradleProperties += mapOf("publish.local.url" to repoDir.toUri())
             environmentVariables += mapOf(
                 "GITHUB_SERVER_URL" to "https://github.com",
                 "GITHUB_REPOSITORY" to "example-org/example-project",

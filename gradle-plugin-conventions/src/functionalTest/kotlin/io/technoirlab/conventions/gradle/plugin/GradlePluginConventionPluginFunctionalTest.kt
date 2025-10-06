@@ -73,8 +73,8 @@ class GradlePluginConventionPluginFunctionalTest {
         val repoDir = gradleRunner.root.dir / "repo"
         repoDir.createDirectories()
 
-        gradleRunner.build(":example-plugin:publish") {
-            gradleProperties += mapOf("publish.url" to repoDir.toUri())
+        gradleRunner.build(":example-plugin:publishAllPublicationsToLocalRepository") {
+            gradleProperties += mapOf("publish.local.url" to repoDir.toUri())
         }
 
         val artifactDir = repoDir / "io/technoirlab/example-plugin/dev"
@@ -109,11 +109,11 @@ class GradlePluginConventionPluginFunctionalTest {
         val repoDir = gradleRunner.root.dir / "repo"
         repoDir.createDirectories()
 
-        gradleRunner.build(":example-plugin:publish") {
+        gradleRunner.build(":example-plugin:publishAllPublicationsToLocalRepository") {
             gradleProperties += mapOf(
                 "project.groupId" to "com.example",
                 "project.version" to "v1",
-                "publish.url" to repoDir.toUri()
+                "publish.local.url" to repoDir.toUri()
             )
         }
 
@@ -129,8 +129,8 @@ class GradlePluginConventionPluginFunctionalTest {
         gradleRunner.root.project("example-plugin")
             .appendBuildScript("gradlePluginConfig {\n${PROJECT_METADATA.prependIndent("    ")}\n}")
 
-        gradleRunner.build(":example-plugin:publish") {
-            gradleProperties += mapOf("publish.url" to repoDir.toUri())
+        gradleRunner.build(":example-plugin:publishAllPublicationsToLocalRepository") {
+            gradleProperties += mapOf("publish.local.url" to repoDir.toUri())
             environmentVariables += mapOf(
                 "GITHUB_SERVER_URL" to "https://github.com",
                 "GITHUB_REPOSITORY" to "example-org/example-project",
