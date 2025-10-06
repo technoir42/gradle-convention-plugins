@@ -38,6 +38,7 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
 
         pluginManager.apply("java-library")
         pluginManager.apply("org.jetbrains.kotlin.jvm")
+        pluginManager.apply("org.jetbrains.kotlin.plugin.sam.with.receiver")
 
         val environment = Environment(providers)
         val publishingOptions = PublishingOptions(

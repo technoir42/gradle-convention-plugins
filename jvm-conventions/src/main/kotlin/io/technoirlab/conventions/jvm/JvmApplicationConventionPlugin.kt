@@ -35,6 +35,7 @@ class JvmApplicationConventionPlugin : Plugin<Project> {
 
         pluginManager.apply("application")
         pluginManager.apply("org.jetbrains.kotlin.jvm")
+        pluginManager.apply("org.jetbrains.kotlin.plugin.sam.with.receiver")
 
         configureJava()
         configureApplication(config)
