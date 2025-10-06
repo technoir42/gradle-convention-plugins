@@ -61,9 +61,11 @@ jobs:
             exit $status
           fi
           if [ -s build-health-report.diff ]; then
-            echo '```diff' >> "$GITHUB_STEP_SUMMARY"
-            cat build-health-report.diff >> "$GITHUB_STEP_SUMMARY"
-            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo '```diff'
+              cat build-health-report.diff
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
           fi
 
   dependencies-sorting:
@@ -96,9 +98,11 @@ jobs:
         run: |
           git --no-pager diff > dependencies-sorting.diff
           if [ -s dependencies-sorting.diff ]; then
-            echo '```diff' >> "$GITHUB_STEP_SUMMARY"
-            cat dependencies-sorting.diff >> "$GITHUB_STEP_SUMMARY"
-            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo '```diff'
+              cat dependencies-sorting.diff
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
             echo 'Dependencies are not sorted'
             exit 1
           fi
