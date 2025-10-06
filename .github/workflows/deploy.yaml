@@ -29,7 +29,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
 
-      - name: Publish
+      - name: Publish to GitHub Packages
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
@@ -43,6 +43,19 @@ jobs:
           -Ppublish.github.url=https://maven.pkg.github.com/technoir-lab/convention-plugins \
           -Ppublish.github.username=${{ secrets.GPR_DEPLOY_USER }} \
           -Ppublish.github.password=${{ secrets.GPR_DEPLOY_TOKEN }}
+
+      - name: Publish to Maven Central
+        env:
+          CENTRAL_PORTAL_USER: ${{ secrets.CENTRAL_PORTAL_USER }}
+          CENTRAL_PORTAL_PASSWORD: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+        run: |
+          ./gradlew publishAggregationToCentralPortal \
+          --scan \
+          -Pgpr.user=${{ github.repository_owner }} \
+          -Pgpr.token=${{ secrets.GITHUB_TOKEN }} \
+          -Pproject.version=${{ github.ref_name }}
 
       - name: Create release
         uses: softprops/action-gh-release@v2
