@@ -41,13 +41,13 @@ data class MavenRepository(
 }
 
 fun RepositoryHandler.maven(repository: MavenRepository) {
-    maven { maven ->
-        maven.name = repository.name
-        maven.url = repository.url
-        if (repository.credentials != null) {
-            maven.credentials {
-                it.username = repository.credentials.username
-                it.password = repository.credentials.password
+    maven {
+        name = repository.name
+        url = repository.url
+        repository.credentials?.let {
+            credentials {
+                username = it.username
+                password = it.password
             }
         }
     }
