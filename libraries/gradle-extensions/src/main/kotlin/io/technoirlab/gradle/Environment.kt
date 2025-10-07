@@ -11,8 +11,12 @@ class Environment(private val providerFactory: ProviderFactory) {
     val isLaunchedFromTest: Boolean
         get() = providerFactory.systemProperty("org.gradle.test.worker").isPresent
 
-    val branchName: Provider<String>
+    val refName: Provider<String>
         get() = providerFactory.environmentVariable("GITHUB_REF_NAME")
+
+    val tagName: Provider<String>
+        get() = providerFactory.environmentVariable("GITHUB_REF_TYPE")
+            .zip(refName) { refType, refName -> if (refType == "tag") refName else null }
 
     val repositoryUrl: Provider<URI>
         get() = providerFactory.environmentVariable("GITHUB_SERVER_URL")

@@ -91,7 +91,7 @@ private fun Environment.getSourceUrl(srcDir: Directory, rootDir: Directory): Pro
     if (File.separatorChar != '/') {
         relativePath = relativePath.replace(File.separatorChar, '/')
     }
-    return repositoryUrl.zip(branchName) { repoUrl, branchName ->
+    return repositoryUrl.zip(refName) { repoUrl, branchName ->
         val baseUrl = if (repoUrl.path.endsWith("/")) repoUrl else repoUrl.copy(path = repoUrl.path + "/")
         baseUrl.resolve("tree/$branchName/$relativePath")
     }
