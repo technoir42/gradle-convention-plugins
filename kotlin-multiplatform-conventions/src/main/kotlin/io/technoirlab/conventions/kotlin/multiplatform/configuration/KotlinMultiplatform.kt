@@ -10,15 +10,19 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.withType
 import org.gradle.language.base.plugins.LifecycleBasePlugin
+import org.jetbrains.kotlin.gradle.dsl.HasConfigurableKotlinCompilerOptions
 import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.dsl.abi.AbiValidationMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinNativeTargetConfigurator.Companion.RUN_GROUP
+import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.Executable
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinWasmJsTargetDsl
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 import org.jetbrains.kotlin.konan.target.Family
 import org.jetbrains.kotlin.konan.target.HostManager
@@ -74,15 +78,10 @@ internal fun Project.configureKotlinMultiplatform(
 
         targets.configureEach {
             when (this) {
-                is KotlinAndroidTarget -> compilerOptions {
-                    jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
-                }
-
-                is KotlinJvmTarget -> compilerOptions {
-                    jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
-                }
-
+                is KotlinAndroidTarget -> configureJvmTarget()
+                is KotlinJvmTarget -> configureJvmTarget()
                 is KotlinNativeTarget -> configureNativeTarget(config.packageName, config.buildFeatures.cinterop, executable)
+                is KotlinWasmJsTargetDsl -> configureJsTarget(executable)
             }
         }
 
@@ -99,6 +98,12 @@ internal fun Project.configureKotlinMultiplatform(
         if (config.buildFeatures.abiValidation.get()) {
             dependsOn(tasks.named("checkLegacyAbi"))
         }
+    }
+}
+
+private fun <T> T.configureJvmTarget() where T : KotlinTarget, T : HasConfigurableKotlinCompilerOptions<KotlinJvmCompilerOptions> {
+    compilerOptions {
+        jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
     }
 }
 
@@ -140,5 +145,11 @@ private fun KotlinNativeTarget.configureNativeTarget(
                 }
             }
         }
+    }
+}
+
+private fun KotlinWasmJsTargetDsl.configureJsTarget(executable: Boolean) {
+    if (executable) {
+        binaries.executable()
     }
 }
