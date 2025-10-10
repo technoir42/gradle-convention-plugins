@@ -1,5 +1,5 @@
 package kmp.library
 
-fun greet(name: String) {
-    nativeGreet(name)
+interface KmpLibrary {
+    fun hello(name: String)
 }

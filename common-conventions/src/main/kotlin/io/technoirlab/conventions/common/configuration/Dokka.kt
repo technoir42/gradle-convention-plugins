@@ -44,6 +44,11 @@ fun Project.configureDokka(environment: Environment, docsFormats: Set<DocsFormat
         dokkaSourceSets.configureEach {
             jdkVersion.set(JDK_VERSION)
 
+            perPackageOption {
+                matchingRegex.set(".+\\.internal.*")
+                suppress.set(true)
+            }
+
             externalDocumentationLinks {
                 register("gradle-api") {
                     url("https://docs.gradle.org/${gradle.gradleVersion}/javadoc/")

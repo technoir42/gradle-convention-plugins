@@ -3,4 +3,6 @@ package com.example.jvm.library
 /**
  * Example JVM library.
  */
-class JvmLibrary
+interface JvmLibrary {
+    fun hello(name: String)
+}

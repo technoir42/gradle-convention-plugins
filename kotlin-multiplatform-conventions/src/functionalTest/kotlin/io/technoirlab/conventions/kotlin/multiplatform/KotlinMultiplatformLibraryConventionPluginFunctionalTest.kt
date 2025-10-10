@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.io.path.createDirectories
 import kotlin.io.path.div
-import kotlin.io.path.writeText
 
 class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
     @RegisterExtension
@@ -126,19 +125,17 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
             """.trimIndent()
         )
 
-        (project.dir / "src/commonMain/kotlin/kmp/library/KmpLibrary.kt")
+        (project.dir / "src/commonMain/kotlin/kmp/library/internal/KmpLibraryImpl.kt")
             .replaceText(
                 """
-                    package kmp.library
+                    import kmp.library.nativeGreet
                 """.trimIndent(),
                 """
-                    package kmp.library
-                    
                     import com.example.kmp.library.nativeGreet
                 """.trimIndent()
             )
 
-        gradleRunner.build(":kmp-library:build")
+        gradleRunner.build(":kmp-library:assemble")
     }
 
     @Test
@@ -253,33 +250,25 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
             .contains(
                 """
                     // Library unique name: <io.technoirlab:kmp-library>
-                    final fun kmp.library/greet(kotlin/String) // kmp.library/greet|greet(kotlin.String){}[0]
+                    abstract interface kmp.library/KmpLibrary { // kmp.library/KmpLibrary|null[0]
+                        abstract fun hello(kotlin/String) // kmp.library/KmpLibrary.hello|hello(kotlin.String){}[0]
+                    }
                 """.trimIndent()
             )
 
         (project.dir / "src/commonMain/kotlin/kmp/library/KmpLibrary.kt")
-            .writeText(
-                """
-                    package kmp.library
-                    
-                    fun greet(name: String) {
-                        nativeGreet(name)
-                    }
-                    
-                    fun hello() = Unit
-                    
-                """.trimIndent()
-            )
+            .replaceText("fun hello(", "fun hello2(")
+        (project.dir / "src/commonMain/kotlin/kmp/library/internal/KmpLibraryImpl.kt")
+            .replaceText("fun hello(", "fun hello2(")
 
         val buildResult = gradleRunner.buildAndFail(":kmp-library:check")
 
         assertThat(buildResult.task(":kmp-library:checkLegacyAbi")?.outcome).isEqualTo(TaskOutcome.FAILED)
         assertThat(buildResult.output).contains(
             """
-                |  // Library unique name: <io.technoirlab:kmp-library>
-                |   final fun kmp.library/greet(kotlin/String) // kmp.library/greet|greet(kotlin.String){}[0]
-                |  +final fun kmp.library/hello() // kmp.library/hello|hello(){}[0]
-            """.trimMargin()
+                -    abstract fun hello(kotlin/String) // kmp.library/KmpLibrary.hello|hello(kotlin.String){}[0]
+                +    abstract fun hello2(kotlin/String) // kmp.library/KmpLibrary.hello2|hello2(kotlin.String){}[0]
+            """.trimIndent()
         )
     }
 
@@ -290,5 +279,6 @@ class KotlinMultiplatformLibraryConventionPluginFunctionalTest {
         val project = gradleRunner.root.project("kmp-library")
         assertThat(project.buildDir / "dokka/html/index.html").exists()
         assertThat(project.buildDir / "dokka/html/kmp-library/kmp.library/index.html").exists()
+        assertThat(project.buildDir / "dokka/html/kmp-library/kmp.library.internal").doesNotExist()
     }
 }

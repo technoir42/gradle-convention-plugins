@@ -193,6 +193,7 @@ class GradlePluginConventionPluginFunctionalTest {
         assertThat(project.buildDir / "dokka/html/index.html").exists()
         assertThat(project.buildDir / "dokka/html/example-plugin/com.example.plugin/index.html").exists()
         assertThat(project.buildDir / "dokka/html/example-plugin/com.example.plugin.api/index.html").exists()
+        assertThat(project.buildDir / "dokka/html/example-plugin/com.example.plugin.internal").doesNotExist()
     }
 
     @Test

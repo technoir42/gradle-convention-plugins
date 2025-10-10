@@ -8,13 +8,13 @@ import io.technoirlab.gradle.test.kit.appendBuildScript
 import io.technoirlab.gradle.test.kit.buildDir
 import io.technoirlab.gradle.test.kit.generatedFile
 import io.technoirlab.gradle.test.kit.jarEntries
+import io.technoirlab.gradle.test.kit.replaceText
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.io.path.createDirectories
 import kotlin.io.path.div
-import kotlin.io.path.writeText
 
 class JvmLibraryConventionPluginFunctionalTest {
     @RegisterExtension
@@ -172,34 +172,25 @@ class JvmLibraryConventionPluginFunctionalTest {
             .content()
             .contains(
                 """
-                    public final class com/example/jvm/library/JvmLibrary {
-                    	public fun <init> ()V
+                    public abstract interface class com/example/jvm/library/JvmLibrary {
+                    	public abstract fun hello (Ljava/lang/String;)V
                     }
                 """.trimIndent()
             )
 
         (project.dir / "src/main/kotlin/com/example/jvm/library/JvmLibrary.kt")
-            .writeText(
-                """
-                    package com.example.jvm.library
-                    
-                    class JvmLibrary {
-                        fun hello() = Unit
-                    }
-                    
-                """.trimIndent()
-            )
+            .replaceText("fun hello(", "fun hello2(")
+        (project.dir / "src/main/kotlin/com/example/jvm/library/internal/JvmLibraryImpl.kt")
+            .replaceText("fun hello(", "fun hello2(")
 
         val buildResult = gradleRunner.buildAndFail(":jvm-library:check")
 
         assertThat(buildResult.task(":jvm-library:checkLegacyAbi")?.outcome).isEqualTo(TaskOutcome.FAILED)
         assertThat(buildResult.output).contains(
             """
-                |   public final class com/example/jvm/library/JvmLibrary {
-                |   	public fun <init> ()V
-                |  +	public final fun hello ()V
-                |   }
-            """.trimMargin()
+                -	public fun hello (Ljava/lang/String;)V
+                +	public fun hello2 (Ljava/lang/String;)V
+            """.trimIndent()
         )
     }
 
@@ -210,5 +201,6 @@ class JvmLibraryConventionPluginFunctionalTest {
         val project = gradleRunner.root.project("jvm-library")
         assertThat(project.buildDir / "dokka/html/index.html").exists()
         assertThat(project.buildDir / "dokka/html/jvm-library/com.example.jvm.library/index.html").exists()
+        assertThat(project.buildDir / "dokka/html/jvm-library/com.example.jvm.library.internal").doesNotExist()
     }
 }
